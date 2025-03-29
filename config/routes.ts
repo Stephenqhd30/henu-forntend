@@ -71,6 +71,19 @@ export default [
     component: './Job/JobList',
   },
   {
+    name: '文件信息管理',
+    path: 'file',
+    icon: 'FundProjectionScreenOutlined',
+    routes: [
+      {
+        name: '文件上传日志管理',
+        path: '/file/log',
+        icon: 'ScheduleOutlined',
+        component: './File/FileLogList',
+      },
+    ],
+  },
+  {
     name: '操作日志信息',
     path: 'operation',
     icon: 'FontColorsOutlined',

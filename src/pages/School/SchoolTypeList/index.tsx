@@ -6,7 +6,7 @@ import {
   exportSchoolTypeTemplateUsingGet,
   exportSchoolTypeUsingGet,
 } from '@/services/henu-backend/excelController';
-import { EXPORT_SCHOOL_EXCEL, SCHOOL_SCHOOL_EXCEL } from '@/constants';
+import { EXPORT_SCHOOL_EXCEL, SCHOOL_TYPE_EXCEL } from '@/constants';
 import {
   deleteSchoolTypeUsingPost,
   listSchoolTypeByPageUsingPost,
@@ -69,7 +69,7 @@ const SchoolTypeList: React.FC = () => {
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', SCHOOL_SCHOOL_EXCEL);
+      link.setAttribute('download', SCHOOL_TYPE_EXCEL);
       document.body.appendChild(link);
       link.click();
       link.remove();

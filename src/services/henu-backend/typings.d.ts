@@ -764,6 +764,7 @@ declare namespace API {
     fileName?: string;
     filePath?: string;
     fileTypeId?: number;
+    fileTypeVO?: FileTypeVO;
     id?: number;
     updateTime?: string;
     userId?: number;
