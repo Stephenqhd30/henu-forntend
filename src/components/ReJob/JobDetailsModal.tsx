@@ -13,7 +13,7 @@ interface Props {
  * @param props
  * @constructor
  */
-const JobDetailsCard: React.FC<Props> = (props) => {
+const JobDetailsModal: React.FC<Props> = (props) => {
   const { job, visible, onCancel } = props;
 
   // 配置 ProDescriptions 的列
@@ -57,4 +57,4 @@ const JobDetailsCard: React.FC<Props> = (props) => {
   );
 };
 
-export default JobDetailsCard;
+export default JobDetailsModal;

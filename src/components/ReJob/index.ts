@@ -1,3 +1,3 @@
-import JobDetailsCard from '@/components/ReJob/JobDetailsCard';
+import JobDetailsModal from '@/components/ReJob/JobDetailsModal';
 
-export { JobDetailsCard };
+export { JobDetailsModal };

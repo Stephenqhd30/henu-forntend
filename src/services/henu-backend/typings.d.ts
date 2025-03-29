@@ -1837,8 +1837,10 @@ declare namespace API {
     userEmail?: string;
     userGender?: number;
     userId?: number;
+    userIdCard?: string;
     userName?: string;
     userPhone?: string;
+    userVO?: UserVO;
     workExperience?: string;
   };
 

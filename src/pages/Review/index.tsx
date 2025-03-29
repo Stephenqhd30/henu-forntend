@@ -1,16 +1,19 @@
 import React, { useRef, useState } from 'react';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, Select, Space, Typography } from 'antd';
+import { Button, Image, Select, Space, Typography } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import { BatchReviewModal, ReviewModal } from '@/pages/Review/components';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
 import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
 import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
-import { JobDetailsCard } from '@/components/ReJob';
+import { JobDetailsModal } from '@/components/ReJob';
+import { UserDetailsModal } from '@/components/ReUser';
 
 const CertificateReview: React.FC = () => {
   const actionRef = useRef<ActionType>();
   // 用户详细 Modal 框
+  const [userModal, setUserModal] = useState<boolean>(false);
+  // 岗位信息 Modal
   const [jobModal, setJobModal] = useState<boolean>(false);
   // 审核信息 Modal 框
   const [reviewModal, setReviewModal] = useState<boolean>(false);
@@ -29,6 +32,11 @@ const CertificateReview: React.FC = () => {
       title: '用户名',
       dataIndex: 'userName',
       valueType: 'text',
+    },
+    {
+      title: '身份证号',
+      dataIndex: 'userIdCard',
+      valueType: 'password',
     },
     {
       title: '性别',
@@ -92,7 +100,17 @@ const CertificateReview: React.FC = () => {
       valueType: 'text',
     },
     {
-      title: '照片',
+      title: '证件照',
+      dataIndex: 'userId',
+      valueType: 'text',
+      render: (_, record) => {
+        return <Image width={64}>{record?.userVO?.userAvatar}</Image>;
+      },
+      hideInForm: true,
+      hideInSearch: true,
+    },
+    {
+      title: '生活照',
       dataIndex: 'userAvatar',
       valueType: 'image',
       fieldProps: {
@@ -114,14 +132,6 @@ const CertificateReview: React.FC = () => {
       title: '主要学生干部经历及获奖情况',
       dataIndex: 'studentLeaderAwards',
       valueType: 'text',
-    },
-    {
-      title: '填写用户',
-      dataIndex: 'userId',
-      valueType: 'text',
-      hideInForm: true,
-      hideInTable: true,
-      hideInSearch: true,
     },
     {
       title: '审核状态',
@@ -168,6 +178,15 @@ const CertificateReview: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <Space>
+          <Typography.Link
+            key={'user-details'}
+            onClick={async () => {
+              setUserModal(true);
+              setCurrentRow(record);
+            }}
+          >
+            查看用户信息
+          </Typography.Link>
           <Typography.Link
             key={'job-details'}
             onClick={async () => {
@@ -264,9 +283,17 @@ const CertificateReview: React.FC = () => {
           }}
         />
       )}
+      {/*用户信息*/}
+      {userModal && (
+        <UserDetailsModal
+          visible={userModal}
+          onCancel={() => setUserModal(false)}
+          user={currentRow?.userVO ?? {}}
+        />
+      )}
       {/*岗位信息*/}
       {jobModal && (
-        <JobDetailsCard
+        <JobDetailsModal
           visible={jobModal}
           onCancel={() => setJobModal(false)}
           job={currentRow?.jobVO ?? {}}
