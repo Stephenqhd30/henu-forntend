@@ -218,7 +218,7 @@ const RegistrationReview: React.FC = () => {
       <ProTable<API.RegistrationFormVO, API.PageParams>
         headerTitle={'报名登记表审核'}
         rowKey={'id'}
-        scroll={{ x: 'max-content', y: 400 }}
+        scroll={{ x: 'max-content'}}
         actionRef={actionRef}
         search={{
           labelWidth: 120,

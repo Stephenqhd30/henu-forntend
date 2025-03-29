@@ -10,7 +10,12 @@ export default [
     path: '/review',
     icon: 'crown',
     routes: [
-      { name: '报名登记表审核', path: '/review', icon: "PicLeftOutlined", component: './Review/ReviewList' },
+      {
+        name: '报名登记表审核',
+        path: '/review',
+        icon: 'PicLeftOutlined',
+        component: './Review/ReviewList',
+      },
       {
         name: '审核日志',
         access: 'canAdmin',
@@ -62,15 +67,14 @@ export default [
   {
     name: '岗位信息管理',
     path: 'job',
+    icon: 'UnderlineOutlined',
+    component: './Job/JobList',
+  },
+  {
+    name: '操作日志信息',
+    path: 'operation',
     icon: 'FontColorsOutlined',
-    routes: [
-      {
-        name: '岗位信息管理',
-        path: 'job',
-        icon: 'UnderlineOutlined',
-        component: './Job/JobList',
-      },
-    ],
+    component: './Operation/OperationList',
   },
   {
     name: 'exception',

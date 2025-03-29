@@ -1,4 +1,4 @@
-import { DownloadOutlined } from '@ant-design/icons';
+import {DownloadOutlined, PlusOutlined} from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
@@ -67,6 +67,7 @@ const JobList: React.FC = () => {
       title: 'id',
       dataIndex: 'id',
       valueType: 'text',
+      hideInForm: true,
     },
     {
       title: '岗位名称',
@@ -79,9 +80,10 @@ const JobList: React.FC = () => {
       valueType: 'text',
     },
     {
-      title: '创建岗位id',
+      title: '创建管理员id',
       dataIndex: 'adminId',
       valueType: 'text',
+      hideInForm: true,
     },
     {
       title: '创建时间',
@@ -150,6 +152,14 @@ const JobList: React.FC = () => {
         }}
         toolBarRender={() => [
           <Space key={'space'} wrap>
+            <Button
+              icon={<PlusOutlined />}
+              key={'export'}
+              type={'primary'}
+              onClick={() => setCreateModalVisible(true)}
+            >
+              新建岗位信息
+            </Button>
             <Button
               key={'export'}
               onClick={async () => {
