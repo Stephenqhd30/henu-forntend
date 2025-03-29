@@ -9,3 +9,4 @@ export const HENU_URL = 'https://www.henu.edu.cn';
 // Excel
 export const USER_EXCEL = '用户信息';
 export const ADMIN_EXCEL = '管理员信息.xlsx';
+export const REVIEW_LOG_EXCEL = '审核日志信息.xlsx';

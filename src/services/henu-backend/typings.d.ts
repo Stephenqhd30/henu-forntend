@@ -1908,6 +1908,7 @@ declare namespace API {
     adminVO?: AdminVO;
     createTime?: string;
     id?: number;
+    registrationFormVO?: RegistrationFormVO;
     registrationId?: number;
     reviewComments?: string;
     reviewStatus?: number;

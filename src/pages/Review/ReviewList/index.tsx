@@ -2,14 +2,18 @@ import React, { useRef, useState } from 'react';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, Image, Select, Space, Typography } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
-import { BatchReviewModal, ReviewModal } from '@/pages/Review/components';
+import { BatchReviewModal, ReviewModal } from '@/pages/Review/ReviewList/components';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
 import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
 import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
 import { JobDetailsModal } from '@/components/ReJob';
 import { UserDetailsModal } from '@/components/ReUser';
 
-const CertificateReview: React.FC = () => {
+/**
+ * 报名登记表信息审核
+ * @constructor
+ */
+const RegistrationReview: React.FC = () => {
   const actionRef = useRef<ActionType>();
   // 用户详细 Modal 框
   const [userModal, setUserModal] = useState<boolean>(false);
@@ -303,4 +307,4 @@ const CertificateReview: React.FC = () => {
   );
 };
 
-export default CertificateReview;
+export default RegistrationReview;

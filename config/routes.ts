@@ -8,19 +8,28 @@ export default [
   {
     name: '审核页面',
     path: '/review',
-    icon: 'UserOutlined',
-    component: './Review',
+    icon: 'crown',
+    routes: [
+      { name: '报名登记表审核', path: '/review', icon: "PicLeftOutlined", component: './Review/ReviewList' },
+      {
+        name: '审核日志',
+        access: 'canAdmin',
+        path: '/review/log',
+        icon: 'PicCenterOutlined',
+        component: './Review/ReviewLogList',
+      },
+    ],
   },
   {
-    name: '管理页',
+    name: '人员信息',
     path: 'admin',
-    icon: 'crown',
+    icon: 'UserOutlined',
     routes: [
       {
         name: '管理员管理',
-        access: "canAdmin",
+        access: 'canAdmin',
         path: '/admin/admin',
-        icon: 'PicCenterOutlined',
+        icon: 'UsergroupAddOutlined',
         component: './Admin/AdminList',
       },
       {
@@ -31,6 +40,7 @@ export default [
       },
     ],
   },
+
   {
     name: 'exception',
     icon: 'warning',
