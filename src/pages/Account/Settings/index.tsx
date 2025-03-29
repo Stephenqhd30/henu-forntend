@@ -1,7 +1,6 @@
 import { PageContainer, ProCard } from '@ant-design/pro-components';
 import React, { useEffect, useState } from 'react';
 
-import { ACCOUNT_TITLE } from '@/constants';
 import BaseView from '@/pages/Account/Settings/components/BaseView';
 import { Grid } from 'antd';
 import { useModel } from '@@/exports';
@@ -28,7 +27,7 @@ const Settings: React.FC = () => {
   const isMobile = !screens.md; // 576px 以下为移动端
 
   return (
-    <PageContainer title={ACCOUNT_TITLE}>
+    <PageContainer>
       <ProCard
         tabs={{
           tabPosition: isMobile ? 'top' : 'left',

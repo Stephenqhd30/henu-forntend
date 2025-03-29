@@ -1,4 +1,3 @@
 export enum FileUploadBiz {
-  USER_AVATAR = 'user_avatar',
-  CERTIFICATE_URL = 'certificate_url',
+  USER_AVATAR = '用户头像',
 }

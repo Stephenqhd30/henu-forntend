@@ -3,8 +3,26 @@ export default [
   {
     path: '/user',
     layout: false,
+    routes: [{ name: '管理员登录', path: '/user/login', component: './User/Login' }],
+  },
+  {
+    name: '管理页',
+    path: 'admin',
+    icon: 'crown',
     routes: [
-      { name: '管理员登录', path: '/user/login', component: './User/Login' },
+      {
+        name: '管理员管理',
+        access: "canAdmin",
+        path: '/admin/admin',
+        icon: 'UserOutlined',
+        component: './Admin/AdminList',
+      },
+      {
+        name: '用户管理',
+        path: '/admin/user',
+        icon: 'UserOutlined',
+        component: './Admin/UserList',
+      },
     ],
   },
   {

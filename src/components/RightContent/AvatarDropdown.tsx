@@ -1,18 +1,12 @@
-import {
-  LogoutOutlined,
-  SafetyCertificateOutlined,
-  SettingOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { history, Link, useModel } from '@umijs/max';
-import { Button, Space } from 'antd';
+import { Button } from 'antd';
 import { stringify } from 'querystring';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import React, { useCallback } from 'react';
 import { flushSync } from 'react-dom';
 import HeaderDropdown from '../HeaderDropdown';
-import AdminAvatarCard from '@/components/ReAdmin/AdminAvatarCard';
-import {adminLogoutUsingPost} from '@/services/henu-backend/adminController';
+import { adminLogoutUsingPost } from '@/services/henu-backend/adminController';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -45,7 +39,6 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     }
   };
 
-
   const onMenuClick = useCallback(
     (event: MenuInfo) => {
       const { key } = event;
@@ -57,7 +50,6 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         return;
       }
       history.push(`/account/${key}`);
-
     },
     [setInitialState],
   );
@@ -116,9 +108,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         items: menuItems,
       }}
     >
-      <Space>
-        <AdminAvatarCard admin={currentAdmin} />
-      </Space>
+      <span>{currentAdmin.adminName}</span>
     </HeaderDropdown>
   );
 };

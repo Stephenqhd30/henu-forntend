@@ -1,21 +1,21 @@
-import {Footer} from '@/components';
-import {LoginForm, ProCard, ProConfigProvider} from '@ant-design/pro-components';
-import {history, useModel} from '@umijs/max';
-import {Grid, Image, message, theme, Typography} from 'antd';
-import React, {useEffect, useState} from 'react';
-import {HENU_SUBTITLE, HENU_TITLE} from '@/constants';
-import {adminLoginUsingPost} from '@/services/henu-backend/adminController';
+import { Footer } from '@/components';
+import { LoginForm, ProCard, ProConfigProvider } from '@ant-design/pro-components';
+import { history, useModel } from '@umijs/max';
+import { Grid, Image, message, theme, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { HENU_SUBTITLE, HENU_TITLE } from '@/constants';
+import { adminLoginUsingPost } from '@/services/henu-backend/adminController';
 import AccountLoginPage from '@/pages/User/Login/components/AccountLoginPage';
 
-const {useBreakpoint} = Grid;
+const { useBreakpoint } = Grid;
 /**
  * 登录信息页
  * @constructor
  */
 const Login: React.FC = () => {
-  const {initialState, setInitialState} = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
   const [redirected, setRedirected] = useState(false);
-  const {token} = theme.useToken();
+  const { token } = theme.useToken();
   const scene = useBreakpoint();
   const isMobile = !scene.md;
   // 用户登录
@@ -23,13 +23,13 @@ const Login: React.FC = () => {
     try {
       // 登录
       const res = await adminLoginUsingPost({
-        ...values
+        ...values,
       });
       if (res.code === 0 && res.data) {
         // 保存已登录的用户信息
         setInitialState({
           ...initialState,
-          currentAdmin: res?.data
+          currentAdmin: res?.data,
         });
         localStorage.setItem('henu-token', res?.data?.token || '');
         setRedirected(true);
@@ -48,7 +48,7 @@ const Login: React.FC = () => {
       const urlParams = new URL(window.location.href).searchParams;
       history.push(urlParams.get('redirect') || '/');
     }
-  }, [redirected]);
+  }, []);
 
   return (
     <>
@@ -60,31 +60,31 @@ const Login: React.FC = () => {
           height: '85vh',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <ProConfigProvider hashed={false}>
-          <div style={{backgroundColor: token.colorBgContainer}}>
-            <ProCard boxShadow={!isMobile} bodyStyle={{padding: isMobile ? 0 : 24}}>
+          <div style={{ backgroundColor: token.colorBgContainer }}>
+            <ProCard boxShadow={!isMobile} bodyStyle={{ padding: isMobile ? 0 : 24 }}>
               <LoginForm
-                logo={<Image src={'/logo.png'} preview={false} width={56}/>}
+                logo={<Image src={'/logo.png'} preview={false} width={56} />}
                 title={<Typography.Title level={3}>{HENU_TITLE}</Typography.Title>}
                 subTitle={<Typography.Title level={5}>{HENU_SUBTITLE}</Typography.Title>}
                 containerStyle={{
-                  padding: isMobile ? 0 : 24
+                  padding: isMobile ? 0 : 24,
                 }}
                 onFinish={async (values) => {
                   await handleLoginSubmit(values as API.AdminLoginRequest);
                   setRedirected(true);
                 }}
               >
-                <AccountLoginPage key={'account'}/>
+                <AccountLoginPage key={'account'} />
               </LoginForm>
             </ProCard>
           </div>
         </ProConfigProvider>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
