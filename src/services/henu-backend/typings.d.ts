@@ -1780,6 +1780,10 @@ declare namespace API {
     notId?: number;
     pageSize?: number;
     partyTime?: string;
+    reviewComments?: string;
+    reviewStatus?: number;
+    reviewTime?: string;
+    reviewer?: string;
     searchText?: string;
     sortField?: string;
     sortOrder?: string;
@@ -1823,6 +1827,10 @@ declare namespace API {
     jobVO?: JobVO;
     marryStatus?: number;
     partyTime?: string;
+    reviewComments?: string;
+    reviewStatus?: number;
+    reviewTime?: string;
+    reviewer?: string;
     studentLeaderAwards?: string;
     updateTime?: string;
     userAvatar?: string;
@@ -1868,6 +1876,7 @@ declare namespace API {
 
   type ReviewLogAddRequest = {
     registrationId?: number;
+    registrationIds?: number[];
     reviewComments?: string;
     reviewStatus?: number;
   };

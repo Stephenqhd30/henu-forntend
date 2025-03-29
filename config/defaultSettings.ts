@@ -11,7 +11,7 @@ const Settings: ProLayoutProps & {
   // 拂晓蓝
   colorPrimary: '#1890ff',
   layout: 'mix',
-  contentWidth: 'Fixed',
+  contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,

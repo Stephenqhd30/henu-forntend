@@ -6,6 +6,12 @@ export default [
     routes: [{ name: '管理员登录', path: '/user/login', component: './User/Login' }],
   },
   {
+    name: '审核页面',
+    path: '/review',
+    icon: 'UserOutlined',
+    component: './Review',
+  },
+  {
     name: '管理页',
     path: 'admin',
     icon: 'crown',
@@ -14,7 +20,7 @@ export default [
         name: '管理员管理',
         access: "canAdmin",
         path: '/admin/admin',
-        icon: 'UserOutlined',
+        icon: 'PicCenterOutlined',
         component: './Admin/AdminList',
       },
       {

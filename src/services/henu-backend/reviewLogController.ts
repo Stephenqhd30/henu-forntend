@@ -17,6 +17,21 @@ export async function addReviewLogUsingPost(
   });
 }
 
+/** batchAddReviewLogs POST /api/reviewLog/add/batch */
+export async function batchAddReviewLogsUsingPost(
+  body: API.ReviewLogAddRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseString_>('/api/reviewLog/add/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** deleteReviewLog POST /api/reviewLog/delete */
 export async function deleteReviewLogUsingPost(
   body: API.DeleteRequest,
