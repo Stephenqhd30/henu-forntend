@@ -1,19 +1,19 @@
 import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
+import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import {
-  exportAdminTemplateUsingGet,
-  exportAdminUsingGet,
-} from '@/services/henu-backend/excelController';
-import {ADMIN_EXCEL, EXPORT_ADMIN_EXCEL} from '@/constants';
+  deleteSchoolUsingPost,
+  listSchoolByPageUsingPost,
+} from '@/services/henu-backend/schoolController';
+import CreateSchoolModal from '@/pages/School/SchoolList/components/CreateSchoolModal';
+import UpdateSchoolModal from '@/pages/School/SchoolList/components/UpdateSchoolModal';
+import { UploadSchoolModal } from '@/pages/School/SchoolList/components';
 import {
-  deleteAdminUsingPost,
-  listAdminByPageUsingPost,
-} from '@/services/henu-backend/adminController';
-import { adminTypeEnum } from '@/enums/AdminTypeEnum';
-import CreateAdminModal from '@/pages/Admin/AdminList/components/CreateAdminModal';
-import { UpdateAdminModal, UploadAdminModal } from '@/pages/Admin/AdminList/components';
+  exportSchoolTemplateUsingGet,
+  exportSchoolUsingGet,
+} from '@/services/henu-backend/excelController';
+import { SCHOOL_EXCEL } from '@/constants';
 
 /**
  * 删除节点
@@ -24,38 +24,42 @@ const handleDelete = async (row: API.DeleteRequest) => {
   const hide = message.loading('正在删除');
   if (!row) return true;
   try {
-    await deleteAdminUsingPost({
+    const res = await deleteSchoolUsingPost({
       id: row.id,
     });
-    hide();
-    message.success('删除成功');
+    if (res.code === 0 && res.data) {
+      message.success('删除成功');
+    } else {
+      message.error(`删除失败${res.message}, 请重试!`);
+    }
   } catch (error: any) {
-    hide();
     message.error(`删除失败${error.message}, 请重试!`);
+  } finally {
+    hide();
   }
 };
 
 /**
- * 管理员管理列表
+ * 高校信息管理
  * @constructor
  */
-const AdminList: React.FC = () => {
-  const actionRef = useRef<ActionType>();
-  // 当前管理员的所点击的数据
-  const [currentRow, setCurrentRow] = useState<API.Admin>();
-  // 创建管理员 Modal 框
+const SchoolList: React.FC = () => {
+  // 新建窗口的Modal框
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
-  // 更新管理员 Modal 框
+  // 更新窗口的Modal框
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   // 上传窗口 Modal 框
   const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
+  const actionRef = useRef<ActionType>();
+  // 当前标签的所点击的数据
+  const [currentRow, setCurrentRow] = useState<API.School>();
 
   /**
-   * 下载管理员信息
+   * 下载高校信息信息
    */
-  const downloadAdminInfo = async () => {
+  const downloadSchoolInfo = async () => {
     try {
-      const res = await exportAdminUsingGet({
+      const res = await exportSchoolUsingGet({
         responseType: 'blob',
       });
 
@@ -64,7 +68,7 @@ const AdminList: React.FC = () => {
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', ADMIN_EXCEL);
+      link.setAttribute('download', SCHOOL_EXCEL);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -77,11 +81,11 @@ const AdminList: React.FC = () => {
   };
 
   /**
-   * 下载导入管理员示例数据
+   * 下载导入高校信息示例数据
    */
-  const downloadAdminExample = async () => {
+  const downloadSchoolExample = async () => {
     try {
-      const res = await exportAdminTemplateUsingGet({
+      const res = await exportSchoolTemplateUsingGet({
         responseType: 'blob',
       });
 
@@ -90,7 +94,7 @@ const AdminList: React.FC = () => {
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', EXPORT_ADMIN_EXCEL);
+      link.setAttribute('download', '导入高校信息示例数据.xlsx');
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -105,39 +109,23 @@ const AdminList: React.FC = () => {
   /**
    * 表格列数据
    */
-  const columns: ProColumns<API.Admin>[] = [
+  const columns: ProColumns<API.School>[] = [
     {
       title: 'id',
       dataIndex: 'id',
       valueType: 'text',
-    },
-    {
-      title: '管理员',
-      dataIndex: 'adminName',
-      valueType: 'text',
-    },
-    {
-      title: '管理员编号',
-      dataIndex: 'adminNumber',
-      valueType: 'text',
-    },
-    {
-      title: '管理员密码',
-      dataIndex: 'adminPassword',
-      valueType: 'password',
-      hideInSearch: true,
-      hideInTable: true,
       hideInForm: true,
     },
     {
-      title: '权限',
-      dataIndex: 'adminType',
-      valueEnum: adminTypeEnum,
-      render: (_, record) => {
-        // @ts-ignore
-        const role = adminTypeEnum[record.adminType];
-        return <Tag color={role?.color}>{role.text}</Tag>;
-      },
+      title: '高校名称',
+      dataIndex: 'schoolName',
+      valueType: 'text',
+    },
+    {
+      title: '创建人id',
+      dataIndex: 'adminId',
+      valueType: 'text',
+      hideInForm: true,
     },
     {
       title: '创建时间',
@@ -164,12 +152,14 @@ const AdminList: React.FC = () => {
           <Typography.Link
             key="update"
             onClick={() => {
+              setUpdateModalVisible(true);
               setCurrentRow(record);
+              actionRef.current?.reload();
             }}
           >
             修改
           </Typography.Link>
-          {/*删除表单管理员的PopConfirm框*/}
+          {/*删除表单高校信息的PopConfirm框*/}
           <Popconfirm
             title="确定删除？"
             description="删除后将无法恢复?"
@@ -195,9 +185,9 @@ const AdminList: React.FC = () => {
     },
   ];
   return (
-    <PageContainer>
-      <ProTable<API.Admin, API.PageParams>
-        headerTitle={'管理员查询'}
+    <>
+      <ProTable<API.SchoolVO, API.PageParams>
+        headerTitle={'高校信息'}
         actionRef={actionRef}
         rowKey={'id'}
         search={{
@@ -211,16 +201,16 @@ const AdminList: React.FC = () => {
               type={'primary'}
               onClick={() => setCreateModalVisible(true)}
             >
-              新建管理员
+              新建高校信息
             </Button>
             <Button
               icon={<DownloadOutlined />}
               key={'export-example'}
               onClick={async () => {
-                await downloadAdminExample();
+                await downloadSchoolExample();
               }}
             >
-              下载导入管理员示例数据
+              下载导入高校信息示例数据
             </Button>
             <Button
               icon={<UploadOutlined />}
@@ -229,28 +219,28 @@ const AdminList: React.FC = () => {
                 setUploadModalVisible(true);
               }}
             >
-              批量导入管理员信息
+              批量导入高校信息
             </Button>
             <Button
               icon={<DownloadOutlined />}
               key={'export'}
               onClick={async () => {
-                await downloadAdminInfo();
+                await downloadSchoolInfo();
               }}
             >
-              导出管理员信息
+              导出高校信息
             </Button>
           </Space>,
         ]}
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
-          const { data, code } = await listAdminByPageUsingPost({
+          const { data, code } = await listSchoolByPageUsingPost({
             ...params,
             ...filter,
             sortField,
             sortOrder,
-          } as API.AdminQueryRequest);
+          } as API.SchoolQueryRequest);
 
           return {
             success: code === 0,
@@ -260,36 +250,40 @@ const AdminList: React.FC = () => {
         }}
         columns={columns}
       />
+
+      {/*新建表单的Modal框*/}
       {createModalVisible && (
-        <CreateAdminModal
+        <CreateSchoolModal
           onCancel={() => {
             setCreateModalVisible(false);
           }}
           onSubmit={async () => {
-            actionRef.current?.reload();
             setCreateModalVisible(false);
+            actionRef.current?.reload();
           }}
           visible={createModalVisible}
           columns={columns}
         />
       )}
+      {/*更新表单的Modal框*/}
       {updateModalVisible && (
-        <UpdateAdminModal
-          oldData={currentRow}
+        <UpdateSchoolModal
           onCancel={() => {
             setUpdateModalVisible(false);
           }}
           onSubmit={async () => {
-            actionRef.current?.reload();
             setUpdateModalVisible(false);
+            setCurrentRow(undefined);
+            actionRef.current?.reload();
           }}
           visible={updateModalVisible}
           columns={columns}
+          oldData={currentRow}
         />
       )}
-      {/*上传管理员信息*/}
+      {/*上传高校信息*/}
       {uploadModalVisible && (
-        <UploadAdminModal
+        <UploadSchoolModal
           onCancel={() => {
             setUploadModalVisible(false);
           }}
@@ -300,7 +294,7 @@ const AdminList: React.FC = () => {
           }}
         />
       )}
-    </PageContainer>
+    </>
   );
 };
-export default AdminList;
+export default SchoolList;

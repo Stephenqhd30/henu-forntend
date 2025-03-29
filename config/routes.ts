@@ -21,7 +21,7 @@ export default [
     ],
   },
   {
-    name: '人员信息',
+    name: '人员信息管理',
     path: 'admin',
     icon: 'UserOutlined',
     routes: [
@@ -37,6 +37,19 @@ export default [
         path: '/admin/user',
         icon: 'UserOutlined',
         component: './Admin/UserList',
+      },
+    ],
+  },
+  {
+    name: '高校信息管理',
+    path: 'school',
+    icon: 'FundProjectionScreenOutlined',
+    routes: [
+      {
+        name: '高校信息管理',
+        path: '/school/school',
+        icon: 'ScheduleOutlined',
+        component: './School/SchoolList',
       },
     ],
   },

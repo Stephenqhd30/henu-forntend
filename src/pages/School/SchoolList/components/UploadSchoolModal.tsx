@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import React from 'react';
 import { ModalForm, ProForm, ProFormUploadDragger } from '@ant-design/pro-components';
-import { importAdminExcelUsingPost } from '@/services/henu-backend/excelController';
+import { importSchoolExcelUsingPost } from '@/services/henu-backend/excelController';
 
 interface Props {
   onCancel: () => void;
@@ -20,23 +20,23 @@ const UploadAdminModal: React.FC<Props> = (props) => {
 
   return (
     <ModalForm
-      title={'批量导入管理员信息'}
+      title={'批量导入高校信息信息'}
       open={visible}
       form={form}
       onFinish={async (values: any) => {
-        const hide = message.loading('正在导入管理员信息，请稍等...');
+        const hide = message.loading('正在导入高校信息信息，请稍等...');
         try {
-          const res = await importAdminExcelUsingPost({
+          const res = await importSchoolExcelUsingPost({
             file: values.file[0].originFileObj,
           });
           if (res.code === 0 && res?.data) {
-            message.success('管理员信息导入成功');
+            message.success('高校信息信息导入成功');
             onSubmit?.();
           } else {
-            message.error('管理员信息导入失败请重试');
+            message.error('高校信息信息导入失败请重试');
           }
         } catch (error: any) {
-          message.error(`管理员信息导入失败${error.message}` + '请重试');
+          message.error(`高校信息信息导入失败${error.message}` + '请重试');
         } finally {
           hide();
         }
