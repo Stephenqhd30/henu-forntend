@@ -17,7 +17,7 @@ const Settings: ProLayoutProps & {
   colorWeak: false,
   splitMenus: false,
   siderMenuType: 'sub',
-  title: '河南大学',
+  title: '河南大学辅导员招聘系统后台管理',
   pwa: false,
   logo: '/logo.png',
   iconfontUrl: '',

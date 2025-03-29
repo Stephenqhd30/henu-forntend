@@ -13,3 +13,5 @@ export const EXPORT_ADMIN_EXCEL = '导入管理员信息示例.xlsx';
 export const REVIEW_LOG_EXCEL = '审核日志信息.xlsx';
 export const SCHOOL_EXCEL = '高校信息.xlsx';
 export const EXPORT_SCHOOL_EXCEL = '导入高校信息示例.xlsx';
+export const SCHOOL_SCHOOL_EXCEL = '高校类型信息.xlsx';
+export const EXPORT_SCHOOL_SCHOOL_EXCEL = '导入高校类型信息示例.xlsx';

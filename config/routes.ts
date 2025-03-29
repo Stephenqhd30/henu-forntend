@@ -51,6 +51,12 @@ export default [
         icon: 'ScheduleOutlined',
         component: './School/SchoolList',
       },
+      {
+        name: '高校类型信息管理',
+        path: '/school/type',
+        icon: 'FontSizeOutlined',
+        component: './School/SchoolTypeList',
+      },
     ],
   },
 

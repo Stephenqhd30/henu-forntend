@@ -154,6 +154,22 @@ export async function exportSchoolTemplateUsingGet(options?: { [key: string]: an
   });
 }
 
+/** exportSchoolSchoolTypeTemplate GET /api/excel/export/template/school/school/type */
+export async function exportSchoolSchoolTypeTemplateUsingGet(options?: { [key: string]: any }) {
+  return request<any>('/api/excel/export/template/school/school/type', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** exportSchoolTypeTemplate GET /api/excel/export/template/school/type */
+export async function exportSchoolTypeTemplateUsingGet(options?: { [key: string]: any }) {
+  return request<any>('/api/excel/export/template/school/type', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** exportUser GET /api/excel/export/user */
 export async function exportUserUsingGet(options?: { [key: string]: any }) {
   return request<any>('/api/excel/export/user', {
@@ -227,6 +243,78 @@ export async function importSchoolExcelUsingPost(
   });
 
   return request<API.BaseResponseString_>('/api/excel/import/school', {
+    method: 'POST',
+    data: formData,
+    requestType: 'form',
+    ...(options || {}),
+  });
+}
+
+/** importSchoolSchoolTypeExcel POST /api/excel/import/school/school/type */
+export async function importSchoolSchoolTypeExcelUsingPost(
+  body: {},
+  file?: File,
+  options?: { [key: string]: any },
+) {
+  const formData = new FormData();
+
+  if (file) {
+    formData.append('file', file);
+  }
+
+  Object.keys(body).forEach((ele) => {
+    const item = (body as any)[ele];
+
+    if (item !== undefined && item !== null) {
+      if (typeof item === 'object' && !(item instanceof File)) {
+        if (item instanceof Array) {
+          item.forEach((f) => formData.append(ele, f || ''));
+        } else {
+          formData.append(ele, JSON.stringify(item));
+        }
+      } else {
+        formData.append(ele, item);
+      }
+    }
+  });
+
+  return request<API.BaseResponseString_>('/api/excel/import/school/school/type', {
+    method: 'POST',
+    data: formData,
+    requestType: 'form',
+    ...(options || {}),
+  });
+}
+
+/** importSchoolTypeExcel POST /api/excel/import/school/type */
+export async function importSchoolTypeExcelUsingPost(
+  body: {},
+  file?: File,
+  options?: { [key: string]: any },
+) {
+  const formData = new FormData();
+
+  if (file) {
+    formData.append('file', file);
+  }
+
+  Object.keys(body).forEach((ele) => {
+    const item = (body as any)[ele];
+
+    if (item !== undefined && item !== null) {
+      if (typeof item === 'object' && !(item instanceof File)) {
+        if (item instanceof Array) {
+          item.forEach((f) => formData.append(ele, f || ''));
+        } else {
+          formData.append(ele, JSON.stringify(item));
+        }
+      } else {
+        formData.append(ele, item);
+      }
+    }
+  });
+
+  return request<API.BaseResponseString_>('/api/excel/import/school/type', {
     method: 'POST',
     data: formData,
     requestType: 'form',

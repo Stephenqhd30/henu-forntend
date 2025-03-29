@@ -1,19 +1,21 @@
 import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import {
-  deleteSchoolUsingPost,
-  listSchoolByPageUsingPost,
-} from '@/services/henu-backend/schoolController';
-import CreateSchoolModal from '@/pages/School/SchoolList/components/CreateSchoolModal';
-import UpdateSchoolModal from '@/pages/School/SchoolList/components/UpdateSchoolModal';
-import { UploadSchoolModal } from '@/pages/School/SchoolList/components';
-import {
-  exportSchoolTemplateUsingGet,
-  exportSchoolUsingGet,
+  exportSchoolTypeTemplateUsingGet,
+  exportSchoolTypeUsingGet,
 } from '@/services/henu-backend/excelController';
-import {EXPORT_SCHOOL_EXCEL, SCHOOL_EXCEL} from '@/constants';
+import { EXPORT_SCHOOL_EXCEL, SCHOOL_SCHOOL_EXCEL } from '@/constants';
+import {
+  deleteSchoolTypeUsingPost,
+  listSchoolTypeByPageUsingPost,
+} from '@/services/henu-backend/schoolTypeController';
+import {
+  CreateSchoolTypeModal,
+  UpdateSchoolTypeModal,
+  UploadSchoolTypeModal,
+} from '@/pages/School/SchoolTypeList/components';
 
 /**
  * 删除节点
@@ -24,7 +26,7 @@ const handleDelete = async (row: API.DeleteRequest) => {
   const hide = message.loading('正在删除');
   if (!row) return true;
   try {
-    const res = await deleteSchoolUsingPost({
+    const res = await deleteSchoolTypeUsingPost({
       id: row.id,
     });
     if (res.code === 0 && res.data) {
@@ -40,10 +42,10 @@ const handleDelete = async (row: API.DeleteRequest) => {
 };
 
 /**
- * 高校信息管理
+ * 高校类型信息管理
  * @constructor
  */
-const SchoolList: React.FC = () => {
+const SchoolTypeList: React.FC = () => {
   // 新建窗口的Modal框
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   // 更新窗口的Modal框
@@ -52,23 +54,22 @@ const SchoolList: React.FC = () => {
   const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   // 当前标签的所点击的数据
-  const [currentRow, setCurrentRow] = useState<API.School>();
+  const [currentRow, setCurrentRow] = useState<API.SchoolType>();
 
   /**
-   * 下载高校信息信息
+   * 下载高校类型信息
    */
-  const downloadSchoolInfo = async () => {
+  const downloadSchoolTypeInfo = async () => {
     try {
-      const res = await exportSchoolUsingGet({
+      const res = await exportSchoolTypeUsingGet({
         responseType: 'blob',
       });
-
       // 创建 Blob 对象
       // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', SCHOOL_EXCEL);
+      link.setAttribute('download', SCHOOL_SCHOOL_EXCEL);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -81,14 +82,13 @@ const SchoolList: React.FC = () => {
   };
 
   /**
-   * 下载导入高校信息示例数据
+   * 下载导入息高校信示例数据
    */
-  const downloadSchoolExample = async () => {
+  const downloadSchoolTypeExample = async () => {
     try {
-      const res = await exportSchoolTemplateUsingGet({
+      const res = await exportSchoolTypeTemplateUsingGet({
         responseType: 'blob',
       });
-
       // 创建 Blob 对象
       // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
@@ -109,7 +109,7 @@ const SchoolList: React.FC = () => {
   /**
    * 表格列数据
    */
-  const columns: ProColumns<API.School>[] = [
+  const columns: ProColumns<API.SchoolType>[] = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -117,8 +117,8 @@ const SchoolList: React.FC = () => {
       hideInForm: true,
     },
     {
-      title: '高校名称',
-      dataIndex: 'schoolName',
+      title: '类型名称',
+      dataIndex: 'typeName',
       valueType: 'text',
     },
     {
@@ -159,7 +159,7 @@ const SchoolList: React.FC = () => {
           >
             修改
           </Typography.Link>
-          {/*删除表单高校信息的PopConfirm框*/}
+          {/*删除表单高校类型信息的PopConfirm框*/}
           <Popconfirm
             title="确定删除？"
             description="删除后将无法恢复?"
@@ -185,9 +185,9 @@ const SchoolList: React.FC = () => {
     },
   ];
   return (
-    <>
-      <ProTable<API.SchoolVO, API.PageParams>
-        headerTitle={'高校信息'}
+    <PageContainer>
+      <ProTable<API.SchoolTypeVO, API.PageParams>
+        headerTitle={'高校类型信息'}
         actionRef={actionRef}
         rowKey={'id'}
         search={{
@@ -201,16 +201,16 @@ const SchoolList: React.FC = () => {
               type={'primary'}
               onClick={() => setCreateModalVisible(true)}
             >
-              新建高校信息
+              新建高校类型信息
             </Button>
             <Button
               icon={<DownloadOutlined />}
               key={'export-example'}
               onClick={async () => {
-                await downloadSchoolExample();
+                await downloadSchoolTypeExample();
               }}
             >
-              下载导入高校信息示例数据
+              下载导入高校类型信息示例数据
             </Button>
             <Button
               icon={<UploadOutlined />}
@@ -219,28 +219,28 @@ const SchoolList: React.FC = () => {
                 setUploadModalVisible(true);
               }}
             >
-              批量导入高校信息
+              批量导入高校类型信息
             </Button>
             <Button
               icon={<DownloadOutlined />}
               key={'export'}
               onClick={async () => {
-                await downloadSchoolInfo();
+                await downloadSchoolTypeInfo();
               }}
             >
-              导出高校信息
+              导出高校类型信息
             </Button>
           </Space>,
         ]}
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
-          const { data, code } = await listSchoolByPageUsingPost({
+          const { data, code } = await listSchoolTypeByPageUsingPost({
             ...params,
             ...filter,
             sortField,
             sortOrder,
-          } as API.SchoolQueryRequest);
+          } as API.SchoolTypeQueryRequest);
 
           return {
             success: code === 0,
@@ -253,7 +253,7 @@ const SchoolList: React.FC = () => {
 
       {/*新建表单的Modal框*/}
       {createModalVisible && (
-        <CreateSchoolModal
+        <CreateSchoolTypeModal
           onCancel={() => {
             setCreateModalVisible(false);
           }}
@@ -267,7 +267,7 @@ const SchoolList: React.FC = () => {
       )}
       {/*更新表单的Modal框*/}
       {updateModalVisible && (
-        <UpdateSchoolModal
+        <UpdateSchoolTypeModal
           onCancel={() => {
             setUpdateModalVisible(false);
           }}
@@ -281,9 +281,9 @@ const SchoolList: React.FC = () => {
           oldData={currentRow}
         />
       )}
-      {/*上传高校信息*/}
+      {/*上传高校类型信息*/}
       {uploadModalVisible && (
-        <UploadSchoolModal
+        <UploadSchoolTypeModal
           onCancel={() => {
             setUploadModalVisible(false);
           }}
@@ -294,7 +294,7 @@ const SchoolList: React.FC = () => {
           }}
         />
       )}
-    </>
+    </PageContainer>
   );
 };
-export default SchoolList;
+export default SchoolTypeList;
