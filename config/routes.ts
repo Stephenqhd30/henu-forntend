@@ -47,7 +47,7 @@ export default [
     routes: [
       {
         name: '高校信息管理',
-        path: '/school/school',
+        path: '/school',
         icon: 'ScheduleOutlined',
         component: './School/SchoolList',
       },
@@ -59,7 +59,19 @@ export default [
       },
     ],
   },
-
+  {
+    name: '岗位信息管理',
+    path: 'job',
+    icon: 'FontColorsOutlined',
+    routes: [
+      {
+        name: '岗位信息管理',
+        path: 'job',
+        icon: 'UnderlineOutlined',
+        component: './Job/JobList',
+      },
+    ],
+  },
   {
     name: 'exception',
     icon: 'warning',
