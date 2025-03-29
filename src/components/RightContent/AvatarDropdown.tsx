@@ -1,4 +1,4 @@
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { LogoutOutlined, PicLeftOutlined } from '@ant-design/icons';
 import { history, Link, useModel } from '@umijs/max';
 import { Button } from 'antd';
 import { stringify } from 'querystring';
@@ -49,7 +49,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         loginOut();
         return;
       }
-      history.push(`/account/${key}`);
+      history.push(`${key}`);
     },
     [setInitialState],
   );
@@ -69,14 +69,9 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     ...(menu
       ? [
           {
-            key: 'center',
-            icon: <UserOutlined />,
-            label: '个人中心',
-          },
-          {
-            key: 'settings',
-            icon: <SettingOutlined />,
-            label: '个人设置',
+            key: 'review',
+            icon: <PicLeftOutlined />,
+            label: '信息审核',
           },
           {
             type: 'divider' as const,
@@ -84,14 +79,9 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         ]
       : []),
     {
-      key: 'center',
-      icon: <UserOutlined />,
-      label: '个人中心',
-    },
-    {
-      key: 'settings',
-      icon: <SettingOutlined />,
-      label: '个人设置',
+      key: 'review',
+      icon: <PicLeftOutlined />,
+      label: '信息审核',
     },
     {
       key: 'logout',
