@@ -63,6 +63,12 @@ export default [
         icon: 'FontSizeOutlined',
         component: './School/SchoolTypeList',
       },
+      {
+        name: '高校与高校类型关联信息管理',
+        path: '/school/school/type',
+        icon: 'LinkedinOutlined',
+        component: './School/SchoolSchoolTypeList',
+      },
     ],
   },
   {
