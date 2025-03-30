@@ -22,3 +22,4 @@ export const JOB_EXCEL = '岗位信息.xlsx';
 export const EDUCATION_EXCEL = '教育经历信息.xlsx';
 export const SCHOOL_SCHOOL_TYPE_EXCEL = '高校与高校类型关联信息.xlsx';
 export const EXPORT_SCHOOL_SCHOOL_TYPE_EXCEL = '导入高校与高校类型关联信息示例.xlsx';
+export const REGISTRATION_EXCEL = '报名登记表信息.xlsx';

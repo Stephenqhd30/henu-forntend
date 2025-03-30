@@ -83,6 +83,12 @@ export default [
     icon: 'PieChartOutlined',
     routes: [
       {
+        name: '报名登记信息管理',
+        path: '/registration',
+        icon: 'BarChartOutlined',
+        component: './Registration/RegistrationList',
+      },
+      {
         name: '教育经历信息管理',
         path: '/registration/education',
         icon: 'AreaChartOutlined',
