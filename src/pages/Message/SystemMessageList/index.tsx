@@ -3,7 +3,7 @@ import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro
 import {Button, message, Popconfirm, Select, Space, Tag, Typography} from 'antd';
 import React, { useRef, useState } from 'react';
 import { exportSystemMessagesUsingGet } from '@/services/henu-backend/excelController';
-import { MESSAGE_PUSH_EXCEL } from '@/constants';
+import {MESSAGE_PUSH_EXCEL, SYSTEM_MESSAGE_EXCEL} from '@/constants';
 import {PushStatus, pushStatusEnum} from '@/enums/PushStatusEnum';
 import {
   deleteSystemMessagesUsingPost,
@@ -60,7 +60,7 @@ const SystemMessagesList: React.FC = () => {
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', MESSAGE_PUSH_EXCEL);
+      link.setAttribute('download', SYSTEM_MESSAGE_EXCEL);
       document.body.appendChild(link);
       link.click();
       link.remove();
