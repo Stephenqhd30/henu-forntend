@@ -2,8 +2,8 @@ export default [
   { path: '/', redirect: '/review' },
   {
     path: '/user',
+    name: "登录页面",
     layout: false,
-    redirect: '/user/login',
     routes: [{ name: '管理员登录', path: '/user/login', component: './User/Login' }],
   },
   {

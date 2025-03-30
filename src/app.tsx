@@ -68,7 +68,7 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
       const {location} = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentAdmin && location.pathname !== loginPath) {
-        history.push(loginPath);
+        history.replace(loginPath);
       }
     },
     menuHeaderRender: undefined,

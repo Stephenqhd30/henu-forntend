@@ -12,7 +12,7 @@ const { useBreakpoint } = Grid;
  * 登录信息页
  * @constructor
  */
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const [redirected, setRedirected] = useState(false);
   const { token } = theme.useToken();
@@ -46,9 +46,9 @@ const Login: React.FC = () => {
   useEffect(() => {
     if (redirected) {
       const urlParams = new URL(window.location.href).searchParams;
-      history.push(urlParams.get('redirect') || '/');
+      history.replace(urlParams.get('redirect') || '/');
     }
-  }, []);
+  }, [redirected]);
 
   return (
     <>
@@ -75,7 +75,6 @@ const Login: React.FC = () => {
                 }}
                 onFinish={async (values) => {
                   await handleLoginSubmit(values as API.AdminLoginRequest);
-                  setRedirected(true);
                 }}
               >
                 <AccountLoginPage key={'account'} />
@@ -88,4 +87,4 @@ const Login: React.FC = () => {
     </>
   );
 };
-export default Login;
+export default LoginPage;
