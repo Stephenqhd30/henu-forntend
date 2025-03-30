@@ -34,7 +34,7 @@ export default [
       {
         name: '管理员管理',
         access: 'canAdmin',
-        path: '/admin/admin',
+        path: '/admin',
         icon: 'UsergroupAddOutlined',
         component: './Admin/AdminList',
       },
@@ -72,10 +72,23 @@ export default [
     ],
   },
   {
-    name: '岗位信息管理',
+    name: '招聘信息管理',
     path: 'job',
-    icon: 'UnderlineOutlined',
-    component: './Job/JobList',
+    icon: 'AppstoreAddOutlined',
+    routes: [
+      {
+        name: '岗位信息管理',
+        path: '/job',
+        icon: 'BarcodeOutlined',
+        component: './Job/JobList',
+      },
+      {
+        name: '干部类型管理',
+        path: '/job/cadre/type',
+        icon: 'BookOutlined',
+        component: './Job/CadreTypeList',
+      },
+    ],
   },
   {
     name: '报名登记信息管理',
@@ -122,7 +135,7 @@ export default [
     ],
   },
   {
-    name: '操作日志信息',
+    name: '操作日志信息管理',
     path: 'operation',
     icon: 'FontColorsOutlined',
     component: './Operation/OperationList',
