@@ -141,6 +141,19 @@ export default [
     ],
   },
   {
+    name: '消息通知管理',
+    path: 'message',
+    icon: 'MessageOutlined',
+    routes: [
+      {
+        name: '面试通知管理',
+        path: '/message/notice',
+        icon: 'NotificationOutlined',
+        component: './Message/MessageNoticeList',
+      },
+    ],
+  },
+  {
     name: '操作日志信息管理',
     path: 'operation',
     icon: 'FontColorsOutlined',

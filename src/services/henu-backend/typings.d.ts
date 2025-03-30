@@ -1038,6 +1038,7 @@ declare namespace API {
     interviewLocation?: string;
     interviewTime?: string;
     isDelete?: number;
+    pushStatus?: number;
     registrationId?: number;
     updateTime?: string;
   };
@@ -1056,6 +1057,7 @@ declare namespace API {
     interviewTime?: string;
     notId?: number;
     pageSize?: number;
+    pushStatus?: number;
     registrationId?: number;
     sortField?: string;
     sortOrder?: string;
