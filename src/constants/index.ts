@@ -27,3 +27,4 @@ export const EXPORT_SCHOOL_SCHOOL_TYPE_EXCEL = '导入高校与高校类型关�
 export const REGISTRATION_EXCEL = '报名登记表信息.xlsx';
 export const FAMILY_EXCEL = '家庭关系信息.xlsx';
 export const MESSAGE_NOTICE_EXCEL = '面试通知信息.xlsx';
+export const MESSAGE_PUSH_EXCEL = '消息推送信息.xlsx';

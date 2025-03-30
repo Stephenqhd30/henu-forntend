@@ -151,6 +151,12 @@ export default [
         icon: 'NotificationOutlined',
         component: './Message/MessageNoticeList',
       },
+      {
+        name: '短信推送管理',
+        path: '/message/push',
+        icon: 'SendOutlined',
+        component: './Message/MessagePushList',
+      },
     ],
   },
   {
