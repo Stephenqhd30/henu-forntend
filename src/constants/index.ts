@@ -28,3 +28,4 @@ export const REGISTRATION_EXCEL = '报名登记表信息.xlsx';
 export const FAMILY_EXCEL = '家庭关系信息.xlsx';
 export const MESSAGE_NOTICE_EXCEL = '面试通知信息.xlsx';
 export const MESSAGE_PUSH_EXCEL = '消息推送信息.xlsx';
+export const SYSTEM_MESSAGE_EXCEL = '系统消息信息.xlsx';

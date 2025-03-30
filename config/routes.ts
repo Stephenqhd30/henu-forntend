@@ -157,6 +157,12 @@ export default [
         icon: 'SendOutlined',
         component: './Message/MessagePushList',
       },
+      {
+        name: '系统消息管理',
+        path: '/message/system',
+        icon: 'SettingOutlined',
+        component: './Message/SystemMessageList',
+      },
     ],
   },
   {

@@ -1,20 +1,18 @@
 import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
+import {Button, message, Popconfirm, Select, Space, Tag, Typography} from 'antd';
 import React, { useRef, useState } from 'react';
-import { exportMessagePushUsingGet } from '@/services/henu-backend/excelController';
+import { exportSystemMessagesUsingGet } from '@/services/henu-backend/excelController';
 import { MESSAGE_PUSH_EXCEL } from '@/constants';
-import { PushStatus, pushStatusEnum } from '@/enums/PushStatusEnum';
+import {PushStatus, pushStatusEnum} from '@/enums/PushStatusEnum';
 import {
-  deleteMessagePushUsingPost,
-  listMessagePushByPageUsingPost,
-} from '@/services/henu-backend/messagePushController';
-import { pushTypeEnum } from '@/enums/PushTypeEnum';
-import { listMessageNoticeVoByPageUsingPost } from '@/services/henu-backend/messageNoticeController';
-import {
-  CreateMessagePushModal,
-  UpdateMessagePushModal,
-} from '@/pages/Message/MessagePushList/components';
+  deleteSystemMessagesUsingPost,
+  listSystemMessagesByPageUsingPost,
+} from '@/services/henu-backend/systemMessagesController';
+import CreateSystemMessagesModal from '@/pages/Message/SystemMessageList/components/CreateSystemMessagesModal';
+import UpdateSystemMessagesModal from '@/pages/Message/SystemMessageList/components/UpdateSystemMessagesModal';
+import {systemTypeEnum} from '@/enums/SystemTypeEnum';
+import {UserGender, userGenderEnum} from '@/enums/UserGenderEnum';
 
 /**
  * 删除节点
@@ -25,7 +23,7 @@ const handleDelete = async (row: API.DeleteRequest) => {
   const hide = message.loading('正在删除');
   if (!row) return true;
   try {
-    await deleteMessagePushUsingPost({
+    await deleteSystemMessagesUsingPost({
       id: row.id,
     });
     hide();
@@ -37,27 +35,26 @@ const handleDelete = async (row: API.DeleteRequest) => {
 };
 
 /**
- * 短信推送管理列表
+ * 系统消息管理列表
  * @constructor
  */
-const MessagePushList: React.FC = () => {
-  // 创建短信推送 Modal 框
+const SystemMessagesList: React.FC = () => {
+  // 创建系统消息 Modal 框
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
-  // 更新短信推送 Modal 框
+  // 更新系统消息 Modal 框
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  // 当前短信推送的所点击的数据
-  const [currentRow, setCurrentRow] = useState<API.MessagePush>();
+  // 当前系统消息的所点击的数据
+  const [currentRow, setCurrentRow] = useState<API.SystemMessages>();
 
   /**
-   * 下载短信推送信息
+   * 下载系统消息信息
    */
-  const downloadMessagePushInfo = async () => {
+  const downloadSystemMessagesInfo = async () => {
     try {
-      const res = await exportMessagePushUsingGet({
+      const res = await exportSystemMessagesUsingGet({
         responseType: 'blob',
       });
-
       // 创建 Blob 对象
       // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
@@ -74,10 +71,12 @@ const MessagePushList: React.FC = () => {
       message.error('导出失败: ' + error.message);
     }
   };
+
+
   /**
    * 表格列数据
    */
-  const columns: ProColumns<API.MessagePush>[] = [
+  const columns: ProColumns<API.SystemMessages>[] = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -85,69 +84,51 @@ const MessagePushList: React.FC = () => {
       hideInForm: true,
     },
     {
-      title: '消息通知人',
-      dataIndex: 'messageNoticeId',
-      valueType: 'select',
-      request: async () => {
-        const res = await listMessageNoticeVoByPageUsingPost({
-          notId: PushStatus.SUCCEED,
-        });
-        if (res.code === 0 && res.data) {
-          return (
-            res.data.records?.map((messageNotice) => ({
-              label: messageNotice.registrationFormVO?.userName,
-              value: messageNotice.id,
-            })) ?? []
-          );
-        } else {
-          return [];
-        }
-      },
-      fieldProps: {
-        placeholder: '请选择报名登记表信息',
-      },
+      title: '通知标题',
+      dataIndex: 'title',
+      valueType: 'text',
     },
     {
-      title: '推送消息',
-      dataIndex: 'pushMessage',
+      title: '消息内容',
+      dataIndex: 'content',
       valueType: 'text',
-      hideInForm: true,
     },
     {
-      title: '消息推送方式',
-      dataIndex: 'pushType',
+      title: '推送时间',
+      dataIndex: 'pushTime',
+      valueType: 'dateTime',
+    },
+    {
+      title: '通知标题',
+      dataIndex: 'title',
       valueType: 'text',
-      valueEnum: pushTypeEnum,
+    },
+    {
+      title: '消息类型',
+      dataIndex: 'type',
+      valueType: 'text',
+      valueEnum: systemTypeEnum,
     },
     {
       title: '消息通知状态',
       dataIndex: 'pushStatus',
       valueType: 'text',
-      hideInForm: true,
       valueEnum: pushStatusEnum,
-      render: (_, record) => {
-        // @ts-ignore
-        const pushStatus = pushStatusEnum[record.pushStatus];
-        return <Tag color={pushStatus?.color}>{pushStatus.text}</Tag>;
+      renderFormItem: () => {
+        return (
+          <Select>
+            <Select.Option value={PushStatus.NOT_PUSHED}>
+              {pushStatusEnum[PushStatus.NOT_PUSHED].text}
+            </Select.Option>
+            <Select.Option value={PushStatus.SUCCEED}>
+              {pushStatusEnum[PushStatus.SUCCEED].text}
+            </Select.Option>
+            <Select.Option value={PushStatus.FAILED}>
+              {pushStatusEnum[PushStatus.FAILED].text}
+            </Select.Option>
+          </Select>
+        );
       },
-    },
-    {
-      title: '失败重试次数',
-      dataIndex: 'retryCount',
-      valueType: 'digit',
-      hideInForm: true,
-    },
-    {
-      title: '失败错误消息',
-      dataIndex: 'errorMessage',
-      valueType: 'digit',
-      hideInForm: true,
-    },
-    {
-      title: '推送用户id',
-      dataIndex: 'userId',
-      valueType: 'text',
-      hideInForm: true,
     },
     {
       title: '创建时间',
@@ -180,7 +161,7 @@ const MessagePushList: React.FC = () => {
           >
             修改
           </Typography.Link>
-          {/*删除表单短信推送的PopConfirm框*/}
+          {/*删除表单系统消息的PopConfirm框*/}
           <Popconfirm
             title="确定删除？"
             description="删除后将无法恢复?"
@@ -207,8 +188,8 @@ const MessagePushList: React.FC = () => {
   ];
   return (
     <PageContainer>
-      <ProTable<API.MessagePush, API.PageParams>
-        headerTitle={'短信推送查询'}
+      <ProTable<API.SystemMessages, API.PageParams>
+        headerTitle={'系统消息查询'}
         actionRef={actionRef}
         rowKey={'id'}
         search={{
@@ -222,28 +203,28 @@ const MessagePushList: React.FC = () => {
               type={'primary'}
               onClick={() => setCreateModalVisible(true)}
             >
-              新建短信推送信息
+              新建系统消息信息
             </Button>
             <Button
               key={'export'}
               onClick={async () => {
-                await downloadMessagePushInfo();
+                await downloadSystemMessagesInfo();
               }}
             >
               <DownloadOutlined />
-              导出短信推送信息
+              导出系统消息信息
             </Button>
           </Space>,
         ]}
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
-          const { data, code } = await listMessagePushByPageUsingPost({
+          const { data, code } = await listSystemMessagesByPageUsingPost({
             ...params,
             ...filter,
             sortField,
             sortOrder,
-          } as API.MessagePushQueryRequest);
+          } as API.SystemMessagesQueryRequest);
 
           return {
             success: code === 0,
@@ -254,7 +235,7 @@ const MessagePushList: React.FC = () => {
         columns={columns}
       />
       {createModalVisible && (
-        <CreateMessagePushModal
+        <CreateSystemMessagesModal
           onCancel={() => {
             setCreateModalVisible(false);
           }}
@@ -267,7 +248,7 @@ const MessagePushList: React.FC = () => {
         />
       )}
       {updateModalVisible && (
-        <UpdateMessagePushModal
+        <UpdateSystemMessagesModal
           oldData={currentRow}
           onCancel={() => {
             setUpdateModalVisible(false);
@@ -283,4 +264,4 @@ const MessagePushList: React.FC = () => {
     </PageContainer>
   );
 };
-export default MessagePushList;
+export default SystemMessagesList;
