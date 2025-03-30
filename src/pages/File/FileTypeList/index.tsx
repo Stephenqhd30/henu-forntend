@@ -1,19 +1,12 @@
-import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
+import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
+import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import { Button, message, Popconfirm, Select, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import {
-  exportAdminTemplateUsingGet,
-  exportAdminUsingGet,
-} from '@/services/henu-backend/excelController';
-import {ADMIN_EXCEL, EXPORT_ADMIN_EXCEL} from '@/constants';
-import {
-  deleteAdminUsingPost,
-  listAdminByPageUsingPost,
-} from '@/services/henu-backend/adminController';
-import { adminTypeEnum } from '@/enums/AdminTypeEnum';
-import CreateAdminModal from '@/pages/Admin/AdminList/components/CreateAdminModal';
-import { UpdateAdminModal, UploadAdminModal } from '@/pages/Admin/AdminList/components';
+import { FILE_TYPE_EXCEL } from '@/constants';
+import { deleteFileLogUsingPost } from '@/services/henu-backend/fileLogController';
+import { exportFileLogUsingGet } from '@/services/henu-backend/excelController';
+import { listFileTypeByPageUsingPost } from '@/services/henu-backend/fileTypeController';
+import { CreateFileTypeModal, UpdateFileTypeModal } from '@/pages/File/FileTypeList/components';
 
 /**
  * 删除节点
@@ -24,38 +17,39 @@ const handleDelete = async (row: API.DeleteRequest) => {
   const hide = message.loading('正在删除');
   if (!row) return true;
   try {
-    await deleteAdminUsingPost({
+    const res = await deleteFileLogUsingPost({
       id: row.id,
     });
-    hide();
-    message.success('删除成功');
+    if (res.code === 0 && res.data) {
+      message.success('删除成功');
+    } else {
+      message.error(`删除失败${res.message}, 请重试!`);
+    }
   } catch (error: any) {
-    hide();
     message.error(`删除失败${error.message}, 请重试!`);
+  } finally {
+    hide();
   }
 };
 
 /**
- * 管理员管理列表
+ * 文件上传类型管理
  * @constructor
  */
-const AdminList: React.FC = () => {
+const FileTypeList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  // 当前管理员的所点击的数据
-  const [currentRow, setCurrentRow] = useState<API.Admin>();
-  // 创建管理员 Modal 框
+  // 当前数据
+  const [currentRow, setCurrentRow] = useState<API.FileType>();
+  // 创建文件上传类型 Modal 框
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
-  // 更新管理员 Modal 框
+  // 更新文件上传类型 Modal 框
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
-  // 上传窗口 Modal 框
-  const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
-
   /**
-   * 下载管理员信息
+   * 下载文件上传日志信息
    */
-  const downloadAdminInfo = async () => {
+  const downloadFileTypeInfo = async () => {
     try {
-      const res = await exportAdminUsingGet({
+      const res = await exportFileLogUsingGet({
         responseType: 'blob',
       });
 
@@ -64,33 +58,7 @@ const AdminList: React.FC = () => {
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', ADMIN_EXCEL);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      // 释放对象 URL
-      window.URL.revokeObjectURL(url);
-    } catch (error: any) {
-      message.error('导出失败: ' + error.message);
-    }
-  };
-
-  /**
-   * 下载导入管理员示例数据
-   */
-  const downloadAdminExample = async () => {
-    try {
-      const res = await exportAdminTemplateUsingGet({
-        responseType: 'blob',
-      });
-
-      // 创建 Blob 对象
-      // @ts-ignore
-      const url = window.URL.createObjectURL(new Blob([res]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', EXPORT_ADMIN_EXCEL);
+      link.setAttribute('download', FILE_TYPE_EXCEL);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -105,39 +73,94 @@ const AdminList: React.FC = () => {
   /**
    * 表格列数据
    */
-  const columns: ProColumns<API.Admin>[] = [
+  const columns: ProColumns<API.FileType>[] = [
     {
       title: 'id',
       dataIndex: 'id',
       valueType: 'text',
-    },
-    {
-      title: '管理员',
-      dataIndex: 'adminName',
-      valueType: 'text',
-    },
-    {
-      title: '管理员编号',
-      dataIndex: 'adminNumber',
-      valueType: 'text',
-    },
-    {
-      title: '管理员密码',
-      dataIndex: 'adminPassword',
-      valueType: 'password',
-      hideInSearch: true,
-      hideInTable: true,
       hideInForm: true,
     },
     {
-      title: '权限',
-      dataIndex: 'adminType',
-      valueEnum: adminTypeEnum,
+      title: '文件上传类型名称',
+      dataIndex: 'typeName',
+      valueType: 'text',
+    },
+    {
+      title: '文件上传类型值',
+      dataIndex: 'typeValues',
       render: (_, record) => {
-        // @ts-ignore
-        const role = adminTypeEnum[record.adminType];
-        return <Tag color={role?.color}>{role.text}</Tag>;
+        if (record.typeValues) {
+          const typeList = JSON.parse(record.typeValues as string);
+          return typeList.map((type: any) => (
+            <Tag key={type} color="blue">
+              {type}
+            </Tag>
+          ));
+        }
+        return <Tag>{'无'}</Tag>;
       },
+      renderFormItem: (_, { value }, form) => {
+        const parsedValue = Array.isArray(value) ? value : [];
+        return (
+          <Select
+            mode="tags"
+            value={parsedValue}
+            onChange={(val) => form.setFieldsValue({ typeValues: val })}
+            placeholder="请输入文件类型，回车确认"
+            style={{ width: '100%' }}
+            tokenSeparators={[',']}
+          >
+            {/* 默认选项 */}
+            <Select.Option value="jpg">JPG</Select.Option>
+            <Select.Option value="png">PNG</Select.Option>
+            <Select.Option value="webp">WEBP</Select.Option>
+            <Select.Option value="pdf">PDF</Select.Option>
+          </Select>
+        );
+      },
+    },
+    {
+      title: '最大可上传文件大小',
+      dataIndex: 'maxFileSize',
+      valueType: 'digit',
+      render: (_, record) => {
+        // eslint-disable-next-line eqeqeq
+        if (record.maxFileSize != null) {
+          const sizeInMB = (record.maxFileSize / (1024 * 1024)).toFixed(2);
+          return `${sizeInMB} MB`;
+        }
+        return '未设置';
+      },
+      renderFormItem: (_, { value }, form) => {
+        const sizeOptions = [1, 2, 5, 10]; // 默认选项：1MB、2MB、5MB、10MB
+        return (
+          <Select
+            value={value}
+            onChange={(val) => {
+              // 将 MB 转换为字节（B）
+              // eslint-disable-next-line eqeqeq
+              const sizeInBytes = val != null ? val * 1024 * 1024 : null;
+              form.setFieldsValue({ maxFileSize: sizeInBytes });
+            }}
+            placeholder="请选择文件大小"
+            style={{ width: '100%' }}
+          >
+            {sizeOptions.map((size) => (
+              // @ts-ignore
+              <Option key={size} value={size}>
+                {`${size} MB`}
+              </Option>
+            ))}
+          </Select>
+        );
+      },
+    },
+    {
+      title: '创建者id',
+      dataIndex: 'adminId',
+      valueType: 'text',
+      hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '创建时间',
@@ -170,7 +193,7 @@ const AdminList: React.FC = () => {
           >
             修改
           </Typography.Link>
-          {/*删除表单管理员的PopConfirm框*/}
+          {/*删除表单文件上传日志的PopConfirm框*/}
           <Popconfirm
             title="确定删除？"
             description="删除后将无法恢复?"
@@ -196,9 +219,9 @@ const AdminList: React.FC = () => {
     },
   ];
   return (
-    <PageContainer>
-      <ProTable<API.Admin, API.PageParams>
-        headerTitle={'管理员查询'}
+    <>
+      <ProTable<API.FileType, API.PageParams>
+        headerTitle={'文件上传类型'}
         actionRef={actionRef}
         rowKey={'id'}
         search={{
@@ -212,46 +235,28 @@ const AdminList: React.FC = () => {
               type={'primary'}
               onClick={() => setCreateModalVisible(true)}
             >
-              新建管理员
-            </Button>
-            <Button
-              icon={<DownloadOutlined />}
-              key={'export-example'}
-              onClick={async () => {
-                await downloadAdminExample();
-              }}
-            >
-              下载导入管理员示例数据
-            </Button>
-            <Button
-              icon={<UploadOutlined />}
-              key={'upload'}
-              onClick={() => {
-                setUploadModalVisible(true);
-              }}
-            >
-              批量导入管理员信息
+              新建文件上传类型
             </Button>
             <Button
               icon={<DownloadOutlined />}
               key={'export'}
               onClick={async () => {
-                await downloadAdminInfo();
+                await downloadFileTypeInfo();
               }}
             >
-              导出管理员信息
+              导出文件上传类型
             </Button>
           </Space>,
         ]}
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
-          const { data, code } = await listAdminByPageUsingPost({
+          const { data, code } = await listFileTypeByPageUsingPost({
             ...params,
             ...filter,
             sortField,
             sortOrder,
-          } as API.AdminQueryRequest);
+          } as API.FileLogQueryRequest);
 
           return {
             success: code === 0,
@@ -262,7 +267,7 @@ const AdminList: React.FC = () => {
         columns={columns}
       />
       {createModalVisible && (
-        <CreateAdminModal
+        <CreateFileTypeModal
           onCancel={() => {
             setCreateModalVisible(false);
           }}
@@ -275,7 +280,7 @@ const AdminList: React.FC = () => {
         />
       )}
       {updateModalVisible && (
-        <UpdateAdminModal
+        <UpdateFileTypeModal
           oldData={currentRow}
           onCancel={() => {
             setUpdateModalVisible(false);
@@ -288,20 +293,7 @@ const AdminList: React.FC = () => {
           columns={columns}
         />
       )}
-      {/*上传管理员信息*/}
-      {uploadModalVisible && (
-        <UploadAdminModal
-          onCancel={() => {
-            setUploadModalVisible(false);
-          }}
-          visible={uploadModalVisible}
-          onSubmit={async () => {
-            setUploadModalVisible(false);
-            actionRef.current?.reload();
-          }}
-        />
-      )}
-    </PageContainer>
+    </>
   );
 };
-export default AdminList;
+export default FileTypeList;

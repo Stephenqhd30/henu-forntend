@@ -64,7 +64,7 @@ const OperationLogList: React.FC = () => {
     },
     {
       title: '请求IP地址',
-      dataIndex: 'requestPath',
+      dataIndex: 'requestIp',
       valueType: 'text',
     },
     {

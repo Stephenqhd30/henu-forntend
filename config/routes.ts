@@ -1,8 +1,9 @@
 export default [
-  { path: '/' },
+  { path: '/', redirect: '/review' },
   {
     path: '/user',
     layout: false,
+    redirect: '/user/login',
     routes: [{ name: '管理员登录', path: '/user/login', component: './User/Login' }],
   },
   {
@@ -73,13 +74,19 @@ export default [
   {
     name: '文件信息管理',
     path: 'file',
-    icon: 'FundProjectionScreenOutlined',
+    icon: 'FileProtectOutlined',
     routes: [
       {
         name: '文件上传日志管理',
         path: '/file/log',
-        icon: 'ScheduleOutlined',
+        icon: 'FileSearchOutlined',
         component: './File/FileLogList',
+      },
+      {
+        name: '文件上传类型管理',
+        path: '/file/type',
+        icon: 'FileSearchOutlined',
+        component: './File/FileTypeList',
       },
     ],
   },

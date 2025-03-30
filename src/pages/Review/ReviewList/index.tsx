@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, Image, Select, Space, Typography } from 'antd';
+import { Button, Select, Space, Typography } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import { BatchReviewModal, ReviewModal } from '@/pages/Review/ReviewList/components';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
@@ -104,17 +104,12 @@ const RegistrationReview: React.FC = () => {
       valueType: 'text',
     },
     {
-      title: '证件照',
-      dataIndex: 'userId',
-      valueType: 'text',
-      render: (_, record) => {
-        return <Image width={64}>{record?.userVO?.userAvatar}</Image>;
-      },
-      hideInForm: true,
-      hideInSearch: true,
+      title: '入党时间',
+      dataIndex: 'partyTime',
+      valueType: 'dateTime',
     },
     {
-      title: '生活照',
+      title: '证件照',
       dataIndex: 'userAvatar',
       valueType: 'image',
       fieldProps: {
@@ -123,9 +118,19 @@ const RegistrationReview: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: '入党时间',
-      dataIndex: 'partyTime',
-      valueType: 'dateTime',
+      title: '生活照',
+      dataIndex: 'userLifePhoto',
+      valueType: 'image',
+      fieldProps: {
+        width: 64,
+      },
+      hideInSearch: true,
+    },
+    {
+      title: '报名登记表文件',
+      dataIndex: 'registrationForm',
+      valueType: 'text',
+      hideInSearch: true,
     },
     {
       title: '工作经历',

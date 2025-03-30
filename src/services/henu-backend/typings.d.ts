@@ -1716,6 +1716,7 @@ declare namespace API {
     jobId?: number;
     marryStatus?: number;
     partyTime?: string;
+    registrationForm?: string;
     reviewComments?: string;
     reviewStatus?: number;
     reviewTime?: string;
@@ -1727,6 +1728,7 @@ declare namespace API {
     userGender?: number;
     userId?: number;
     userIdCard?: string;
+    userLifePhoto?: string;
     userName?: string;
     userPhone?: string;
     workExperience?: string;
@@ -1740,11 +1742,13 @@ declare namespace API {
     jobId?: number;
     marryStatus?: number;
     partyTime?: string;
+    registrationForm?: string;
     studentLeaderAwards?: string;
     userAvatar?: string;
     userEmail?: string;
     userGender?: number;
     userIdCard?: string;
+    userLifePhoto?: string;
     userName?: string;
     userPhone?: string;
     workExperience?: string;
@@ -1759,11 +1763,13 @@ declare namespace API {
     jobId?: number;
     marryStatus?: number;
     partyTime?: string;
+    registrationForm?: string;
     studentLeaderAwards?: string;
     userAvatar?: string;
     userEmail?: string;
     userGender?: number;
     userIdCard?: string;
+    userLifePhoto?: string;
     userName?: string;
     userPhone?: string;
     workExperience?: string;
@@ -1807,12 +1813,14 @@ declare namespace API {
     jobId?: number;
     marryStatus?: number;
     partyTime?: string;
+    registrationForm?: string;
     studentLeaderAwards?: string;
     userAvatar?: string;
     userEmail?: string;
     userGender?: number;
     userId?: number;
     userIdCard?: string;
+    userLifePhoto?: string;
     userName?: string;
     userPhone?: string;
     workExperience?: string;
@@ -1828,6 +1836,7 @@ declare namespace API {
     jobVO?: JobVO;
     marryStatus?: number;
     partyTime?: string;
+    registrationForm?: string;
     reviewComments?: string;
     reviewStatus?: number;
     reviewTime?: string;
@@ -1839,6 +1848,7 @@ declare namespace API {
     userGender?: number;
     userId?: number;
     userIdCard?: string;
+    userLifePhoto?: string;
     userName?: string;
     userPhone?: string;
     userVO?: UserVO;

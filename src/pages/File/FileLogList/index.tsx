@@ -93,6 +93,7 @@ const FileLogVOList: React.FC = () => {
       dataIndex: 'fileTypeVO',
       valueType: 'text',
       hideInForm: true,
+      hideInSearch: true,
       render: (_, record) => <span>{record?.fileTypeVO?.typeName}</span>,
     },
     {
@@ -100,6 +101,7 @@ const FileLogVOList: React.FC = () => {
       dataIndex: 'userId',
       valueType: 'text',
       hideInForm: true,
+      hideInSearch: true,
       render: (_, record) => <span>{record?.userVO?.userName}</span>,
     },
 
