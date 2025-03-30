@@ -75,6 +75,7 @@ const UserList: React.FC = () => {
       title: 'id',
       dataIndex: 'id',
       valueType: 'text',
+      hideInForm: true,
     },
     {
       title: '姓名',

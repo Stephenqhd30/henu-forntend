@@ -81,11 +81,6 @@ const DeadlineList: React.FC = () => {
       hideInForm: true,
     },
     {
-      title: '截止时间',
-      dataIndex: 'deadlineTime',
-      valueType: 'date',
-    },
-    {
       title: '岗位名称',
       dataIndex: 'jobId',
       valueType: 'select',
@@ -105,6 +100,11 @@ const DeadlineList: React.FC = () => {
       fieldProps: {
         placeholder: '请选择岗位信息',
       },
+    },
+    {
+      title: '截止时间',
+      dataIndex: 'deadlineTime',
+      valueType: 'dateTime',
     },
     {
       title: '创建管理员id',

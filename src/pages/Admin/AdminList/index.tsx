@@ -6,7 +6,7 @@ import {
   exportAdminTemplateUsingGet,
   exportAdminUsingGet,
 } from '@/services/henu-backend/excelController';
-import {ADMIN_EXCEL, EXPORT_ADMIN_EXCEL} from '@/constants';
+import { ADMIN_EXCEL, EXPORT_ADMIN_EXCEL } from '@/constants';
 import {
   deleteAdminUsingPost,
   listAdminByPageUsingPost,
@@ -110,6 +110,7 @@ const AdminList: React.FC = () => {
       title: 'id',
       dataIndex: 'id',
       valueType: 'text',
+      hideInForm: true,
     },
     {
       title: '管理员',
@@ -127,7 +128,6 @@ const AdminList: React.FC = () => {
       valueType: 'password',
       hideInSearch: true,
       hideInTable: true,
-      hideInForm: true,
     },
     {
       title: '权限',
@@ -285,7 +285,6 @@ const AdminList: React.FC = () => {
             setUpdateModalVisible(false);
           }}
           visible={updateModalVisible}
-          columns={columns}
         />
       )}
       {/*上传管理员信息*/}

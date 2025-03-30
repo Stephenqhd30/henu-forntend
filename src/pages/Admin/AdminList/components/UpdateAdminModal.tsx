@@ -1,14 +1,14 @@
-import { ProColumns, ProTable } from '@ant-design/pro-components';
-import { message, Modal } from 'antd';
+import { ModalForm, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
+import { message, Select } from 'antd';
 import React from 'react';
 import { updateAdminUsingPost } from '@/services/henu-backend/adminController';
+import { AdminType, adminTypeEnum } from '@/enums/AdminTypeEnum';
 
 interface UpdateProps {
   oldData?: API.AdminVO;
   onCancel: () => void;
   onSubmit: (values: API.AdminUpdateRequest) => Promise<void>;
   visible: boolean;
-  columns: ProColumns<API.AdminVO>[];
 }
 
 /**
@@ -33,36 +33,54 @@ const handleUpdate = async (fields: API.AdminUpdateRequest) => {
   }
 };
 const UpdateAdminModal: React.FC<UpdateProps> = (props) => {
-  const { oldData, visible, onSubmit, onCancel, columns } = props;
+  const { oldData, visible, onSubmit, onCancel } = props;
+  const [form] = ProForm.useForm<API.AdminUpdateRequest>();
   if (!oldData) {
     return <></>;
   }
 
   return (
-    <Modal
-      destroyOnClose
+    <ModalForm
       title={'更新管理员信息'}
-      onCancel={() => onCancel?.()}
       open={visible}
-      footer
+      form={form}
+      initialValues={oldData}
+      onFinish={async (values: API.AdminUpdateRequest) => {
+        const success = await handleUpdate({
+          ...values,
+          id: oldData?.id,
+        });
+        if (success) {
+          onSubmit?.(values);
+        }
+      }}
+      autoFocusFirstInput
+      modalProps={{
+        destroyOnClose: true,
+        onCancel: () => {
+          onCancel?.();
+        },
+      }}
+      submitter={{
+        searchConfig: {
+          submitText: '更新管理员信息',
+          resetText: '取消',
+        },
+      }}
     >
-      <ProTable
-        type={'form'}
-        form={{
-          initialValues: oldData,
-        }}
-        columns={columns}
-        onSubmit={async (values: API.AdminUpdateRequest) => {
-          const success = await handleUpdate({
-            ...values,
-            id: oldData?.id,
-          });
-          if (success) {
-            onSubmit?.(values);
-          }
-        }}
-      />
-    </Modal>
+      <ProFormText name={'adminName'} label={'管理员'} />
+      <ProFormText name={'adminNumber'} label={'管理员编号'} />
+      <ProFormSelect name={'adminType'} label={'权限'} valueEnum={adminTypeEnum}>
+        <Select>
+          <Select.Option value={AdminType.SYSTEM_ADMIN}>
+            {adminTypeEnum[AdminType.SYSTEM_ADMIN].text}
+          </Select.Option>
+          <Select.Option value={AdminType.ADMIN}>
+            {adminTypeEnum[AdminType.ADMIN].text}
+          </Select.Option>
+        </Select>
+      </ProFormSelect>
+    </ModalForm>
   );
 };
 export default UpdateAdminModal;

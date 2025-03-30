@@ -30,10 +30,10 @@ export default [
     name: '人员信息管理',
     path: 'admin',
     icon: 'UserOutlined',
+    access: 'canAdmin',
     routes: [
       {
         name: '管理员管理',
-        access: 'canAdmin',
         path: '/admin',
         icon: 'UsergroupAddOutlined',
         component: './Admin/AdminList',
@@ -50,6 +50,7 @@ export default [
     name: '高校信息管理',
     path: 'school',
     icon: 'FundProjectionScreenOutlined',
+    access: 'canAdmin',
     routes: [
       {
         name: '高校信息管理',
@@ -75,6 +76,7 @@ export default [
     name: '招聘信息管理',
     path: 'job',
     icon: 'AppstoreAddOutlined',
+    access: 'canAdmin',
     routes: [
       {
         name: '岗位信息管理',
@@ -124,6 +126,7 @@ export default [
   {
     name: '文件信息管理',
     path: 'file',
+    access: 'canAdmin',
     icon: 'FileProtectOutlined',
     routes: [
       {
@@ -143,6 +146,7 @@ export default [
   {
     name: '消息通知管理',
     path: 'message',
+    access: 'canAdmin',
     icon: 'MessageOutlined',
     routes: [
       {
@@ -168,6 +172,7 @@ export default [
   {
     name: '操作日志信息管理',
     path: 'operation',
+    access: 'canAdmin',
     icon: 'FontColorsOutlined',
     component: './Operation/OperationList',
   },

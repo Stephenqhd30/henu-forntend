@@ -116,10 +116,8 @@ const UpdateUserModal: React.FC<Props> = (props) => {
         },
       }}
     >
-      userPassword?: string;
       <ProFormText name={'userName'} label={'用户名'} />
       <ProFormText name={'userIdCard'} label={'身份证号'} />
-      <ProFormText name={'userPassword'} label={'密码'} />
       <ProFormText name={'userEmail'} label={'邮箱'} />
       <ProFormText name={'userPhone'} label={'电话'} />
       <ProFormUploadDragger
