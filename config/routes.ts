@@ -94,6 +94,12 @@ export default [
         icon: 'AreaChartOutlined',
         component: './Registration/EducationList',
       },
+      {
+        name: '家庭关系信息管理',
+        path: '/registration/family',
+        icon: 'RadarChartOutlined',
+        component: './Registration/FamilyList',
+      },
     ],
   },
   {
