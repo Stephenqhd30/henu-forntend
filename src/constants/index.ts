@@ -19,6 +19,7 @@ export const OPERATION_LOG_EXCEL = '操作日志信息.xlsx';
 export const FILE_LOG_EXCEL = '文件上传日志希信息.xlsx';
 export const FILE_TYPE_EXCEL = '文件上传类型信息.xlsx';
 export const JOB_EXCEL = '岗位信息.xlsx';
+export const DEADLINE_EXCEL = '截止时间信息.xlsx';
 export const CADRE_TYPE_EXCEL = '干部类型信息.xlsx';
 export const EDUCATION_EXCEL = '教育经历信息.xlsx';
 export const SCHOOL_SCHOOL_TYPE_EXCEL = '高校与高校类型关联信息.xlsx';

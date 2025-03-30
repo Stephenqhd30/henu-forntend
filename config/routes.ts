@@ -88,6 +88,12 @@ export default [
         icon: 'BookOutlined',
         component: './Job/CadreTypeList',
       },
+      {
+        name: '截止时间管理',
+        path: '/job/deadline',
+        icon: 'CalendarOutlined',
+        component: './Job/DeadlineList',
+      },
     ],
   },
   {
