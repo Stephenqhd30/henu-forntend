@@ -2,8 +2,8 @@ import {DownloadOutlined, PlusOutlined} from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import { exportJobUsingGet } from '@/services/henu-backend/excelController';
-import { USER_EXCEL } from '@/constants';
+import {exportAdminUsingGet, exportJobUsingGet} from '@/services/henu-backend/excelController';
+import {ADMIN_EXCEL, JOB_EXCEL, USER_EXCEL} from '@/constants';
 import { deleteJobUsingPost, listJobByPageUsingPost } from '@/services/henu-backend/jobController';
 import { CreateJobModal, UpdateJobModal } from '@/pages/Job/JobList/components';
 
@@ -45,15 +45,22 @@ const JobList: React.FC = () => {
    */
   const downloadJobInfo = async () => {
     try {
-      const res = await exportJobUsingGet({ responseType: 'blob' });
+      const res = await exportJobUsingGet({
+        responseType: 'blob',
+      });
+
+      // 创建 Blob 对象
+      // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.download = USER_EXCEL;
+      link.setAttribute('download', JOB_EXCEL);
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
-      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+      link.remove();
+
+      // 释放对象 URL
+      window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
     }

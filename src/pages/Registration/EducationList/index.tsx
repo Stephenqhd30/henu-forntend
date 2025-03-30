@@ -1,13 +1,14 @@
 import { DownloadOutlined } from '@ant-design/icons';
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import {FILE_LOG_EXCEL, OPERATION_LOG_EXCEL} from '@/constants';
+import { EDUCATION_EXCEL } from '@/constants';
 import {
-  deleteFileLogUsingPost,
-  listFileLogVoByPageUsingPost,
-} from '@/services/henu-backend/fileLogController';
-import { exportFileLogUsingGet } from '@/services/henu-backend/excelController';
+  deleteEducationUsingPost,
+  listEducationVoByPageUsingPost,
+} from '@/services/henu-backend/educationController';
+import { exportEducationUsingGet } from '@/services/henu-backend/excelController';
+import { UserDetailsModal } from '@/components/ReUser';
 
 /**
  * 删除节点
@@ -18,36 +19,34 @@ const handleDelete = async (row: API.DeleteRequest) => {
   const hide = message.loading('正在删除');
   if (!row) return true;
   try {
-    const res = await deleteFileLogUsingPost({
+    await deleteEducationUsingPost({
       id: row.id,
     });
-    if (res.code === 0 && res.data) {
-      message.success('删除成功');
-    } else {
-      message.error(`删除失败${res.message}, 请重试!`);
-    }
-  } catch (error: any) {
-    message.error(`删除失败${error.message}, 请重试!`);
-  } finally {
     hide();
+    message.success('删除成功');
+  } catch (error: any) {
+    hide();
+    message.error(`删除失败${error.message}, 请重试!`);
   }
 };
 
 /**
- * 文件上传日志管理
+ * 教育经历列表
  * @constructor
  */
-const FileLogVOList: React.FC = () => {
+const EducationVOList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  // 当前标签的所点击的数据
-  const [, setCurrentRow] = useState<API.FileLogVO>();
+  // 当前教育经历的所点击的数据
+  const [currentRow, setCurrentRow] = useState<API.EducationVO>();
+  // 用户详细Modal
+  const [userModal, setUserModal] = useState<boolean>(false);
 
   /**
-   * 下载文件上传日志信息
+   * 下载教育经历信息
    */
-  const downloadFileLogVOInfo = async () => {
+  const downloadEducationVOInfo = async () => {
     try {
-      const res = await exportFileLogUsingGet({
+      const res = await exportEducationUsingGet({
         responseType: 'blob',
       });
 
@@ -56,7 +55,7 @@ const FileLogVOList: React.FC = () => {
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', FILE_LOG_EXCEL);
+      link.setAttribute('download', EDUCATION_EXCEL);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -71,7 +70,7 @@ const FileLogVOList: React.FC = () => {
   /**
    * 表格列数据
    */
-  const columns: ProColumns<API.FileLogVO>[] = [
+  const columns: ProColumns<API.EducationVO>[] = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -79,36 +78,52 @@ const FileLogVOList: React.FC = () => {
       hideInForm: true,
     },
     {
-      title: '文件名称',
-      dataIndex: 'fileName',
-      valueType: 'text',
-    },
-    {
-      title: '文件上传路径',
-      dataIndex: 'filePath',
-      valueType: 'text',
-    },
-    {
-      title: '文件类型',
-      dataIndex: 'fileTypeVO',
-      valueType: 'text',
-      hideInForm: true,
-      hideInSearch: true,
-      render: (_, record) => <span>{record?.fileTypeVO?.typeName}</span>,
-    },
-    {
-      title: '上传用户',
-      dataIndex: 'userId',
-      valueType: 'text',
-      hideInForm: true,
-      hideInSearch: true,
+      title: '用户姓名',
+      dataIndex: 'userVO',
       render: (_, record) => <span>{record?.userVO?.userName}</span>,
     },
-
+    {
+      title: '学校名称',
+      dataIndex: 'schoolVO',
+      render: (_, record) => <span>{record?.schoolVO?.schoolName}</span>,
+    },
+    {
+      title: '教育阶段',
+      dataIndex: 'educationalStage',
+      valueType: 'text',
+    },
+    {
+      title: '专业',
+      dataIndex: 'major',
+      valueType: 'text',
+    },
+    {
+      title: '学习起止年月',
+      dataIndex: 'studyTime',
+      valueType: 'text',
+    },
+    {
+      title: '证明人',
+      dataIndex: 'certifier',
+      valueType: 'text',
+    },
+    {
+      title: '证明人联系电话',
+      dataIndex: 'certifierPhone',
+      valueType: 'text',
+    },
     {
       title: '创建时间',
       sorter: true,
       dataIndex: 'createTime',
+      valueType: 'dateTime',
+      hideInSearch: true,
+      hideInForm: true,
+    },
+    {
+      title: '更新时间',
+      sorter: true,
+      dataIndex: 'updateTime',
       valueType: 'dateTime',
       hideInSearch: true,
       hideInForm: true,
@@ -119,7 +134,16 @@ const FileLogVOList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <Space size={'middle'}>
-          {/*删除表单文件上传日志的PopConfirm框*/}
+          <Typography.Link
+            key="user-details"
+            onClick={() => {
+              setUserModal(true);
+              setCurrentRow(record);
+            }}
+          >
+            查看用户信息
+          </Typography.Link>
+          {/*删除表单教育经历的PopConfirm框*/}
           <Popconfirm
             title="确定删除？"
             description="删除后将无法恢复?"
@@ -145,9 +169,9 @@ const FileLogVOList: React.FC = () => {
     },
   ];
   return (
-    <>
-      <ProTable<API.FileLogVO, API.PageParams>
-        headerTitle={'文件上传日志'}
+    <PageContainer>
+      <ProTable<API.EducationVO, API.PageParams>
+        headerTitle={'教育经历查询'}
         actionRef={actionRef}
         rowKey={'id'}
         search={{
@@ -156,25 +180,25 @@ const FileLogVOList: React.FC = () => {
         toolBarRender={() => [
           <Space key={'space'} wrap>
             <Button
-              icon={<DownloadOutlined />}
               key={'export'}
               onClick={async () => {
-                await downloadFileLogVOInfo();
+                await downloadEducationVOInfo();
               }}
             >
-              导出文件上传日志
+              <DownloadOutlined />
+              导出教育经历信息
             </Button>
           </Space>,
         ]}
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
-          const { data, code } = await listFileLogVoByPageUsingPost({
+          const { data, code } = await listEducationVoByPageUsingPost({
             ...params,
             ...filter,
             sortField,
             sortOrder,
-          } as API.FileLogQueryRequest);
+          } as API.EducationQueryRequest);
 
           return {
             success: code === 0,
@@ -184,7 +208,16 @@ const FileLogVOList: React.FC = () => {
         }}
         columns={columns}
       />
-    </>
+      {userModal && (
+        <UserDetailsModal
+          onCancel={() => {
+            setUserModal(false);
+          }}
+          visible={userModal}
+          user={currentRow?.userVO ?? {}}
+        />
+      )}
+    </PageContainer>
   );
 };
-export default FileLogVOList;
+export default EducationVOList;

@@ -18,3 +18,5 @@ export const EXPORT_SCHOOL_TYPE_EXCEL = '导入高校类型信息示例.xlsx';
 export const OPERATION_LOG_EXCEL = '操作日志信息.xlsx';
 export const FILE_LOG_EXCEL = '文件上传日志希信息.xlsx';
 export const FILE_TYPE_EXCEL = '文件上传类型信息.xlsx';
+export const JOB_EXCEL = '岗位信息.xlsx';
+export const EDUCATION_EXCEL = '教育经历信息.xlsx';

@@ -7,8 +7,8 @@ import {
   deleteUserUsingPost,
   listUserByPageUsingPost,
 } from '@/services/henu-backend/userController';
-import { exportUserUsingGet } from '@/services/henu-backend/excelController';
-import { USER_EXCEL } from '@/constants';
+import {exportAdminUsingGet, exportUserUsingGet} from '@/services/henu-backend/excelController';
+import {ADMIN_EXCEL, USER_EXCEL} from '@/constants';
 import { UpdateUserModal } from '@/pages/Admin/UserList/components';
 
 /**
@@ -47,15 +47,22 @@ const UserList: React.FC = () => {
    */
   const downloadUserInfo = async () => {
     try {
-      const res = await exportUserUsingGet({ responseType: 'blob' });
+      const res = await exportUserUsingGet({
+        responseType: 'blob',
+      });
+
+      // 创建 Blob 对象
+      // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.download = USER_EXCEL;
+      link.setAttribute('download', USER_EXCEL);
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
-      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+      link.remove();
+
+      // 释放对象 URL
+      window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
     }

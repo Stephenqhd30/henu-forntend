@@ -3,7 +3,7 @@ import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro
 import { Button, message, Space } from 'antd';
 import React, { useRef } from 'react';
 import { exportOperationLogUsingGet } from '@/services/henu-backend/excelController';
-import { ADMIN_EXCEL } from '@/constants';
+import {ADMIN_EXCEL, OPERATION_LOG_EXCEL} from '@/constants';
 import { listOperationLogByPageUsingPost } from '@/services/henu-backend/operationLogController';
 
 /**
@@ -26,7 +26,7 @@ const OperationLogList: React.FC = () => {
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', ADMIN_EXCEL);
+      link.setAttribute('download', OPERATION_LOG_EXCEL);
       document.body.appendChild(link);
       link.click();
       link.remove();

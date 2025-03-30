@@ -72,6 +72,19 @@ export default [
     component: './Job/JobList',
   },
   {
+    name: '报名登记信息管理',
+    path: 'registration',
+    icon: 'PieChartOutlined',
+    routes: [
+      {
+        name: '教育经历信息管理',
+        path: '/registration/education',
+        icon: 'AreaChartOutlined',
+        component: './Registration/EducationList',
+      },
+    ],
+  },
+  {
     name: '文件信息管理',
     path: 'file',
     icon: 'FileProtectOutlined',
@@ -85,7 +98,7 @@ export default [
       {
         name: '文件上传类型管理',
         path: '/file/type',
-        icon: 'FileSearchOutlined',
+        icon: 'FileUnknownOutlined',
         component: './File/FileTypeList',
       },
     ],

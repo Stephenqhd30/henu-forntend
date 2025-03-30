@@ -1,9 +1,9 @@
 import { ProDescriptions } from '@ant-design/pro-components';
 import React from 'react';
-import {Image, Modal, Select} from 'antd';
-import {UserGender, userGenderEnum} from '@/enums/UserGenderEnum';
-import {MarryStatus, marryStatusEnum} from '@/enums/MarryStatusEnum';
-import {ReviewStatus, reviewStatusEnum} from '@/enums/ReviewStatusEnum';
+import { Modal, Select } from 'antd';
+import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
+import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
+import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 
 interface Props {
   registration: API.RegistrationFormVO;
@@ -96,21 +96,26 @@ const RegistrationDetailsModal: React.FC<Props> = (props) => {
     },
     {
       title: '证件照',
-      dataIndex: 'userId',
-      valueType: 'text',
-      render: (_: any, record: any) => {
-        return <Image width={64}>{record?.userVO?.userAvatar}</Image>;
-      },
-      hideInForm: true,
-      hideInSearch: true,
-    },
-    {
-      title: '生活照',
       dataIndex: 'userAvatar',
       valueType: 'image',
       fieldProps: {
         width: 64,
       },
+      hideInSearch: true,
+    },
+    {
+      title: '生活照',
+      dataIndex: 'userLifePhoto',
+      valueType: 'image',
+      fieldProps: {
+        width: 64,
+      },
+      hideInSearch: true,
+    },
+    {
+      title: '报名登记表文件',
+      dataIndex: 'registrationForm',
+      valueType: 'text',
       hideInSearch: true,
     },
     {
