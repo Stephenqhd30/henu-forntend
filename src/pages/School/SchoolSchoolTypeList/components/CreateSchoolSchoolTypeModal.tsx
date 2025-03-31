@@ -1,13 +1,21 @@
-import { ProColumns, ProTable } from '@ant-design/pro-components';
-import { message, Modal } from 'antd';
+import {
+  ModalForm,
+  ProColumns,
+  ProForm,
+  ProFormSelect,
+  ProFormText,
+  ProTable,
+} from '@ant-design/pro-components';
+import { message, Modal, Select } from 'antd';
 import React from 'react';
 import { addSchoolSchoolTypeUsingPost } from '@/services/henu-backend/schoolSchoolTypeController';
+import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
+import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 
 interface CreateProps {
   onCancel: () => void;
   onSubmit: (values: API.SchoolSchoolTypeAddRequest) => Promise<void>;
   visible: boolean;
-  columns: ProColumns<API.SchoolSchoolType>[];
 }
 
 /**
@@ -42,26 +50,56 @@ const handleAdd = async (fields: API.SchoolSchoolTypeAddRequest) => {
  * @constructor
  */
 const CreateSchoolSchoolTypeTypeModal: React.FC<CreateProps> = (props) => {
-  const { visible, onSubmit, onCancel, columns } = props;
+  const { visible, onSubmit, onCancel } = props;
+  const [form] = ProForm.useForm<API.SchoolSchoolTypeAddRequest>();
   return (
-    <Modal
-      destroyOnClose
-      title={'创建高校与高校类型关联信息'}
-      onCancel={() => onCancel?.()}
+    <ModalForm
+      title={'更新高校与高校类型关联信息'}
       open={visible}
-      footer
+      form={form}
+      onFinish={async (values: API.SchoolSchoolTypeAddRequest) => {
+        const success = await handleAdd({
+          ...values,
+        });
+        if (success) {
+          onSubmit?.(values);
+        }
+      }}
+      autoFocusFirstInput
+      modalProps={{
+        destroyOnClose: true,
+        onCancel: () => {
+          onCancel?.();
+        },
+      }}
+      submitter={{
+        searchConfig: {
+          submitText: '创建',
+          resetText: '取消',
+        },
+      }}
     >
-      <ProTable
-        columns={columns}
-        onSubmit={async (values: API.SchoolSchoolTypeAddRequest) => {
-          const success = await handleAdd(values);
-          if (success) {
-            onSubmit?.(values);
+      <ProFormText name={'schoolName'} label={'高校名称'} />
+      <ProFormSelect
+        mode="multiple"
+        name={'schoolTypes'}
+        request={async () => {
+          const res = await listSchoolTypeVoByPageUsingPost({});
+          if (res.code === 0 && res.data) {
+            return (
+              res.data.records?.map((schoolType) => ({
+                label: schoolType.typeName,
+                value: schoolType.typeName,
+              })) ?? []
+            );
+          } else {
+            return [];
           }
         }}
-        type={'form'}
+        placeholder="请选择高校类型"
+        style={{ width: '100%' }}
       />
-    </Modal>
+    </ModalForm>
   );
 };
 export default CreateSchoolSchoolTypeTypeModal;

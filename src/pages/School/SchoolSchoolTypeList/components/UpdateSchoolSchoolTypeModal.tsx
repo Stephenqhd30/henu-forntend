@@ -1,14 +1,15 @@
-import { ProColumns, ProTable } from '@ant-design/pro-components';
-import { message, Modal } from 'antd';
+import {ModalForm, ProColumns, ProForm, ProFormSelect, ProFormText, ProTable} from '@ant-design/pro-components';
+import {message, Modal, Select} from 'antd';
 import React from 'react';
 import { updateSchoolSchoolTypeUsingPost } from '@/services/henu-backend/schoolSchoolTypeController';
+import {UserGender, userGenderEnum} from '@/enums/UserGenderEnum';
+import {listSchoolTypeVoByPageUsingPost} from '@/services/henu-backend/schoolTypeController';
 
 interface UpdateProps {
-  oldData?: API.SchoolSchoolType;
+  oldData?: API.SchoolSchoolTypeVO;
   onCancel: () => void;
   onSubmit: (values: API.SchoolTypeUpdateRequest) => Promise<void>;
   visible: boolean;
-  columns: ProColumns<API.SchoolSchoolType>[];
 }
 
 /**
@@ -41,39 +42,61 @@ const handleUpdate = async (fields: API.SchoolTypeUpdateRequest) => {
  * @constructor
  */
 const UpdateSchoolTypeTypeModal: React.FC<UpdateProps> = (props) => {
-  const { oldData, visible, onSubmit, onCancel, columns } = props;
+  const { oldData, visible, onSubmit, onCancel } = props;
+  const [form] = ProForm.useForm<API.SchoolTypeUpdateRequest>();
   if (!oldData) {
     return <></>;
   }
 
   return (
-    <Modal
-      destroyOnClose
-      title={'更新高校类型信息'}
+    <ModalForm
+      title={'更新高校与高校类型关联信息'}
       open={visible}
-      onCancel={() => onCancel?.()}
-      centered
-      footer
+      form={form}
+      initialValues={oldData}
+      onFinish={async (values: API.SchoolTypeUpdateRequest) => {
+        const success = await handleUpdate({
+          ...values,
+          id: oldData?.id,
+        });
+        if (success) {
+          onSubmit?.(values);
+        }
+      }}
+      autoFocusFirstInput
+      modalProps={{
+        destroyOnClose: true,
+        onCancel: () => {
+          onCancel?.();
+        },
+      }}
+      submitter={{
+        searchConfig: {
+          submitText: '更新',
+          resetText: '取消',
+        },
+      }}
     >
-      <ProTable
-        type={'form'}
-        form={{
-          initialValues: {
-            ...oldData,
-          },
-        }}
-        columns={columns}
-        onSubmit={async (values: API.SchoolSchoolTypeUpdateRequest) => {
-          const success = await handleUpdate({
-            ...values,
-            id: oldData?.id,
-          });
-          if (success) {
-            onSubmit?.(values);
+      <ProFormSelect
+        mode="multiple"
+        name={'schoolTypes'}
+        request={async () => {
+          const res = await listSchoolTypeVoByPageUsingPost({});
+          if (res.code === 0 && res.data) {
+            return (
+              res.data.records?.map((schoolType) => ({
+                label: schoolType.typeName,
+                value: schoolType.typeName,
+              })) ?? []
+            );
+          } else {
+            return [];
           }
         }}
+        placeholder="请选择高校类型"
+        style={{ width: '100%' }}
       />
-    </Modal>
+    </ModalForm>
   );
 };
 export default UpdateSchoolTypeTypeModal;

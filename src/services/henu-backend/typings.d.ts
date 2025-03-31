@@ -1976,7 +1976,7 @@ declare namespace API {
   };
 
   type SchoolSchoolTypeAddRequest = {
-    schoolId?: number;
+    schoolName?: string;
     schoolTypes?: string[];
   };
 
@@ -1995,7 +1995,7 @@ declare namespace API {
 
   type SchoolSchoolTypeUpdateRequest = {
     id?: number;
-    schoolId?: number;
+    schoolName?: string;
     schoolTypes?: string[];
   };
 
@@ -2035,10 +2035,8 @@ declare namespace API {
   };
 
   type SchoolTypeUpdateRequest = {
-    content?: string;
     id?: number;
-    tags?: string[];
-    title?: string;
+    typeName?: string;
   };
 
   type SchoolTypeVO = {

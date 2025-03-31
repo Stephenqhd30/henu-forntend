@@ -14,13 +14,12 @@ import {
 } from '@/services/henu-backend/excelController';
 import {
   deleteSchoolSchoolTypeUsingPost,
-  listSchoolSchoolTypeByPageUsingPost,
+  listSchoolSchoolTypeVoByPageUsingPost,
 } from '@/services/henu-backend/schoolSchoolTypeController';
 import { EXPORT_SCHOOL_SCHOOL_TYPE_EXCEL, SCHOOL_SCHOOL_TYPE_EXCEL } from '@/constants';
 import CreateSchoolSchoolTypeModal from '@/pages/School/SchoolSchoolTypeList/components/CreateSchoolSchoolTypeModal';
 import UpdateSchoolSchoolTypeModal from '@/pages/School/SchoolSchoolTypeList/components/UpdateSchoolSchoolTypeModal';
 import UploadSchoolSchoolTypeModal from '@/pages/School/SchoolSchoolTypeList/components/UploadSchoolSchoolTypeModal';
-import { listSchoolVoByPageUsingPost } from '@/services/henu-backend/schoolController';
 import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 
 /**
@@ -60,7 +59,7 @@ const SchoolSchoolSchoolTypeList: React.FC = () => {
   const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   // 当前标签的所点击的数据
-  const [currentRow, setCurrentRow] = useState<API.SchoolSchoolType>();
+  const [currentRow, setCurrentRow] = useState<API.SchoolSchoolTypeVO>();
 
   /**
    * 下载高校与高校类型关联信息
@@ -115,7 +114,7 @@ const SchoolSchoolSchoolTypeList: React.FC = () => {
   /**
    * 表格列数据
    */
-  const columns: ProColumns<API.SchoolSchoolType>[] = [
+  const columns: ProColumns<API.SchoolSchoolTypeVO>[] = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -125,31 +124,17 @@ const SchoolSchoolSchoolTypeList: React.FC = () => {
     {
       title: '高校名称',
       dataIndex: 'schoolId',
-      valueType: 'select',
-      request: async () => {
-        const res = await listSchoolVoByPageUsingPost({});
-        if (res.code === 0 && res.data) {
-          return (
-            res.data.records?.map((school) => ({
-              label: school.schoolName,
-              value: school.id,
-            })) ?? []
-          );
-        } else {
-          return [];
-        }
-      },
-      fieldProps: {
-        placeholder: '请选择高校',
-      },
+      valueType: 'text',
+      hideInForm: true,
+      hideInSearch: true,
+      render: (_, record) => <span>{record?.schoolVO?.schoolName}</span>,
     },
     {
       title: '学校类型',
       dataIndex: 'schoolTypes',
       render: (_, record) => {
         if (record.schoolTypes) {
-          const typeList = JSON.parse(record.schoolTypes);
-          return typeList.map((type: any) => (
+          return record?.schoolTypes.map((type: any) => (
             <Tag key={type} color="blue">
               {type}
             </Tag>
@@ -249,7 +234,7 @@ const SchoolSchoolSchoolTypeList: React.FC = () => {
   ];
   return (
     <PageContainer>
-      <ProTable<API.SchoolSchoolType, API.PageParams>
+      <ProTable<API.SchoolSchoolTypeVO, API.PageParams>
         headerTitle={'高校与高校类型关联信息'}
         actionRef={actionRef}
         rowKey={'id'}
@@ -298,7 +283,7 @@ const SchoolSchoolSchoolTypeList: React.FC = () => {
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
-          const { data, code } = await listSchoolSchoolTypeByPageUsingPost({
+          const { data, code } = await listSchoolSchoolTypeVoByPageUsingPost({
             ...params,
             ...filter,
             sortField,
@@ -325,7 +310,6 @@ const SchoolSchoolSchoolTypeList: React.FC = () => {
             actionRef.current?.reload();
           }}
           visible={createModalVisible}
-          columns={columns}
         />
       )}
       {/*更新表单的Modal框*/}
@@ -340,7 +324,6 @@ const SchoolSchoolSchoolTypeList: React.FC = () => {
             actionRef.current?.reload();
           }}
           visible={updateModalVisible}
-          columns={columns}
           oldData={currentRow}
         />
       )}

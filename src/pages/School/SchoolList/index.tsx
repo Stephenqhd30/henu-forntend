@@ -1,5 +1,5 @@
 import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import {ActionType, PageContainer, ProColumns, ProTable} from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import {
@@ -185,7 +185,7 @@ const SchoolList: React.FC = () => {
     },
   ];
   return (
-    <>
+    <PageContainer>
       <ProTable<API.SchoolVO, API.PageParams>
         headerTitle={'高校信息'}
         actionRef={actionRef}
@@ -294,7 +294,7 @@ const SchoolList: React.FC = () => {
           }}
         />
       )}
-    </>
+    </PageContainer>
   );
 };
 export default SchoolList;
