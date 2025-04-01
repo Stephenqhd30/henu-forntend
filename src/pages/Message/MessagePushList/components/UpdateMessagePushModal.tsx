@@ -21,15 +21,17 @@ const handleUpdate = async (fields: API.MessagePushUpdateRequest) => {
   try {
     const res = await updateMessagePushUsingPost(fields);
     if (res.code === 0 && res.data) {
-      hide();
       message.success('更新成功');
       return true;
+    } else {
+      message.error(`更新失败${res.message}, 请重试!`);
+      return false;
     }
-    return false;
   } catch (error: any) {
-    hide();
     message.error(`更新失败${error.message}, 请重试!`);
     return false;
+  } finally {
+    hide();
   }
 };
 const UpdateMessagePushModal: React.FC<UpdateProps> = (props) => {

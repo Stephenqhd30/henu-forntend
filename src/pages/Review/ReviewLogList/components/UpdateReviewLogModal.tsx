@@ -1,7 +1,7 @@
 import { ProColumns, ProTable } from '@ant-design/pro-components';
 import { message, Modal } from 'antd';
 import React from 'react';
-import {updateReviewLogUsingPost} from '@/services/henu-backend/reviewLogController';
+import { updateReviewLogUsingPost } from '@/services/henu-backend/reviewLogController';
 
 interface UpdateProps {
   oldData?: API.ReviewLogVO;
@@ -21,15 +21,16 @@ const handleUpdate = async (fields: API.ReviewLogUpdateRequest) => {
   try {
     const res = await updateReviewLogUsingPost(fields);
     if (res.code === 0 && res.data) {
-      hide();
       message.success('更新成功');
-      return true;
+    } else {
+      message.error(`更新失败${res.message}, 请重试!`);
+      return false;
     }
-    return false;
   } catch (error: any) {
-    hide();
     message.error(`更新失败${error.message}, 请重试!`);
     return false;
+  } finally {
+    hide();
   }
 };
 const UpdateReviewLogModal: React.FC<UpdateProps> = (props) => {

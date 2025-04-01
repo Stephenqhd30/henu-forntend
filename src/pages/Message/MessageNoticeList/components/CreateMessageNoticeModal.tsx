@@ -22,7 +22,6 @@ const handleAdd = async (fields: API.MessageNoticeAddRequest) => {
       ...fields,
     });
     if (res.code === 0 && res.data) {
-      hide();
       message.success('添加成功');
       return true;
     } else {

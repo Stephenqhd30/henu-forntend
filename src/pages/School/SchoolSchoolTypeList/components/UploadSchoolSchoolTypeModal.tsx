@@ -33,7 +33,7 @@ const UploadAdminModal: React.FC<Props> = (props) => {
             message.success('高校与高校类型关联信息导入成功');
             onSubmit?.();
           } else {
-            message.error('高校与高校类型关联信息导入失败请重试');
+            message.error('高校与高校类型关联信息导入失败请重试' + res.message);
           }
         } catch (error: any) {
           message.error(`高校与高校类型关联信息导入失败${error.message}` + '请重试');

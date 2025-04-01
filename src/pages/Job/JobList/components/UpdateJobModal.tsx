@@ -1,7 +1,7 @@
 import { ProColumns, ProTable } from '@ant-design/pro-components';
 import { message, Modal } from 'antd';
 import React from 'react';
-import {updateJobUsingPost} from '@/services/henu-backend/jobController';
+import { updateJobUsingPost } from '@/services/henu-backend/jobController';
 
 interface UpdateProps {
   oldData?: API.JobVO;
@@ -21,15 +21,17 @@ const handleUpdate = async (fields: API.JobUpdateRequest) => {
   try {
     const res = await updateJobUsingPost(fields);
     if (res.code === 0 && res.data) {
-      hide();
       message.success('更新成功');
       return true;
+    } else {
+      message.error(`更新失败${res.message}, 请重试!`);
+      return false;
     }
-    return false;
   } catch (error: any) {
-    hide();
     message.error(`更新失败${error.message}, 请重试!`);
     return false;
+  } finally {
+    hide();
   }
 };
 const UpdateJobModal: React.FC<UpdateProps> = (props) => {

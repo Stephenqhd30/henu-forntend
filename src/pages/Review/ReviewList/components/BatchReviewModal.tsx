@@ -33,15 +33,15 @@ const BatchReviewModal: React.FC<ReviewModalProps> = (props) => {
       form={form}
       onFinish={async (values: API.ReviewLogAddRequest) => {
         try {
-          const success = await batchAddReviewLogsUsingPost({
+          const res = await batchAddReviewLogsUsingPost({
             ...values,
             registrationIds: selectedRowKeys,
           });
-          if (success.code === 0 && success.data) {
+          if (res.code === 0 && res.data) {
             onSubmit?.(values);
             message.success('审核信息已更新');
           } else {
-            message.error(`审核失败`);
+            message.error(`审核失败` + res.message);
           }
         } catch (error: any) {
           message.error('审核失败' + error.message);
