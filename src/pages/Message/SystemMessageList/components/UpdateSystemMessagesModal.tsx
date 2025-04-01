@@ -1,12 +1,12 @@
 import { ProColumns, ProTable } from '@ant-design/pro-components';
 import { message, Modal } from 'antd';
 import React from 'react';
-import { updateMessagePushUsingPost } from '@/services/henu-backend/messagePushController';
+import {updateSystemMessagesUsingPost} from '@/services/henu-backend/systemMessagesController';
 
 interface UpdateProps {
   oldData?: API.MessagePush;
   onCancel: () => void;
-  onSubmit: (values: API.MessagePushUpdateRequest) => Promise<void>;
+  onSubmit: (values: API.SystemMessagesUpdateRequest) => Promise<void>;
   visible: boolean;
   columns: ProColumns<API.MessagePush>[];
 }
@@ -16,10 +16,10 @@ interface UpdateProps {
  *
  * @param fields
  */
-const handleUpdate = async (fields: API.MessagePushUpdateRequest) => {
+const handleUpdate = async (fields: API.SystemMessagesUpdateRequest) => {
   const hide = message.loading('正在更新');
   try {
-    const res = await updateMessagePushUsingPost(fields);
+    const res = await updateSystemMessagesUsingPost(fields);
     if (res.code === 0 && res.data) {
       hide();
       message.success('更新成功');
@@ -55,7 +55,7 @@ const UpdateSystemMessagesModal: React.FC<UpdateProps> = (props) => {
           initialValues: oldData,
         }}
         columns={columns}
-        onSubmit={async (values: API.MessagePushUpdateRequest) => {
+        onSubmit={async (values: API.SystemMessagesUpdateRequest) => {
           const success = await handleUpdate({
             ...values,
             id: oldData?.id,

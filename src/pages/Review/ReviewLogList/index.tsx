@@ -78,6 +78,7 @@ const ReviewLogList: React.FC = () => {
       title: 'id',
       dataIndex: 'id',
       valueType: 'text',
+      hideInForm: true,
     },
     {
       title: '审核状态',
@@ -87,9 +88,6 @@ const ReviewLogList: React.FC = () => {
       renderFormItem: () => {
         return (
           <Select>
-            <Select.Option value={ReviewStatus.REVIEWING}>
-              {reviewStatusEnum[ReviewStatus.REVIEWING].text}
-            </Select.Option>
             <Select.Option value={ReviewStatus.PASS}>
               {reviewStatusEnum[ReviewStatus.PASS].text}
             </Select.Option>
@@ -238,8 +236,8 @@ const ReviewLogList: React.FC = () => {
             setUpdateModalVisible(false);
           }}
           onSubmit={async () => {
-            actionRef.current?.reload();
             setUpdateModalVisible(false);
+            actionRef.current?.reload();
           }}
           visible={updateModalVisible}
           columns={columns}

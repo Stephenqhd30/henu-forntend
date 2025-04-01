@@ -1041,6 +1041,7 @@ declare namespace API {
     pushStatus?: number;
     registrationId?: number;
     updateTime?: string;
+    userName?: string;
   };
 
   type MessageNoticeAddRequest = {
@@ -1061,6 +1062,7 @@ declare namespace API {
     registrationId?: number;
     sortField?: string;
     sortOrder?: string;
+    userName?: string;
   };
 
   type MessageNoticeUpdateRequest = {
@@ -1078,6 +1080,7 @@ declare namespace API {
     registrationFormVO?: RegistrationFormVO;
     registrationId?: number;
     updateTime?: string;
+    userName?: string;
   };
 
   type MessagePush = {
@@ -1091,6 +1094,7 @@ declare namespace API {
     retryCount?: number;
     updateTime?: string;
     userId?: number;
+    userName?: string;
   };
 
   type MessagePushAddRequest = {
@@ -1113,15 +1117,7 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     userId?: number;
-  };
-
-  type MessagePushUpdateRequest = {
-    id?: number;
-    messageNoticeId?: number;
-    pushMessage?: string;
-    pushStatus?: number;
-    pushType?: string;
-    userId?: number;
+    userName?: string;
   };
 
   type MessagePushVO = {
@@ -1135,13 +1131,13 @@ declare namespace API {
     retryCount?: number;
     updateTime?: string;
     userId?: number;
+    userName?: string;
     userVO?: UserVO;
   };
 
   type OperationLog = {
     createTime?: string;
     id?: number;
-    isDelete?: number;
     requestId?: string;
     requestIp?: string;
     requestMethod?: string;
@@ -1885,7 +1881,7 @@ declare namespace API {
     reviewComments?: string;
     reviewStatus?: number;
     reviewTime?: string;
-    reviewerId?: number;
+    reviewer?: string;
     updateTime?: string;
   };
 
@@ -1904,7 +1900,7 @@ declare namespace API {
     registrationId?: number;
     reviewComments?: string;
     reviewStatus?: number;
-    reviewerId?: number;
+    reviewer?: string;
     searchText?: string;
     sortField?: string;
     sortOrder?: string;
@@ -1918,7 +1914,6 @@ declare namespace API {
   };
 
   type ReviewLogVO = {
-    adminVO?: AdminVO;
     createTime?: string;
     id?: number;
     registrationFormVO?: RegistrationFormVO;
@@ -1926,7 +1921,7 @@ declare namespace API {
     reviewComments?: string;
     reviewStatus?: number;
     reviewTime?: string;
-    reviewerId?: number;
+    reviewer?: string;
     updateTime?: string;
   };
 

@@ -1,18 +1,17 @@
 import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import {Button, message, Popconfirm, Select, Space, Tag, Typography} from 'antd';
+import { Button, message, Popconfirm, Select, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { exportSystemMessagesUsingGet } from '@/services/henu-backend/excelController';
-import {MESSAGE_PUSH_EXCEL, SYSTEM_MESSAGE_EXCEL} from '@/constants';
-import {PushStatus, pushStatusEnum} from '@/enums/PushStatusEnum';
+import { SYSTEM_MESSAGE_EXCEL } from '@/constants';
+import { PushStatus, pushStatusEnum } from '@/enums/PushStatusEnum';
 import {
   deleteSystemMessagesUsingPost,
   listSystemMessagesByPageUsingPost,
 } from '@/services/henu-backend/systemMessagesController';
 import CreateSystemMessagesModal from '@/pages/Message/SystemMessageList/components/CreateSystemMessagesModal';
 import UpdateSystemMessagesModal from '@/pages/Message/SystemMessageList/components/UpdateSystemMessagesModal';
-import {systemTypeEnum} from '@/enums/SystemTypeEnum';
-import {UserGender, userGenderEnum} from '@/enums/UserGenderEnum';
+import { systemTypeEnum } from '@/enums/SystemTypeEnum';
 
 /**
  * 删除节点
@@ -72,7 +71,6 @@ const SystemMessagesList: React.FC = () => {
     }
   };
 
-
   /**
    * 表格列数据
    */
@@ -113,6 +111,7 @@ const SystemMessagesList: React.FC = () => {
       title: '消息通知状态',
       dataIndex: 'pushStatus',
       valueType: 'text',
+      hideInForm: true,
       valueEnum: pushStatusEnum,
       renderFormItem: () => {
         return (

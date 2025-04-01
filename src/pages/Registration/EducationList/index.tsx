@@ -78,14 +78,16 @@ const EducationVOList: React.FC = () => {
       hideInForm: true,
     },
     {
-      title: '用户姓名',
-      dataIndex: 'userVO',
+      title: '用户',
+      dataIndex: 'userId',
       render: (_, record) => <span>{record?.userVO?.userName}</span>,
+      hideInSearch: true,
     },
     {
-      title: '学校名称',
-      dataIndex: 'schoolVO',
+      title: '学校',
+      dataIndex: 'schoolId',
       render: (_, record) => <span>{record?.schoolVO?.schoolName}</span>,
+      hideInSearch: true,
     },
     {
       title: '教育阶段',

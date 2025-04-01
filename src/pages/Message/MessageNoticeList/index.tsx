@@ -8,13 +8,13 @@ import {
 } from '@/services/henu-backend/messageNoticeController';
 import { exportMessageNoticeUsingGet } from '@/services/henu-backend/excelController';
 import { MESSAGE_NOTICE_EXCEL } from '@/constants';
-import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
-import { ReviewStatus } from '@/enums/ReviewStatusEnum';
-import { pushStatusEnum } from '@/enums/PushStatusEnum';
+import { PushStatus, pushStatusEnum } from '@/enums/PushStatusEnum';
 import {
   CreateMessageNoticeModal,
   UpdateMessageNoticeModal,
 } from '@/pages/Message/MessageNoticeList/components';
+import { addMessagePushUsingPost } from '@/services/henu-backend/messagePushController';
+import { PushType } from '@/enums/PushTypeEnum';
 
 /**
  * 删除节点
@@ -28,11 +28,36 @@ const handleDelete = async (row: API.DeleteRequest) => {
     await deleteMessageNoticeUsingPost({
       id: row.id,
     });
-    hide();
     message.success('删除成功');
   } catch (error: any) {
-    hide();
     message.error(`删除失败${error.message}, 请重试!`);
+  } finally {
+    hide();
+  }
+};
+
+/**
+ * 删除节点
+ *
+ * @param row
+ */
+const handlePush = async (row: any) => {
+  const hide = message.loading('正在发送中');
+  if (!row) return true;
+  try {
+    const res = await addMessagePushUsingPost({
+      messageNoticeId: row?.id,
+      pushType: PushType.SMS,
+    });
+    if (res.code === 0 && res.data) {
+      message.success('消息发送成功');
+    } else {
+      message.error(`消息发送失败${res.message}`);
+    }
+  } catch (error: any) {
+    message.error(`消息发送失败${error.message}, 请重试!`);
+  } finally {
+    hide();
   }
 };
 
@@ -88,25 +113,14 @@ const MessageNoticeList: React.FC = () => {
     {
       title: '报名登记表信息',
       dataIndex: 'registrationId',
-      valueType: 'select',
-      request: async () => {
-        const res = await listRegistrationFormVoByPageUsingPost({
-          reviewStatus: ReviewStatus.PASS,
-        });
-        if (res.code === 0 && res.data) {
-          return (
-            res.data.records?.map((registrationForm) => ({
-              label: registrationForm.userName,
-              value: registrationForm.id,
-            })) ?? []
-          );
-        } else {
-          return [];
-        }
-      },
-      fieldProps: {
-        placeholder: '请选择报名登记表信息',
-      },
+      valueType: 'text',
+      hideInForm: true,
+    },
+    {
+      title: '通知用户名',
+      dataIndex: 'userName',
+      valueType: 'text',
+      hideInForm: true,
     },
     {
       title: '面试地点',
@@ -159,6 +173,27 @@ const MessageNoticeList: React.FC = () => {
           >
             修改
           </Typography.Link>
+          {/*删除表单面试通知的PopConfirm框*/}
+          <Popconfirm
+            title="确定发送信息？"
+            description="发送信息后将无法撤回?"
+            okText="确定"
+            cancelText="取消"
+            onConfirm={async () => {
+              await handlePush(record);
+              actionRef.current?.reload();
+            }}
+          >
+            <Typography.Link
+              key={'push'}
+              type={'secondary'}
+              onClick={() => {
+                setCurrentRow(record);
+              }}
+            >
+              发送短信
+            </Typography.Link>
+          </Popconfirm>
           {/*删除表单面试通知的PopConfirm框*/}
           <Popconfirm
             title="确定删除？"
@@ -215,13 +250,14 @@ const MessageNoticeList: React.FC = () => {
           </Space>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = Object.keys(sort)?.[0];
+          const sortField = 'createTime';
           const sortOrder = sort?.[sortField] ?? undefined;
           const { data, code } = await listMessageNoticeByPageUsingPost({
             ...params,
             ...filter,
             sortField,
             sortOrder,
+            notId: PushStatus.SUCCEED,
           } as API.MessageNoticeQueryRequest);
 
           return {

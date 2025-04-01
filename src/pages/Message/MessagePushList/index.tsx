@@ -1,20 +1,15 @@
-import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
+import { DownloadOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { exportMessagePushUsingGet } from '@/services/henu-backend/excelController';
 import { MESSAGE_PUSH_EXCEL } from '@/constants';
-import { PushStatus, pushStatusEnum } from '@/enums/PushStatusEnum';
+import { pushStatusEnum } from '@/enums/PushStatusEnum';
 import {
   deleteMessagePushUsingPost,
   listMessagePushByPageUsingPost,
 } from '@/services/henu-backend/messagePushController';
 import { pushTypeEnum } from '@/enums/PushTypeEnum';
-import { listMessageNoticeVoByPageUsingPost } from '@/services/henu-backend/messageNoticeController';
-import {
-  CreateMessagePushModal,
-  UpdateMessagePushModal,
-} from '@/pages/Message/MessagePushList/components';
 
 /**
  * 删除节点
@@ -41,13 +36,9 @@ const handleDelete = async (row: API.DeleteRequest) => {
  * @constructor
  */
 const MessagePushList: React.FC = () => {
-  // 创建短信推送 Modal 框
-  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
-  // 更新短信推送 Modal 框
-  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   // 当前短信推送的所点击的数据
-  const [currentRow, setCurrentRow] = useState<API.MessagePush>();
+  const [, setCurrentRow] = useState<API.MessagePush>();
 
   /**
    * 下载短信推送信息
@@ -82,36 +73,22 @@ const MessagePushList: React.FC = () => {
       title: 'id',
       dataIndex: 'id',
       valueType: 'text',
-      hideInForm: true,
+      hideInTable: true,
     },
     {
-      title: '消息通知人',
+      title: '消息通知id',
       dataIndex: 'messageNoticeId',
-      valueType: 'select',
-      request: async () => {
-        const res = await listMessageNoticeVoByPageUsingPost({
-          notId: PushStatus.SUCCEED,
-        });
-        if (res.code === 0 && res.data) {
-          return (
-            res.data.records?.map((messageNotice) => ({
-              label: messageNotice.registrationFormVO?.userName,
-              value: messageNotice.id,
-            })) ?? []
-          );
-        } else {
-          return [];
-        }
-      },
-      fieldProps: {
-        placeholder: '请选择报名登记表信息',
-      },
+      valueType: 'text',
+    },
+    {
+      title: '通知用户名',
+      dataIndex: 'userName',
+      valueType: 'text',
     },
     {
       title: '推送消息',
       dataIndex: 'pushMessage',
-      valueType: 'text',
-      hideInForm: true,
+      valueType: 'textarea',
     },
     {
       title: '消息推送方式',
@@ -122,7 +99,7 @@ const MessagePushList: React.FC = () => {
     {
       title: '消息通知状态',
       dataIndex: 'pushStatus',
-      valueType: 'text',
+      valueType: 'select',
       hideInForm: true,
       valueEnum: pushStatusEnum,
       render: (_, record) => {
@@ -140,14 +117,15 @@ const MessagePushList: React.FC = () => {
     {
       title: '失败错误消息',
       dataIndex: 'errorMessage',
-      valueType: 'digit',
+      valueType: 'text',
       hideInForm: true,
     },
     {
       title: '推送用户id',
       dataIndex: 'userId',
       valueType: 'text',
-      hideInForm: true,
+      hideInTable: true,
+      hideInSearch: true,
     },
     {
       title: '创建时间',
@@ -155,14 +133,16 @@ const MessagePushList: React.FC = () => {
       dataIndex: 'createTime',
       valueType: 'dateTime',
       hideInSearch: true,
+      hideInTable: true,
       hideInForm: true,
     },
     {
       title: '更新时间',
       sorter: true,
-      dataIndex: 'updateTime',
+      dataIndex: 'createTime',
       valueType: 'dateTime',
       hideInSearch: true,
+      hideInTable: true,
       hideInForm: true,
     },
     {
@@ -171,15 +151,6 @@ const MessagePushList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <Space size={'middle'}>
-          <Typography.Link
-            key="update"
-            onClick={() => {
-              setUpdateModalVisible(true);
-              setCurrentRow(record);
-            }}
-          >
-            修改
-          </Typography.Link>
           {/*删除表单短信推送的PopConfirm框*/}
           <Popconfirm
             title="确定删除？"
@@ -217,14 +188,6 @@ const MessagePushList: React.FC = () => {
         toolBarRender={() => [
           <Space key={'space'} wrap>
             <Button
-              icon={<PlusOutlined />}
-              key={'export'}
-              type={'primary'}
-              onClick={() => setCreateModalVisible(true)}
-            >
-              新建短信推送信息
-            </Button>
-            <Button
               key={'export'}
               onClick={async () => {
                 await downloadMessagePushInfo();
@@ -253,33 +216,6 @@ const MessagePushList: React.FC = () => {
         }}
         columns={columns}
       />
-      {createModalVisible && (
-        <CreateMessagePushModal
-          onCancel={() => {
-            setCreateModalVisible(false);
-          }}
-          onSubmit={async () => {
-            actionRef.current?.reload();
-            setCreateModalVisible(false);
-          }}
-          visible={createModalVisible}
-          columns={columns}
-        />
-      )}
-      {updateModalVisible && (
-        <UpdateMessagePushModal
-          oldData={currentRow}
-          onCancel={() => {
-            setUpdateModalVisible(false);
-          }}
-          onSubmit={async () => {
-            actionRef.current?.reload();
-            setUpdateModalVisible(false);
-          }}
-          visible={updateModalVisible}
-          columns={columns}
-        />
-      )}
     </PageContainer>
   );
 };

@@ -92,21 +92,6 @@ export async function listReviewLogVoByPageUsingPost(
   });
 }
 
-/** listMyReviewLogVOByPage POST /api/reviewLog/my/list/page/vo */
-export async function listMyReviewLogVoByPageUsingPost(
-  body: API.ReviewLogQueryRequest,
-  options?: { [key: string]: any },
-) {
-  return request<API.BaseResponsePageReviewLogVO_>('/api/reviewLog/my/list/page/vo', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
-
 /** updateReviewLog POST /api/reviewLog/update */
 export async function updateReviewLogUsingPost(
   body: API.ReviewLogUpdateRequest,

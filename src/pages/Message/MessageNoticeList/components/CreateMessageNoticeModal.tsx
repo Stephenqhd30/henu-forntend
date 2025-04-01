@@ -1,7 +1,16 @@
-import { ProColumns, ProTable } from '@ant-design/pro-components';
-import { message, Modal } from 'antd';
+import {
+  ModalForm,
+  ProColumns,
+  ProForm,
+  ProFormDateTimePicker,
+  ProFormSelect,
+  ProFormTextArea,
+} from '@ant-design/pro-components';
+import { message } from 'antd';
 import React from 'react';
 import { addMessageNoticeUsingPost } from '@/services/henu-backend/messageNoticeController';
+import { PushStatus } from '@/enums/PushStatusEnum';
+import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
 
 interface CreateProps {
   onCancel: () => void;
@@ -42,26 +51,58 @@ const handleAdd = async (fields: API.MessageNoticeAddRequest) => {
  * @constructor
  */
 const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
-  const { visible, onSubmit, onCancel, columns } = props;
+  const { visible, onSubmit, onCancel } = props;
+  const [form] = ProForm.useForm<API.MessageNoticeAddRequest>();
   return (
-    <Modal
-      destroyOnClose
-      title={'新建面试通知'}
-      onCancel={() => onCancel?.()}
+    <ModalForm
+      title={'添加短信推送信息'}
       open={visible}
-      footer
+      form={form}
+      onFinish={async (values: API.MessageNoticeAddRequest) => {
+        const success = await handleAdd({
+          ...values,
+        });
+        if (success) {
+          onSubmit?.(values);
+        }
+      }}
+      autoFocusFirstInput
+      modalProps={{
+        destroyOnClose: true,
+        onCancel: () => {
+          onCancel?.();
+        },
+      }}
+      submitter={{
+        searchConfig: {
+          submitText: '创建',
+          resetText: '取消',
+        },
+      }}
     >
-      <ProTable
-        columns={columns}
-        onSubmit={async (values: API.MessageNoticeAddRequest) => {
-          const success = await handleAdd(values);
-          if (success) {
-            onSubmit?.(values);
+      <ProFormSelect
+        name={'registrationId'}
+        request={async () => {
+          const res = await listRegistrationFormVoByPageUsingPost({
+            reviewStatus: PushStatus.SUCCEED,
+          });
+          if (res.code === 0 && res.data) {
+            return (
+              res.data.records?.map((registrationForm) => ({
+                label: registrationForm?.userName + ' - ' + registrationForm.jobVO?.jobName,
+                value: registrationForm.id,
+              })) ?? []
+            );
+          } else {
+            return [];
           }
         }}
-        type={'form'}
+        placeholder="请选择消息通知人"
+        style={{ width: '100%' }}
       />
-    </Modal>
+      <ProFormTextArea name={'interviewLocation'} label={'面试地点'} />
+      <ProFormDateTimePicker name={'interviewTime'} label={'面试时间'} />
+    </ModalForm>
   );
 };
 export default CreateMessageNoticeModal;

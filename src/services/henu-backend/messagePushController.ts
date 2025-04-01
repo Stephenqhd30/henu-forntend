@@ -91,18 +91,3 @@ export async function listMyMessagePushVoByPageUsingPost(
     ...(options || {}),
   });
 }
-
-/** updateMessagePush POST /api/messagePush/update */
-export async function updateMessagePushUsingPost(
-  body: API.MessagePushUpdateRequest,
-  options?: { [key: string]: any },
-) {
-  return request<API.BaseResponseBoolean_>('/api/messagePush/update', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
