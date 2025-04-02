@@ -1906,13 +1906,6 @@ declare namespace API {
     sortOrder?: string;
   };
 
-  type ReviewLogUpdateRequest = {
-    id?: number;
-    registrationId?: number;
-    reviewComments?: string;
-    reviewStatus?: number;
-  };
-
   type ReviewLogVO = {
     createTime?: string;
     id?: number;

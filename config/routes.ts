@@ -17,13 +17,6 @@ export default [
         icon: 'PicLeftOutlined',
         component: './Review/ReviewList',
       },
-      {
-        name: '审核日志',
-        access: 'canAdmin',
-        path: '/review/log',
-        icon: 'PicCenterOutlined',
-        component: './Review/ReviewLogList',
-      },
     ],
   },
   {
@@ -37,12 +30,6 @@ export default [
         path: '/admin',
         icon: 'UsergroupAddOutlined',
         component: './Admin/AdminList',
-      },
-      {
-        name: '用户管理',
-        path: '/admin/user',
-        icon: 'UserOutlined',
-        component: './Admin/UserList',
       },
     ],
   },
@@ -99,47 +86,21 @@ export default [
     ],
   },
   {
-    name: '报名登记信息管理',
-    path: 'registration',
-    icon: 'PieChartOutlined',
-    routes: [
-      {
-        name: '报名登记信息管理',
-        path: '/registration',
-        icon: 'BarChartOutlined',
-        component: './Registration/RegistrationList',
-      },
-      {
-        name: '教育经历信息管理',
-        path: '/registration/education',
-        icon: 'AreaChartOutlined',
-        component: './Registration/EducationList',
-      },
-      {
-        name: '家庭关系信息管理',
-        path: '/registration/family',
-        icon: 'RadarChartOutlined',
-        component: './Registration/FamilyList',
-      },
-    ],
-  },
-  {
     name: '文件信息管理',
     path: 'file',
-    access: 'canAdmin',
     icon: 'FileProtectOutlined',
     routes: [
-      {
-        name: '文件上传日志管理',
-        path: '/file/log',
-        icon: 'FileSearchOutlined',
-        component: './File/FileLogList',
-      },
       {
         name: '文件上传类型管理',
         path: '/file/type',
         icon: 'FileUnknownOutlined',
         component: './File/FileTypeList',
+      },
+      {
+        name: '文件上传日志管理',
+        path: '/file/log',
+        icon: 'FileSearchOutlined',
+        component: './File/FileLogList',
       },
     ],
   },
@@ -168,6 +129,13 @@ export default [
         component: './Message/SystemMessageList',
       },
     ],
+  },
+  {
+    name: '审核日志',
+    access: 'canAdmin',
+    path: '/review/log',
+    icon: 'PicCenterOutlined',
+    component: './Review/ReviewLogList',
   },
   {
     name: '操作日志信息管理',

@@ -92,6 +92,34 @@ const RegistrationList: React.FC = () => {
       valueType: 'text',
     },
     {
+      title: '证件照',
+      dataIndex: 'userAvatar',
+      valueType: 'image',
+      fieldProps: {
+        width: 64,
+      },
+      hideInSearch: true,
+    },
+    {
+      title: '生活照',
+      dataIndex: 'userLifePhoto',
+      valueType: 'image',
+      fieldProps: {
+        width: 64,
+      },
+      hideInSearch: true,
+    },
+    {
+      title: '工作经历',
+      dataIndex: 'workExperience',
+      valueType: 'text',
+    },
+    {
+      title: '主要学生干部经历及获奖情况',
+      dataIndex: 'studentLeaderAwards',
+      valueType: 'text',
+    },
+    {
       title: '婚姻状况',
       dataIndex: 'marryStatus',
       valueType: 'text',
@@ -130,38 +158,10 @@ const RegistrationList: React.FC = () => {
       valueType: 'dateTime',
     },
     {
-      title: '证件照',
-      dataIndex: 'userAvatar',
-      valueType: 'image',
-      fieldProps: {
-        width: 64,
-      },
-      hideInSearch: true,
-    },
-    {
-      title: '生活照',
-      dataIndex: 'userLifePhoto',
-      valueType: 'image',
-      fieldProps: {
-        width: 64,
-      },
-      hideInSearch: true,
-    },
-    {
       title: '报名登记表文件',
       dataIndex: 'registrationForm',
       valueType: 'text',
       hideInSearch: true,
-    },
-    {
-      title: '工作经历',
-      dataIndex: 'workExperience',
-      valueType: 'text',
-    },
-    {
-      title: '主要学生干部经历及获奖情况',
-      dataIndex: 'studentLeaderAwards',
-      valueType: 'text',
     },
     {
       title: '审核状态',
