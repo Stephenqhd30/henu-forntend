@@ -1,12 +1,11 @@
 import React from 'react';
-import { Modal, Select } from 'antd';
-import { ProDescriptions } from '@ant-design/pro-components';
-import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
+import { Modal, Tag } from 'antd';
+import { ProList } from '@ant-design/pro-components';
 
 interface Props {
   onCancel: () => void;
   visible: boolean;
-  user: API.UserVO;
+  registration: API.RegistrationFormVO;
 }
 
 /**
@@ -15,67 +14,53 @@ interface Props {
  * @constructor
  */
 const UserDetailsModal: React.FC<Props> = (props) => {
-  const { onCancel, visible, user } = props;
-  const columns = [
-    {
-      title: 'id',
-      dataIndex: 'id',
-      valueType: 'text',
-    },
-    {
-      title: '姓名',
-      dataIndex: 'userName',
-      valueType: 'text',
-    },
-    {
-      title: '头像',
-      dataIndex: 'userAvatar',
-      valueType: 'image',
-      fieldProps: {
-        width: 64,
-      },
-      hideInSearch: true,
-    },
-    {
-      title: '电话',
-      dataIndex: 'userPhone',
-      valueType: 'text',
-    },
-    {
-      title: '邮箱',
-      dataIndex: 'userEmail',
-      valueType: 'text',
-    },
-    {
-      title: '性别',
-      dataIndex: 'userGender',
-      valueType: 'text',
-      valueEnum: userGenderEnum,
-      renderFormItem: () => {
-        return (
-          <Select>
-            <Select.Option value={UserGender.MALE}>
-              {userGenderEnum[UserGender.MALE].text}
-            </Select.Option>
-            <Select.Option value={UserGender.FEMALE}>
-              {userGenderEnum[UserGender.FEMALE].text}
-            </Select.Option>
-          </Select>
-        );
-      },
-    },
-  ];
+  const { onCancel, visible, registration } = props;
   return (
     <Modal
       destroyOnClose
-      title={'用户信息'}
+      title={'用户相关信息'}
       open={visible}
       onCancel={() => {
         onCancel?.();
       }}
       footer={null}
     >
-      <ProDescriptions dataSource={user} column={1} columns={columns} />
+      <ProList
+        headerTitle="教育经历"
+        dataSource={registration.educationVOList || []}
+        metas={{
+          title: {
+            render: (_, row) => `${row.educationalStage} - ${row.schoolVO?.schoolName}`,
+          },
+          subTitle: {
+            render: (_, row: API.EducationVO) => {
+              if (row?.schoolVO?.schoolTypes && row.schoolVO.schoolTypes.length > 0) {
+                return row.schoolVO.schoolTypes.map((type: string) => (
+                  <Tag key={type} color="blue">
+                    {type}
+                  </Tag>
+                ));
+              }
+            },
+          },
+          description: {
+            render: (_, row) => {
+              return <span>{`专业: ${row.major} - 学习时间: ${row.studyTime}`}</span>;
+            },
+          },
+        }}
+        locale={{ emptyText: '暂无教育经历' }}
+      />
+      <ProList
+        headerTitle="家庭信息"
+        dataSource={registration.familyVOList || []}
+        metas={{
+          title: { dataIndex: 'familyName', title: '姓名' },
+          subTitle: { dataIndex: 'appellation', title: '称谓' },
+          description: { dataIndex: 'workDetail', title: '职业' },
+        }}
+        locale={{ emptyText: '暂无家庭信息' }}
+      />
     </Modal>
   );
 };

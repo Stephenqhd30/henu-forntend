@@ -1,5 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
+import {
+  ActionType,
+  PageContainer,
+  ProColumns,
+  ProFormSelect,
+  ProTable,
+} from '@ant-design/pro-components';
 import { Button, Select, Space, Typography } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import { BatchReviewModal, ReviewModal } from '@/pages/Review/ReviewList/components';
@@ -8,6 +14,7 @@ import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
 import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
 import { JobDetailsModal } from '@/components/ReJob';
 import { UserDetailsModal } from '@/components/ReUser';
+import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 
 /**
  * 报名登记表信息审核
@@ -41,6 +48,7 @@ const RegistrationReview: React.FC = () => {
       title: '身份证号',
       dataIndex: 'userIdCard',
       valueType: 'password',
+      hideInSearch: true,
     },
     {
       title: '性别',
@@ -64,11 +72,42 @@ const RegistrationReview: React.FC = () => {
       title: '联系电话',
       dataIndex: 'userPhone',
       valueType: 'text',
+      hideInSearch: true,
+    },
+    {
+      title: '证件照',
+      dataIndex: 'userAvatar',
+      valueType: 'image',
+      fieldProps: {
+        width: 64,
+      },
+      hideInSearch: true,
+    },
+    {
+      title: '生活照',
+      dataIndex: 'userLifePhoto',
+      valueType: 'image',
+      fieldProps: {
+        width: 64,
+      },
+      hideInSearch: true,
+    },
+    {
+      title: '工作经历',
+      dataIndex: 'workExperience',
+      valueType: 'text',
+    },
+    {
+      title: '主要学生干部经历及获奖情况',
+      dataIndex: 'studentLeaderAwards',
+      valueType: 'text',
+      hideInSearch: true,
     },
     {
       title: '邮箱',
       dataIndex: 'userEmail',
       valueType: 'text',
+      hideInSearch: true,
     },
     {
       title: '婚姻状况',
@@ -92,38 +131,24 @@ const RegistrationReview: React.FC = () => {
       title: '家庭住址',
       dataIndex: 'address',
       valueType: 'text',
+      hideInSearch: true,
     },
     {
       title: '出生日期',
       dataIndex: 'birthDate',
       valueType: 'text',
+      hideInSearch: true,
     },
     {
       title: '民族',
       dataIndex: 'ethnic',
       valueType: 'text',
+      hideInSearch: true,
     },
     {
       title: '入党时间',
       dataIndex: 'partyTime',
       valueType: 'dateTime',
-    },
-    {
-      title: '证件照',
-      dataIndex: 'userAvatar',
-      valueType: 'image',
-      fieldProps: {
-        width: 64,
-      },
-      hideInSearch: true,
-    },
-    {
-      title: '生活照',
-      dataIndex: 'userLifePhoto',
-      valueType: 'image',
-      fieldProps: {
-        width: 64,
-      },
       hideInSearch: true,
     },
     {
@@ -131,16 +156,6 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'registrationForm',
       valueType: 'text',
       hideInSearch: true,
-    },
-    {
-      title: '工作经历',
-      dataIndex: 'workExperience',
-      valueType: 'text',
-    },
-    {
-      title: '主要学生干部经历及获奖情况',
-      dataIndex: 'studentLeaderAwards',
-      valueType: 'text',
     },
     {
       title: '审核状态',
@@ -167,6 +182,7 @@ const RegistrationReview: React.FC = () => {
       title: '审核意见',
       dataIndex: 'reviewComments',
       valueType: 'textarea',
+      hideInSearch: true,
     },
     {
       title: '审核时间',
@@ -180,6 +196,40 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'reviewer',
       valueType: 'text',
       hideInForm: true,
+      hideInSearch: true,
+    },
+    {
+      title: '学校类型',
+      dataIndex: 'schoolTypes',
+      hideInForm: true,
+      hideInTable: true,
+      hideInSetting: true,
+      renderFormItem: (_, { value }, form) => {
+        const parsedValue = Array.isArray(value) ? value : [];
+        return (
+          <ProFormSelect
+            mode="multiple"
+            // @ts-ignore
+            value={parsedValue}
+            request={async () => {
+              const res = await listSchoolTypeVoByPageUsingPost({});
+              if (res.code === 0 && res.data) {
+                return (
+                  res.data.records?.map((schoolType) => ({
+                    label: schoolType.typeName,
+                    value: schoolType.typeName,
+                  })) ?? []
+                );
+              } else {
+                return [];
+              }
+            }}
+            onChange={(val) => form.setFieldsValue({ schoolTypes: val })}
+            placeholder="请选择高校类型"
+            style={{ width: '100%' }}
+          />
+        );
+      },
     },
     {
       title: '操作',
@@ -223,7 +273,7 @@ const RegistrationReview: React.FC = () => {
       <ProTable<API.RegistrationFormVO, API.PageParams>
         headerTitle={'报名登记表审核'}
         rowKey={'id'}
-        scroll={{ x: 'max-content'}}
+        scroll={{ x: 'max-content' }}
         actionRef={actionRef}
         search={{
           labelWidth: 120,
@@ -236,7 +286,6 @@ const RegistrationReview: React.FC = () => {
             ...filter,
             sortField,
             sortOrder,
-            notId: ReviewStatus.PASS,
           } as API.ReviewLogQueryRequest);
 
           return {
@@ -297,7 +346,7 @@ const RegistrationReview: React.FC = () => {
         <UserDetailsModal
           visible={userModal}
           onCancel={() => setUserModal(false)}
-          user={currentRow?.userVO ?? {}}
+          registration={currentRow}
         />
       )}
       {/*岗位信息*/}

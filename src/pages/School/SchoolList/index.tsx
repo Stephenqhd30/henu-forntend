@@ -1,10 +1,16 @@
 import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import {ActionType, PageContainer, ProColumns, ProTable} from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Space, Typography } from 'antd';
+import {
+  ActionType,
+  PageContainer,
+  ProColumns,
+  ProFormSelect,
+  ProTable,
+} from '@ant-design/pro-components';
+import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import {
   deleteSchoolUsingPost,
-  listSchoolByPageUsingPost,
+  listSchoolVoByPageUsingPost,
 } from '@/services/henu-backend/schoolController';
 import CreateSchoolModal from '@/pages/School/SchoolList/components/CreateSchoolModal';
 import UpdateSchoolModal from '@/pages/School/SchoolList/components/UpdateSchoolModal';
@@ -13,7 +19,8 @@ import {
   exportSchoolTemplateUsingGet,
   exportSchoolUsingGet,
 } from '@/services/henu-backend/excelController';
-import {EXPORT_SCHOOL_EXCEL, SCHOOL_EXCEL} from '@/constants';
+import { EXPORT_SCHOOL_EXCEL, SCHOOL_EXCEL } from '@/constants';
+import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 
 /**
  * 删除节点
@@ -109,7 +116,7 @@ const SchoolList: React.FC = () => {
   /**
    * 表格列数据
    */
-  const columns: ProColumns<API.School>[] = [
+  const columns: ProColumns<API.SchoolVO>[] = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -120,6 +127,24 @@ const SchoolList: React.FC = () => {
       title: '高校名称',
       dataIndex: 'schoolName',
       valueType: 'text',
+    },
+    {
+      title: '学校类型',
+      dataIndex: 'schoolTypes',
+      hideInSearch: true,
+      hideInForm: true,
+      render: (_, record) => {
+        if (record) {
+          return (
+            record?.schoolTypes?.map((type: any) => (
+              <Tag key={type} color="blue">
+                {type}
+              </Tag>
+            )) ?? []
+          );
+        }
+        return <Tag>{'无'}</Tag>;
+      },
     },
     {
       title: '创建人id',
@@ -235,7 +260,7 @@ const SchoolList: React.FC = () => {
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
-          const { data, code } = await listSchoolByPageUsingPost({
+          const { data, code } = await listSchoolVoByPageUsingPost({
             ...params,
             ...filter,
             sortField,

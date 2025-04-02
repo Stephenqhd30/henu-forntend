@@ -3,7 +3,7 @@ import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro
 import { Button, message, Space } from 'antd';
 import React, { useRef } from 'react';
 import { exportOperationLogUsingGet } from '@/services/henu-backend/excelController';
-import {ADMIN_EXCEL, OPERATION_LOG_EXCEL} from '@/constants';
+import { OPERATION_LOG_EXCEL } from '@/constants';
 import { listOperationLogByPageUsingPost } from '@/services/henu-backend/operationLogController';
 
 /**
@@ -96,7 +96,7 @@ const OperationLogList: React.FC = () => {
       <ProTable<API.OperationLog, API.PageParams>
         headerTitle={'操作日志信息查询'}
         actionRef={actionRef}
-        scroll={{ x: 'max-content'}}
+        scroll={{ x: 'max-content' }}
         rowKey={'id'}
         search={{
           labelWidth: 120,

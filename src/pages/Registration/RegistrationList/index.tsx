@@ -6,7 +6,6 @@ import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/r
 import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
 import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
 import { JobDetailsModal } from '@/components/ReJob';
-import { UserDetailsModal } from '@/components/ReUser';
 import { exportRegistrationFormUsingGet } from '@/services/henu-backend/excelController';
 import { REGISTRATION_EXCEL } from '@/constants';
 import { DownloadOutlined } from '@ant-design/icons';
@@ -17,8 +16,6 @@ import { DownloadOutlined } from '@ant-design/icons';
  */
 const RegistrationList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  // 用户详细 Modal 框
-  const [userModal, setUserModal] = useState<boolean>(false);
   // 岗位信息 Modal
   const [jobModal, setJobModal] = useState<boolean>(false);
   // 当前行数据
@@ -209,15 +206,6 @@ const RegistrationList: React.FC = () => {
       render: (_, record) => (
         <Space>
           <Typography.Link
-            key={'user-details'}
-            onClick={async () => {
-              setUserModal(true);
-              setCurrentRow(record);
-            }}
-          >
-            查看用户信息
-          </Typography.Link>
-          <Typography.Link
             key={'job-details'}
             onClick={async () => {
               setJobModal(true);
@@ -271,14 +259,6 @@ const RegistrationList: React.FC = () => {
         }}
         columns={columns}
       />
-      {/*用户信息*/}
-      {userModal && (
-        <UserDetailsModal
-          visible={userModal}
-          onCancel={() => setUserModal(false)}
-          user={currentRow?.userVO ?? {}}
-        />
-      )}
       {/*岗位信息*/}
       {jobModal && (
         <JobDetailsModal

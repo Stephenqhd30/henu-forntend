@@ -1828,7 +1828,9 @@ declare namespace API {
     address?: string;
     birthDate?: string;
     createTime?: string;
+    educationVOList?: EducationVO[];
     ethnic?: string;
+    familyVOList?: FamilyVO[];
     id?: number;
     jobId?: number;
     jobVO?: JobVO;
@@ -1849,7 +1851,6 @@ declare namespace API {
     userLifePhoto?: string;
     userName?: string;
     userPhone?: string;
-    userVO?: UserVO;
     workExperience?: string;
   };
 
@@ -2045,6 +2046,7 @@ declare namespace API {
     createTime?: string;
     id?: number;
     schoolName?: string;
+    schoolTypes?: string[];
     updateTime?: string;
   };
 

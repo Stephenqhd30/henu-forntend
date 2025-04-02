@@ -1,34 +1,10 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Space, Typography } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Button, message, Space } from 'antd';
+import React, { useRef } from 'react';
 import { EDUCATION_EXCEL } from '@/constants';
-import {
-  deleteEducationUsingPost,
-  listEducationVoByPageUsingPost,
-} from '@/services/henu-backend/educationController';
+import { listEducationVoByPageUsingPost } from '@/services/henu-backend/educationController';
 import { exportEducationUsingGet } from '@/services/henu-backend/excelController';
-import { UserDetailsModal } from '@/components/ReUser';
-
-/**
- * 删除节点
- *
- * @param row
- */
-const handleDelete = async (row: API.DeleteRequest) => {
-  const hide = message.loading('正在删除');
-  if (!row) return true;
-  try {
-    await deleteEducationUsingPost({
-      id: row.id,
-    });
-    hide();
-    message.success('删除成功');
-  } catch (error: any) {
-    hide();
-    message.error(`删除失败${error.message}, 请重试!`);
-  }
-};
 
 /**
  * 教育经历列表
@@ -36,10 +12,6 @@ const handleDelete = async (row: API.DeleteRequest) => {
  */
 const EducationVOList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  // 当前教育经历的所点击的数据
-  const [currentRow, setCurrentRow] = useState<API.EducationVO>();
-  // 用户详细Modal
-  const [userModal, setUserModal] = useState<boolean>(false);
 
   /**
    * 下载教育经历信息
@@ -130,45 +102,6 @@ const EducationVOList: React.FC = () => {
       hideInSearch: true,
       hideInForm: true,
     },
-    {
-      title: '操作',
-      dataIndex: 'option',
-      valueType: 'option',
-      render: (_, record) => (
-        <Space size={'middle'}>
-          <Typography.Link
-            key="user-details"
-            onClick={() => {
-              setUserModal(true);
-              setCurrentRow(record);
-            }}
-          >
-            查看用户信息
-          </Typography.Link>
-          {/*删除表单教育经历的PopConfirm框*/}
-          <Popconfirm
-            title="确定删除？"
-            description="删除后将无法恢复?"
-            okText="确定"
-            cancelText="取消"
-            onConfirm={async () => {
-              await handleDelete(record);
-              actionRef.current?.reload();
-            }}
-          >
-            <Typography.Link
-              key={'delete'}
-              type={'danger'}
-              onClick={() => {
-                setCurrentRow(record);
-              }}
-            >
-              删除
-            </Typography.Link>
-          </Popconfirm>
-        </Space>
-      ),
-    },
   ];
   return (
     <PageContainer>
@@ -210,15 +143,6 @@ const EducationVOList: React.FC = () => {
         }}
         columns={columns}
       />
-      {userModal && (
-        <UserDetailsModal
-          onCancel={() => {
-            setUserModal(false);
-          }}
-          visible={userModal}
-          user={currentRow?.userVO ?? {}}
-        />
-      )}
     </PageContainer>
   );
 };

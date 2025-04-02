@@ -2,7 +2,7 @@ export default [
   { path: '/', redirect: '/review' },
   {
     path: '/user',
-    name: "登录页面",
+    name: '登录页面',
     layout: false,
     routes: [{ name: '管理员登录', path: '/user/login', component: './User/Login' }],
   },
@@ -16,6 +16,13 @@ export default [
         path: '/review',
         icon: 'PicLeftOutlined',
         component: './Review/ReviewList',
+      },
+      {
+        name: '审核日志',
+        access: 'canAdmin',
+        path: '/review/log',
+        icon: 'PicCenterOutlined',
+        component: './Review/ReviewLogList',
       },
     ],
   },
@@ -88,6 +95,7 @@ export default [
   {
     name: '文件信息管理',
     path: 'file',
+    access: 'canAdmin',
     icon: 'FileProtectOutlined',
     routes: [
       {
@@ -101,6 +109,32 @@ export default [
         path: '/file/log',
         icon: 'FileSearchOutlined',
         component: './File/FileLogList',
+      },
+    ],
+  },
+  {
+    name: '报名登记信息管理',
+    path: 'registration',
+    icon: 'PieChartOutlined',
+    access: 'canAdmin',
+    routes: [
+      {
+        name: '报名登记信息管理',
+        path: '/registration',
+        icon: 'BarChartOutlined',
+        component: './Registration/RegistrationList',
+      },
+      {
+        name: '教育经历信息管理',
+        path: '/registration/education',
+        icon: 'AreaChartOutlined',
+        component: './Registration/EducationList',
+      },
+      {
+        name: '家庭关系信息管理',
+        path: '/registration/family',
+        icon: 'RadarChartOutlined',
+        component: './Registration/FamilyList',
       },
     ],
   },
@@ -129,13 +163,6 @@ export default [
         component: './Message/SystemMessageList',
       },
     ],
-  },
-  {
-    name: '审核日志',
-    access: 'canAdmin',
-    path: '/review/log',
-    icon: 'PicCenterOutlined',
-    component: './Review/ReviewLogList',
   },
   {
     name: '操作日志信息管理',
