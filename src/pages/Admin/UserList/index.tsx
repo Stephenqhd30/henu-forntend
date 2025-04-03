@@ -7,8 +7,8 @@ import {
   deleteUserUsingPost,
   listUserByPageUsingPost,
 } from '@/services/henu-backend/userController';
-import {exportAdminUsingGet, exportUserUsingGet} from '@/services/henu-backend/excelController';
-import {ADMIN_EXCEL, USER_EXCEL} from '@/constants';
+import { exportUserUsingGet } from '@/services/henu-backend/excelController';
+import { USER_EXCEL } from '@/constants';
 import { UpdateUserModal } from '@/pages/Admin/UserList/components';
 
 /**
@@ -208,8 +208,8 @@ const UserList: React.FC = () => {
           </Space>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = Object.keys(sort)?.[0];
-          const sortOrder = sort?.[sortField] ?? undefined;
+          const sortField = 'update_time';
+          const sortOrder = sort?.[sortField] ?? 'descend';
           const { data, code } = await listUserByPageUsingPost({
             ...params,
             ...filter,

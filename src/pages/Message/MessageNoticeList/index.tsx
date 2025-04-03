@@ -250,8 +250,8 @@ const MessageNoticeList: React.FC = () => {
           </Space>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = 'createTime';
-          const sortOrder = sort?.[sortField] ?? undefined;
+          const sortField = 'create_time';
+          const sortOrder = sort?.[sortField] ?? 'descend';
           const { data, code } = await listMessageNoticeByPageUsingPost({
             ...params,
             ...filter,

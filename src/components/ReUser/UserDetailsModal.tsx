@@ -23,7 +23,7 @@ const UserDetailsModal: React.FC<Props> = (props) => {
       onCancel={() => {
         onCancel?.();
       }}
-      width={'800'}
+      width={800}
       footer={null}
     >
       <ProList
@@ -71,19 +71,14 @@ const UserDetailsModal: React.FC<Props> = (props) => {
         locale={{ emptyText: '暂无家庭信息' }}
       />
       <ProList
-        headerTitle="用户上传附件信息"
+        headerTitle="附件信息"
         dataSource={registration.fileLogVOList || []}
         metas={{
           title: {
             render: (_, row) => {
-              return <span>{row?.fileTypeVO?.typeName}</span>;
-            },
-          },
-          description: {
-            render: (_, row) => {
               return (
                 <a target={'_blank'} rel="noopener noreferrer" href={row.filePath}>
-                  {row.filePath}
+                  {row?.fileTypeVO?.typeName}
                 </a>
               );
             },

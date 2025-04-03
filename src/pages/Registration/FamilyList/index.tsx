@@ -1,10 +1,10 @@
-import {DownloadOutlined} from '@ant-design/icons';
-import {ActionType, PageContainer, ProColumns, ProTable} from '@ant-design/pro-components';
-import {Button, message, Space} from 'antd';
-import React, {useRef} from 'react';
-import {FAMILY_EXCEL} from '@/constants';
-import {exportFamilyUsingGet} from '@/services/henu-backend/excelController';
-import {listFamilyVoByPageUsingPost} from '@/services/henu-backend/familyController';
+import { DownloadOutlined } from '@ant-design/icons';
+import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
+import { Button, message, Space } from 'antd';
+import React, { useRef } from 'react';
+import { FAMILY_EXCEL } from '@/constants';
+import { exportFamilyUsingGet } from '@/services/henu-backend/excelController';
+import { listFamilyVoByPageUsingPost } from '@/services/henu-backend/familyController';
 
 /**
  * 家庭关系列表
@@ -109,8 +109,8 @@ const FamilyList: React.FC = () => {
           </Space>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = Object.keys(sort)?.[0];
-          const sortOrder = sort?.[sortField] ?? undefined;
+          const sortField = 'update_time';
+          const sortOrder = sort?.[sortField] ?? 'descend';
           const { data, code } = await listFamilyVoByPageUsingPost({
             ...params,
             ...filter,

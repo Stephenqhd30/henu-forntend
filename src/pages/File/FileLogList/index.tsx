@@ -149,6 +149,7 @@ const FileLogVOList: React.FC = () => {
       <ProTable<API.FileLogVO, API.PageParams>
         headerTitle={'文件上传日志'}
         actionRef={actionRef}
+        scroll={{ x: 'max-content' }}
         rowKey={'id'}
         search={{
           labelWidth: 120,
@@ -167,8 +168,8 @@ const FileLogVOList: React.FC = () => {
           </Space>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = Object.keys(sort)?.[0];
-          const sortOrder = sort?.[sortField] ?? undefined;
+          const sortField = "create_time";
+          const sortOrder = sort?.[sortField] ?? "descend";
           const { data, code } = await listFileLogVoByPageUsingPost({
             ...params,
             ...filter,

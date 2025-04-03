@@ -126,8 +126,8 @@ const EducationVOList: React.FC = () => {
           </Space>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = Object.keys(sort)?.[0];
-          const sortOrder = sort?.[sortField] ?? undefined;
+          const sortField = 'update_time';
+          const sortOrder = sort?.[sortField] ?? 'descend';
           const { data, code } = await listEducationVoByPageUsingPost({
             ...params,
             ...filter,

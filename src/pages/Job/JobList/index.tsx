@@ -1,9 +1,9 @@
-import {DownloadOutlined, PlusOutlined} from '@ant-design/icons';
+import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import {exportAdminUsingGet, exportJobUsingGet} from '@/services/henu-backend/excelController';
-import {ADMIN_EXCEL, JOB_EXCEL, USER_EXCEL} from '@/constants';
+import { exportJobUsingGet } from '@/services/henu-backend/excelController';
+import { JOB_EXCEL } from '@/constants';
 import { deleteJobUsingPost, listJobByPageUsingPost } from '@/services/henu-backend/jobController';
 import { CreateJobModal, UpdateJobModal } from '@/pages/Job/JobList/components';
 
@@ -179,8 +179,8 @@ const JobList: React.FC = () => {
           </Space>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = Object.keys(sort)?.[0];
-          const sortOrder = sort?.[sortField] ?? undefined;
+          const sortField = 'update_time';
+          const sortOrder = sort?.[sortField] ?? 'descend';
           const { data, code } = await listJobByPageUsingPost({
             ...params,
             ...filter,

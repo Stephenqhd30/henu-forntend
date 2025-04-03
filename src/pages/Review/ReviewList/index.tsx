@@ -285,8 +285,8 @@ const RegistrationReview: React.FC = () => {
           labelWidth: 120,
         }}
         request={async (params, sort, filter) => {
-          const sortField = Object.keys(sort)?.[0];
-          const sortOrder = sort?.[sortField] ?? undefined;
+          const sortField = 'update_time';
+          const sortOrder = sort?.[sortField] ?? 'descend';
           const { data, code } = await listRegistrationFormVoByPageUsingPost({
             ...params,
             ...filter,
