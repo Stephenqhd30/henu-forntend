@@ -1823,6 +1823,7 @@ declare namespace API {
     emergencyPhone?: string;
     ethnic?: string;
     familyVOList?: FamilyVO[];
+    fileLogVOList?: FileLogVO[];
     id?: number;
     jobId?: number;
     jobVO?: JobVO;
