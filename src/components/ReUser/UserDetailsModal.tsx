@@ -56,7 +56,15 @@ const UserDetailsModal: React.FC<Props> = (props) => {
         dataSource={registration.familyVOList || []}
         metas={{
           title: { dataIndex: 'familyName', title: '姓名' },
-          subTitle: { dataIndex: 'appellation', title: '称谓' },
+          subTitle: {
+            render: (_, row) => {
+              return (
+                <Tag key={row.userId} color="blue">
+                  {row.appellation}
+                </Tag>
+              );
+            },
+          },
           description: { dataIndex: 'workDetail', title: '职业' },
         }}
         locale={{ emptyText: '暂无家庭信息' }}

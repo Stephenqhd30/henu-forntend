@@ -1774,31 +1774,22 @@ declare namespace API {
   };
 
   type RegistrationFormQueryRequest = {
-    address?: string;
-    birthDate?: string;
     current?: number;
-    emergencyPhone?: string;
-    ethnic?: string;
     id?: number;
     jobId?: number;
     marryStatus?: number;
     notId?: number;
     pageSize?: number;
-    partyTime?: string;
-    reviewComments?: string;
     reviewStatus?: number;
-    reviewTime?: string;
     reviewer?: string;
+    schoolTypes?: string[];
     searchText?: string;
     sortField?: string;
     sortOrder?: string;
     studentLeaderAwards?: string;
-    userEmail?: string;
     userGender?: number;
     userId?: number;
-    userIdCard?: string;
     userName?: string;
-    userPhone?: string;
     workExperience?: string;
   };
 
@@ -1829,6 +1820,7 @@ declare namespace API {
     birthDate?: string;
     createTime?: string;
     educationVOList?: EducationVO[];
+    emergencyPhone?: string;
     ethnic?: string;
     familyVOList?: FamilyVO[];
     id?: number;

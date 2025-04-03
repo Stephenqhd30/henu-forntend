@@ -152,6 +152,12 @@ const RegistrationReview: React.FC = () => {
       hideInSearch: true,
     },
     {
+      title: '紧急联系电话',
+      dataIndex: 'emergencyPhone',
+      valueType: 'text',
+      hideInSearch: true,
+    },
+    {
       title: '报名登记表文件',
       dataIndex: 'registrationForm',
       valueType: 'text',
