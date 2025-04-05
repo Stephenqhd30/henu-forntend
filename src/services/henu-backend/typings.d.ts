@@ -1719,7 +1719,8 @@ declare namespace API {
     reviewStatus?: number;
     reviewTime?: string;
     reviewer?: string;
-    studentLeaderAwards?: string;
+    studentAwards?: string;
+    studentLeader?: string;
     updateTime?: string;
     userAvatar?: string;
     userEmail?: string;
@@ -1741,7 +1742,8 @@ declare namespace API {
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
-    studentLeaderAwards?: string;
+    studentAwards?: string;
+    studentLeader?: string[];
     userAvatar?: string;
     userEmail?: string;
     userGender?: number;
@@ -1762,7 +1764,8 @@ declare namespace API {
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
-    studentLeaderAwards?: string;
+    studentAwards?: string;
+    studentLeader?: string[];
     userAvatar?: string;
     userEmail?: string;
     userGender?: number;
@@ -1786,7 +1789,8 @@ declare namespace API {
     searchText?: string;
     sortField?: string;
     sortOrder?: string;
-    studentLeaderAwards?: string;
+    studentAwards?: string;
+    studentLeader?: string[];
     userGender?: number;
     userId?: number;
     userName?: string;
@@ -1803,7 +1807,8 @@ declare namespace API {
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
-    studentLeaderAwards?: string;
+    studentAwards?: string;
+    studentLeader?: string[];
     userAvatar?: string;
     userEmail?: string;
     userGender?: number;
@@ -1834,7 +1839,8 @@ declare namespace API {
     reviewStatus?: number;
     reviewTime?: string;
     reviewer?: string;
-    studentLeaderAwards?: string;
+    studentAwards?: string;
+    studentLeader?: string[];
     updateTime?: string;
     userAvatar?: string;
     userEmail?: string;

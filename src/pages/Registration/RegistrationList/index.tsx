@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Select, Space, Typography } from 'antd';
+import {Button, message, Select, Space, Tag, Typography} from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
 import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
@@ -112,9 +112,28 @@ const RegistrationList: React.FC = () => {
       valueType: 'text',
     },
     {
-      title: '主要学生干部经历及获奖情况',
-      dataIndex: 'studentLeaderAwards',
+      title: '主要学生干部经历',
+      dataIndex: 'studentLeader',
       valueType: 'text',
+      hideInSearch: true,
+      render: (_, record) => {
+        if (record) {
+          return (
+            record?.studentLeader?.map((type: any) => (
+              <Tag key={type} color="blue">
+                {type}
+              </Tag>
+            )) ?? []
+          );
+        }
+        return <Tag>{'无'}</Tag>;
+      },
+    },
+    {
+      title: '主要获奖情况',
+      dataIndex: 'studentAwards',
+      valueType: 'text',
+      hideInSearch: true,
     },
     {
       title: '婚姻状况',

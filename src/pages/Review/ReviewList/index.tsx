@@ -6,7 +6,7 @@ import {
   ProFormSelect,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, Select, Space, Typography } from 'antd';
+import { Button, Grid, Select, Space, Tag, Typography } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import { BatchReviewModal, ReviewModal } from '@/pages/Review/ReviewList/components';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
@@ -16,11 +16,14 @@ import { JobDetailsModal } from '@/components/ReJob';
 import { UserDetailsModal } from '@/components/ReUser';
 import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 
+const { useBreakpoint } = Grid;
 /**
  * 报名登记表信息审核
  * @constructor
  */
 const RegistrationReview: React.FC = () => {
+  const scene = useBreakpoint();
+  const isMobile = !scene.md;
   const actionRef = useRef<ActionType>();
   // 用户详细 Modal 框
   const [userModal, setUserModal] = useState<boolean>(false);
@@ -98,8 +101,26 @@ const RegistrationReview: React.FC = () => {
       valueType: 'text',
     },
     {
-      title: '主要学生干部经历及获奖情况',
-      dataIndex: 'studentLeaderAwards',
+      title: '主要学生干部经历',
+      dataIndex: 'studentLeader',
+      valueType: 'text',
+      hideInSearch: true,
+      render: (_, record) => {
+        if (record) {
+          return (
+            record?.studentLeader?.map((type: any) => (
+              <Tag key={type} color="blue">
+                {type}
+              </Tag>
+            )) ?? []
+          );
+        }
+        return <Tag>{'无'}</Tag>;
+      },
+    },
+    {
+      title: '主要获奖情况',
+      dataIndex: 'studentAwards',
       valueType: 'text',
       hideInSearch: true,
     },
@@ -241,6 +262,7 @@ const RegistrationReview: React.FC = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
+      fixed: isMobile ? undefined : 'right',
       render: (_, record) => (
         <Space>
           <Typography.Link
@@ -250,7 +272,7 @@ const RegistrationReview: React.FC = () => {
               setCurrentRow(record);
             }}
           >
-            查看用户信息
+            用户信息
           </Typography.Link>
           <Typography.Link
             key={'job-details'}
@@ -259,7 +281,7 @@ const RegistrationReview: React.FC = () => {
               setCurrentRow(record);
             }}
           >
-            查看岗位信息
+            岗位信息
           </Typography.Link>
           <Typography.Link
             key={'review'}
