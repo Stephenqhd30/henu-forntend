@@ -1712,6 +1712,7 @@ declare namespace API {
     id?: number;
     isDelete?: number;
     jobId?: number;
+    leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
@@ -1720,7 +1721,7 @@ declare namespace API {
     reviewTime?: string;
     reviewer?: string;
     studentAwards?: string;
-    studentLeader?: string;
+    studentLeaders?: string;
     updateTime?: string;
     userAvatar?: string;
     userEmail?: string;
@@ -1739,11 +1740,12 @@ declare namespace API {
     emergencyPhone?: string;
     ethnic?: string;
     jobId?: number;
+    leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
     studentAwards?: string;
-    studentLeader?: string[];
+    studentLeaders?: string[];
     userAvatar?: string;
     userEmail?: string;
     userGender?: number;
@@ -1761,11 +1763,12 @@ declare namespace API {
     ethnic?: string;
     id?: number;
     jobId?: number;
+    leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
     studentAwards?: string;
-    studentLeader?: string[];
+    studentLeaders?: string[];
     userAvatar?: string;
     userEmail?: string;
     userGender?: number;
@@ -1780,6 +1783,7 @@ declare namespace API {
     current?: number;
     id?: number;
     jobId?: number;
+    leaderExperience?: string;
     marryStatus?: number;
     notId?: number;
     pageSize?: number;
@@ -1790,7 +1794,7 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     studentAwards?: string;
-    studentLeader?: string[];
+    studentLeaders?: string[];
     userGender?: number;
     userId?: number;
     userName?: string;
@@ -1804,11 +1808,12 @@ declare namespace API {
     ethnic?: string;
     id?: number;
     jobId?: number;
+    leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
     studentAwards?: string;
-    studentLeader?: string[];
+    studentLeaders?: string[];
     userAvatar?: string;
     userEmail?: string;
     userGender?: number;
@@ -1832,6 +1837,7 @@ declare namespace API {
     id?: number;
     jobId?: number;
     jobVO?: JobVO;
+    leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
@@ -1840,7 +1846,7 @@ declare namespace API {
     reviewTime?: string;
     reviewer?: string;
     studentAwards?: string;
-    studentLeader?: string[];
+    studentLeaders?: string[];
     updateTime?: string;
     userAvatar?: string;
     userEmail?: string;

@@ -108,15 +108,23 @@ const RegistrationReview: React.FC = () => {
       render: (_, record) => {
         if (record) {
           return (
-            record?.studentLeader?.map((type: any) => (
-              <Tag key={type} color="blue">
-                {type}
-              </Tag>
+            record?.studentLeaders?.map((type: any) => (
+              <Space key={"space"} wrap={true} direction={"vertical"}>
+                <Tag key={type} color="blue">
+                  {type}
+                </Tag>
+              </Space>
             )) ?? []
           );
         }
         return <Tag>{'无'}</Tag>;
       },
+    },
+    {
+      title: '干部经历描述',
+      dataIndex: 'leaderExperience',
+      valueType: 'text',
+      hideInSearch: true,
     },
     {
       title: '主要获奖情况',
