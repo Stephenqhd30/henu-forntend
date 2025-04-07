@@ -13,7 +13,10 @@ import {
   CreateMessageNoticeModal,
   UpdateMessageNoticeModal,
 } from '@/pages/Message/MessageNoticeList/components';
-import { addMessagePushUsingPost } from '@/services/henu-backend/messagePushController';
+import {
+  addMessagePushByIdsUsingPost,
+  addMessagePushUsingPost,
+} from '@/services/henu-backend/messagePushController';
 import { PushType } from '@/enums/PushTypeEnum';
 
 /**
@@ -73,6 +76,8 @@ const MessageNoticeList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   // 当前面试通知的所点击的数据
   const [currentRow, setCurrentRow] = useState<API.MessageNotice>();
+  // 选中行数据
+  const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
 
   /**
    * 下载面试通知信息
@@ -227,6 +232,38 @@ const MessageNoticeList: React.FC = () => {
         rowKey={'id'}
         search={{
           labelWidth: 120,
+        }}
+        rowSelection={{
+          selectedRowKeys: selectedRowKeys,
+          onChange: setSelectedRowKeys,
+        }}
+        tableAlertOptionRender={() => {
+          return (
+            <Space>
+              <Button
+                type="primary"
+                onClick={async () => {
+                  try {
+                    const res = await addMessagePushByIdsUsingPost({
+                      messageNoticeIds: selectedRowKeys,
+                      pushType: PushType.SMS,
+                    });
+                    if (res.code === 0 && res.data) {
+                      message.success('消息发送成功');
+                    } else {
+                      message.error(`消息发送失败${res.message}`);
+                    }
+                  } catch (error: any) {
+                    message.error(`消息发送失败${error.message}`);
+                  } finally {
+                    actionRef.current?.reload();
+                  }
+                }}
+              >
+                批量发送
+              </Button>
+            </Space>
+          );
         }}
         toolBarRender={() => [
           <Space key={'space'} wrap>

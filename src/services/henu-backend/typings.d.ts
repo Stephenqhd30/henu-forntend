@@ -132,6 +132,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListLong_ = {
+    code?: number;
+    data?: number[];
+    message?: string;
+  };
+
   type BaseResponseLoginAdminVO_ = {
     code?: number;
     data?: LoginAdminVO;
@@ -1099,6 +1105,7 @@ declare namespace API {
 
   type MessagePushAddRequest = {
     messageNoticeId?: number;
+    messageNoticeIds?: number[];
     pushType?: string;
   };
 
@@ -1781,7 +1788,7 @@ declare namespace API {
 
   type RegistrationFormQueryRequest = {
     current?: number;
-    educationalStages?: string[];
+    educationStages?: string[];
     id?: number;
     jobId?: number;
     leaderExperience?: string;

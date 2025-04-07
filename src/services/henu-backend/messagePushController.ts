@@ -17,6 +17,21 @@ export async function addMessagePushUsingPost(
   });
 }
 
+/** addMessagePushByIds POST /api/messagePush/add/batch */
+export async function addMessagePushByIdsUsingPost(
+  body: API.MessagePushAddRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseListLong_>('/api/messagePush/add/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** deleteMessagePush POST /api/messagePush/delete */
 export async function deleteMessagePushUsingPost(
   body: API.DeleteRequest,
