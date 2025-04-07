@@ -15,6 +15,9 @@ import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
 import { JobDetailsModal } from '@/components/ReJob';
 import { UserDetailsModal } from '@/components/ReUser';
 import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
+import { listCadreTypeByPageUsingPost } from '@/services/henu-backend/cadreTypeController';
+import { listJobByPageUsingPost } from '@/services/henu-backend/jobController';
+import { EducationStage, educationStageEnum } from '@/enums/EducationalStageEnum';
 
 const { useBreakpoint } = Grid;
 /**
@@ -102,14 +105,17 @@ const RegistrationReview: React.FC = () => {
     },
     {
       title: '主要学生干部经历',
-      dataIndex: 'studentLeader',
+      dataIndex: 'studentLeaders',
       valueType: 'text',
-      hideInSearch: true,
+      search: {
+        // @ts-ignore
+        colSize: 2,
+      },
       render: (_, record) => {
         if (record) {
           return (
             record?.studentLeaders?.map((type: any) => (
-              <Space key={"space"} wrap={true} direction={"vertical"}>
+              <Space key={'space'} wrap={true} direction={'vertical'}>
                 <Tag key={type} color="blue">
                   {type}
                 </Tag>
@@ -118,6 +124,31 @@ const RegistrationReview: React.FC = () => {
           );
         }
         return <Tag>{'无'}</Tag>;
+      },
+      renderFormItem: (_, { value }, form) => {
+        return (
+          <ProFormSelect
+            mode="multiple"
+            // @ts-ignore
+            value={value}
+            request={async () => {
+              const res = await listCadreTypeByPageUsingPost({});
+              if (res.code === 0 && res.data) {
+                return (
+                  res.data.records?.map((cadreType) => ({
+                    label: cadreType.type,
+                    value: cadreType.type,
+                  })) ?? []
+                );
+              } else {
+                return [];
+              }
+            }}
+            onChange={(val) => form.setFieldsValue({ studentLeaders: val })}
+            placeholder="请选择干部类型"
+            style={{ width: '100%' }}
+          />
+        );
       },
     },
     {
@@ -141,7 +172,7 @@ const RegistrationReview: React.FC = () => {
     {
       title: '婚姻状况',
       dataIndex: 'marryStatus',
-      valueType: 'text',
+      valueType: 'select',
       valueEnum: marryStatusEnum,
       renderFormItem: () => {
         return (
@@ -193,6 +224,40 @@ const RegistrationReview: React.FC = () => {
       hideInSearch: true,
     },
     {
+      title: '岗位信息',
+      dataIndex: 'jobId',
+      valueType: 'select',
+      search: {
+        // @ts-ignore
+        colSize: 2,
+      },
+      hideInTable: true,
+      renderFormItem: (_, { value }, form) => {
+        return (
+          <ProFormSelect
+            mode="single"
+            // @ts-ignore
+            value={value}
+            request={async () => {
+              const res = await listJobByPageUsingPost({});
+              if (res.code === 0 && res.data) {
+                return (
+                  res.data.records?.map((job) => ({
+                    label: job.jobName,
+                    value: job.id,
+                  })) ?? []
+                );
+              } else {
+                return [];
+              }
+            }}
+            onChange={(val) => form.setFieldsValue({ jobId: val })}
+            placeholder="请选择岗位"
+          />
+        );
+      },
+    },
+    {
       title: '审核状态',
       dataIndex: 'reviewStatus',
       valueType: 'select',
@@ -231,7 +296,36 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'reviewer',
       valueType: 'text',
       hideInForm: true,
-      hideInSearch: true,
+    },
+    {
+      title: '教育阶段',
+      dataIndex: 'educationStages',
+      valueType: 'select',
+      hideInForm: true,
+      hideInTable: true,
+      hideInSetting: true,
+      valueEnum: educationStageEnum,
+      renderFormItem: (_, { value }, form) => {
+        return (
+          <Select
+            mode="multiple"
+            value={value}
+            onChange={(val) => form.setFieldsValue({ educationStages: val })}
+            placeholder="请选择教育阶段"
+            allowClear
+          >
+            <Select.Option value={EducationStage.UNDERGRADUATE_COURSE}>
+              {educationStageEnum[EducationStage.UNDERGRADUATE_COURSE].text}
+            </Select.Option>
+            <Select.Option value={EducationStage.POSTGRADUATE}>
+              {educationStageEnum[EducationStage.POSTGRADUATE].text}
+            </Select.Option>
+            <Select.Option value={EducationStage.DOCTOR_DEGREE}>
+              {educationStageEnum[EducationStage.DOCTOR_DEGREE].text}
+            </Select.Option>
+          </Select>
+        );
+      },
     },
     {
       title: '学校类型',
