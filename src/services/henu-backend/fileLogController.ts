@@ -17,6 +17,21 @@ export async function deleteFileLogUsingPost(
   });
 }
 
+/** downloadFile POST /api/file/download */
+export async function downloadFileUsingPost(
+  body: API.DownloadFileRequest,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/file/download', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** getFileLogVOById GET /api/file/get/vo */
 export async function getFileLogVoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

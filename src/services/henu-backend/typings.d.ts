@@ -610,6 +610,10 @@ declare namespace API {
     width?: number;
   };
 
+  type DownloadFileRequest = {
+    userId?: number;
+  };
+
   type Education = {
     certifier?: string;
     certifierPhone?: string;
