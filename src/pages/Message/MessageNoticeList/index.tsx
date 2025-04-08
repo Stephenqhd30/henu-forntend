@@ -40,7 +40,7 @@ const handleDelete = async (row: API.DeleteRequest) => {
 };
 
 /**
- * 删除节点
+ * 发送消息
  *
  * @param row
  */
@@ -120,6 +120,7 @@ const MessageNoticeList: React.FC = () => {
       dataIndex: 'registrationId',
       valueType: 'text',
       hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '通知用户名',
@@ -154,6 +155,7 @@ const MessageNoticeList: React.FC = () => {
       dataIndex: 'adminId',
       valueType: 'text',
       hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '创建时间',
@@ -178,7 +180,7 @@ const MessageNoticeList: React.FC = () => {
           >
             修改
           </Typography.Link>
-          {/*删除表单面试通知的PopConfirm框*/}
+          {/*发送表单面试通知的PopConfirm框*/}
           <Popconfirm
             title="确定发送信息？"
             description="发送信息后将无法撤回?"

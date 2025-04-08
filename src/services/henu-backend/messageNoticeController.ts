@@ -17,6 +17,21 @@ export async function addMessageNoticeUsingPost(
   });
 }
 
+/** addMessageNoticeByBatch POST /api/messageNotice/add/batch */
+export async function addMessageNoticeByBatchUsingPost(
+  body: API.MessageNoticeAddRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseListLong_>('/api/messageNotice/add/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** deleteMessageNotice POST /api/messageNotice/delete */
 export async function deleteMessageNoticeUsingPost(
   body: API.DeleteRequest,

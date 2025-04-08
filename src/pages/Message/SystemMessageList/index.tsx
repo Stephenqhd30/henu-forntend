@@ -7,7 +7,7 @@ import { SYSTEM_MESSAGE_EXCEL } from '@/constants';
 import { PushStatus, pushStatusEnum } from '@/enums/PushStatusEnum';
 import {
   deleteSystemMessagesUsingPost,
-  listSystemMessagesByPageUsingPost,
+  listSystemMessagesByPageUsingPost, updateSystemMessagesUsingPost
 } from '@/services/henu-backend/systemMessagesController';
 import CreateSystemMessagesModal from '@/pages/Message/SystemMessageList/components/CreateSystemMessagesModal';
 import UpdateSystemMessagesModal from '@/pages/Message/SystemMessageList/components/UpdateSystemMessagesModal';
@@ -33,6 +33,8 @@ const handleDelete = async (row: API.DeleteRequest) => {
   }
 };
 
+
+
 /**
  * 系统消息管理列表
  * @constructor
@@ -45,6 +47,30 @@ const SystemMessagesList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   // 当前系统消息的所点击的数据
   const [currentRow, setCurrentRow] = useState<API.SystemMessages>();
+  /**
+   * 发送消息
+   *
+   * @param row
+   */
+  const handlePush = async (row: any) => {
+    const hide = message.loading('正在发送中');
+    if (!row) return true;
+    try {
+      const res = await updateSystemMessagesUsingPost({
+        id: row.id,
+        pushStatus: PushStatus.SUCCEED,
+      });
+      if (res.code === 0 && res.data) {
+        message.success('消息发送成功');
+      } else {
+        message.error(`消息发送失败${res.message}`);
+      }
+    } catch (error: any) {
+      message.error(`消息发送失败${error.message}, 请重试!`);
+    } finally {
+      hide();
+    }
+  };
 
   /**
    * 下载系统消息信息
@@ -160,6 +186,27 @@ const SystemMessagesList: React.FC = () => {
           >
             修改
           </Typography.Link>
+          {/*发送系统通知的PopConfirm框*/}
+          <Popconfirm
+            title="确定发送信息？"
+            description="发送信息后将无法撤回?"
+            okText="确定"
+            cancelText="取消"
+            onConfirm={async () => {
+              await handlePush(record);
+              actionRef.current?.reload();
+            }}
+          >
+            <Typography.Link
+              key={'push'}
+              type={'secondary'}
+              onClick={() => {
+                setCurrentRow(record);
+              }}
+            >
+              发送
+            </Typography.Link>
+          </Popconfirm>
           {/*删除表单系统消息的PopConfirm框*/}
           <Popconfirm
             title="确定删除？"

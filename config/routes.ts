@@ -147,7 +147,7 @@ export default [
         component: './Message/MessageNoticeList',
       },
       {
-        name: '短信推送管理',
+        name: '短信推送日志',
         path: '/message/push',
         icon: 'SendOutlined',
         component: './Message/MessagePushList',

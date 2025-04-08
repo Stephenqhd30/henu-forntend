@@ -1058,6 +1058,7 @@ declare namespace API {
     interviewLocation?: string;
     interviewTime?: string;
     registrationId?: number;
+    registrationIds?: number[];
   };
 
   type MessageNoticeQueryRequest = {
@@ -2109,9 +2110,9 @@ declare namespace API {
   type SystemMessagesUpdateRequest = {
     content?: string;
     id?: number;
+    pushStatus?: number;
     pushTime?: string;
     title?: string;
-    type?: string;
   };
 
   type SystemMessagesVO = {

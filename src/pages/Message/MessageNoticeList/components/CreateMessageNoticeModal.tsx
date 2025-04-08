@@ -8,7 +8,7 @@ import {
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import React from 'react';
-import { addMessageNoticeUsingPost } from '@/services/henu-backend/messageNoticeController';
+import { addMessageNoticeByBatchUsingPost } from '@/services/henu-backend/messageNoticeController';
 import { PushStatus } from '@/enums/PushStatusEnum';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
 
@@ -27,7 +27,7 @@ interface CreateProps {
 const handleAdd = async (fields: API.MessageNoticeAddRequest) => {
   const hide = message.loading('正在添加');
   try {
-    const res = await addMessageNoticeUsingPost({
+    const res = await addMessageNoticeByBatchUsingPost({
       ...fields,
     });
     if (res.code === 0 && res.data) {
@@ -81,10 +81,11 @@ const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
       }}
     >
       <ProFormSelect
-        name={'registrationId'}
+        name={'registrationIds'}
+        mode={'multiple'}
         request={async () => {
           const res = await listRegistrationFormVoByPageUsingPost({
-            reviewStatus: PushStatus.SUCCEED,
+            notId: PushStatus.SUCCEED,
           });
           if (res.code === 0 && res.data) {
             return (
