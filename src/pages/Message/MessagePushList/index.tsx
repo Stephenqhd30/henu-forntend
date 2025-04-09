@@ -133,16 +133,14 @@ const MessagePushList: React.FC = () => {
       dataIndex: 'createTime',
       valueType: 'dateTime',
       hideInSearch: true,
-      hideInTable: true,
       hideInForm: true,
     },
     {
       title: '更新时间',
       sorter: true,
-      dataIndex: 'createTime',
+      dataIndex: 'updateTime',
       valueType: 'dateTime',
       hideInSearch: true,
-      hideInTable: true,
       hideInForm: true,
     },
     {

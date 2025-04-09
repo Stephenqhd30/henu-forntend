@@ -1,4 +1,4 @@
-import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
+import {DownloadOutlined, PlusOutlined, UploadOutlined} from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
@@ -12,6 +12,7 @@ import { PushStatus, pushStatusEnum } from '@/enums/PushStatusEnum';
 import {
   CreateMessageNoticeModal,
   UpdateMessageNoticeModal,
+  UploadMessageNoticeModal,
 } from '@/pages/Message/MessageNoticeList/components';
 import {
   addMessagePushByIdsUsingPost,
@@ -28,10 +29,14 @@ const handleDelete = async (row: API.DeleteRequest) => {
   const hide = message.loading('正在删除');
   if (!row) return true;
   try {
-    await deleteMessageNoticeUsingPost({
+    const res = await deleteMessageNoticeUsingPost({
       id: row.id,
     });
-    message.success('删除成功');
+    if (res.code === 0 && res.data) {
+      message.success('删除成功');
+    } else {
+      message.error(`删除失败${res.message}, 请重试!`);
+    }
   } catch (error: any) {
     message.error(`删除失败${error.message}, 请重试!`);
   } finally {
@@ -73,6 +78,8 @@ const MessageNoticeList: React.FC = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   // 更新面试通知 Modal 框
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+  // 上传窗口 Modal 框
+  const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   // 当前面试通知的所点击的数据
   const [currentRow, setCurrentRow] = useState<API.MessageNotice>();
@@ -161,6 +168,14 @@ const MessageNoticeList: React.FC = () => {
       title: '创建时间',
       sorter: true,
       dataIndex: 'createTime',
+      valueType: 'dateTime',
+      hideInSearch: true,
+      hideInForm: true,
+    },
+    {
+      title: '更新时间',
+      sorter: true,
+      dataIndex: 'updateTime',
       valueType: 'dateTime',
       hideInSearch: true,
       hideInForm: true,
@@ -278,6 +293,15 @@ const MessageNoticeList: React.FC = () => {
               新建面试通知信息
             </Button>
             <Button
+              icon={<UploadOutlined />}
+              key={'upload'}
+              onClick={() => {
+                setUploadModalVisible(true);
+              }}
+            >
+              批量面试通知信息
+            </Button>
+            <Button
               key={'export'}
               onClick={async () => {
                 await downloadMessageNoticeInfo();
@@ -332,6 +356,19 @@ const MessageNoticeList: React.FC = () => {
           }}
           visible={updateModalVisible}
           columns={columns}
+        />
+      )}
+      {/*上传管理员信息*/}
+      {uploadModalVisible && (
+        <UploadMessageNoticeModal
+          onCancel={() => {
+            setUploadModalVisible(false);
+          }}
+          visible={uploadModalVisible}
+          onSubmit={async () => {
+            setUploadModalVisible(false);
+            actionRef.current?.reload();
+          }}
         />
       )}
     </PageContainer>
