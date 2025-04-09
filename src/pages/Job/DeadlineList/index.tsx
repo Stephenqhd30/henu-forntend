@@ -9,7 +9,7 @@ import {
   listDeadlineByPageUsingPost,
 } from '@/services/henu-backend/deadlineController';
 import { CreateDeadlineModal, UpdateDeadlineModal } from '@/pages/Job/DeadlineList/components';
-import { listJobVoByPageUsingPost } from '@/services/henu-backend/jobController';
+import {listJobByPageUsingPost, listJobVoByPageUsingPost} from '@/services/henu-backend/jobController';
 
 /**
  * 删除节点
@@ -85,7 +85,7 @@ const DeadlineList: React.FC = () => {
       dataIndex: 'jobId',
       valueType: 'select',
       request: async () => {
-        const res = await listJobVoByPageUsingPost({});
+        const res = await listJobByPageUsingPost({});
         if (res.code === 0 && res.data) {
           return (
             res.data.records?.map((job) => ({

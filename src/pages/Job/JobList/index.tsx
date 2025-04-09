@@ -87,6 +87,11 @@ const JobList: React.FC = () => {
       valueType: 'text',
     },
     {
+      title: '截止时间',
+      dataIndex: 'deadlineTime',
+      valueType: 'dateTime',
+    },
+    {
       title: '创建管理员id',
       dataIndex: 'adminId',
       valueType: 'text',

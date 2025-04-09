@@ -981,6 +981,7 @@ declare namespace API {
   type Job = {
     adminId?: number;
     createTime?: string;
+    deadlineTime?: string;
     id?: number;
     isDelete?: number;
     jobExplanation?: string;
@@ -996,6 +997,7 @@ declare namespace API {
   type JobQueryRequest = {
     adminId?: number;
     current?: number;
+    deadlineTime?: string;
     id?: number;
     jobExplanation?: string;
     jobName?: string;
