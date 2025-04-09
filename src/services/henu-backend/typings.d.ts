@@ -612,6 +612,7 @@ declare namespace API {
 
   type DownloadFileRequest = {
     userId?: number;
+    userIds?: number[];
   };
 
   type Education = {

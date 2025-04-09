@@ -18,7 +18,10 @@ import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolT
 import { listCadreTypeByPageUsingPost } from '@/services/henu-backend/cadreTypeController';
 import { listJobByPageUsingPost } from '@/services/henu-backend/jobController';
 import { EducationStage, educationStageEnum } from '@/enums/EducationalStageEnum';
-import { downloadFileUsingPost } from '@/services/henu-backend/fileLogController';
+import {
+  downloadFileByBatchUsingPost,
+  downloadFileUsingPost,
+} from '@/services/henu-backend/fileLogController';
 
 const { useBreakpoint } = Grid;
 /**
@@ -41,6 +44,9 @@ const RegistrationReview: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<API.RegistrationFormVO>({});
   // 选中行数据
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
+  // 选中的数据
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
+
   /**
    * 下载用户上传的文件（ZIP）
    * @param record
@@ -49,6 +55,44 @@ const RegistrationReview: React.FC = () => {
     try {
       const response = await downloadFileUsingPost(
         { userId: record.userId },
+        {
+          responseType: 'blob',
+          getResponse: true,
+        },
+      );
+      const blob = new Blob([response.data], { type: 'application/zip' });
+      // 从响应头中获取文件名
+      const disposition = response.headers['content-disposition'];
+      let fileName = '附件信息.zip';
+      if (disposition) {
+        const match = disposition.match(/filename="?([^"]+)"?/);
+        if (match && match[1]) {
+          fileName = decodeURIComponent(match[1]);
+        }
+      }
+      // 创建并点击下载链接
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      // 释放 URL 对象
+      window.URL.revokeObjectURL(url);
+      message.success('文件下载成功');
+    } catch (error: any) {
+      message.error('文件下载失败: ' + (error?.message || '未知错误'));
+    }
+  };
+
+  /**
+   * 批量下载用户上传的文件（ZIP）
+   */
+  const downloadFileByBatch = async () => {
+    try {
+      const response = await downloadFileByBatchUsingPost(
+        { userIds: selectedRows.map(row => row.userId) },
         {
           responseType: 'blob',
           getResponse: true,
@@ -472,7 +516,10 @@ const RegistrationReview: React.FC = () => {
         columns={columns}
         rowSelection={{
           selectedRowKeys: selectedRowKeys,
-          onChange: setSelectedRowKeys,
+          onChange: (keys, rows) => {
+            setSelectedRowKeys(keys);
+            setSelectedRows(rows);
+          },
         }}
         tableAlertOptionRender={() => {
           return (
@@ -485,6 +532,13 @@ const RegistrationReview: React.FC = () => {
                 }}
               >
                 批量审核
+              </Button>
+              <Button
+                onClick={async () => {
+                  await downloadFileByBatch();
+                }}
+              >
+                批量下载附件信息
               </Button>
             </Space>
           );

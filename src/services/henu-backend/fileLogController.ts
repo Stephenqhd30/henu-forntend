@@ -32,6 +32,21 @@ export async function downloadFileUsingPost(
   });
 }
 
+/** downloadFileByBatch POST /api/file/download/batch */
+export async function downloadFileByBatchUsingPost(
+  body: API.DownloadFileRequest,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/file/download/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** getFileLogVOById GET /api/file/get/vo */
 export async function getFileLogVoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
