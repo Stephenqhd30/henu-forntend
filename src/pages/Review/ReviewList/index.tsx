@@ -22,6 +22,7 @@ import {
   downloadFileByBatchUsingPost,
   downloadFileUsingPost,
 } from '@/services/henu-backend/fileLogController';
+import { RegistrationStatus, registrationStatusEnum } from '@/enums/RegistrationStatusEnum';
 
 const { useBreakpoint } = Grid;
 /**
@@ -92,7 +93,7 @@ const RegistrationReview: React.FC = () => {
   const downloadFileByBatch = async () => {
     try {
       const response = await downloadFileByBatchUsingPost(
-        { userIds: selectedRows.map(row => row.userId) },
+        { userIds: selectedRows.map((row) => row.userId) },
         {
           responseType: 'blob',
           getResponse: true,
@@ -441,6 +442,12 @@ const RegistrationReview: React.FC = () => {
           />
         );
       },
+    },
+    {
+      title: '报名状态',
+      dataIndex: 'registrationStatus',
+      valueType: 'select',
+      valueEnum: registrationStatusEnum,
     },
     {
       title: '操作',

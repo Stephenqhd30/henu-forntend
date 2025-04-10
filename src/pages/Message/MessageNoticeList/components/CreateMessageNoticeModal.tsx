@@ -4,13 +4,14 @@ import {
   ProForm,
   ProFormDateTimePicker,
   ProFormSelect,
-  ProFormTextArea,
+  ProFormTextArea
 } from '@ant-design/pro-components';
-import { message } from 'antd';
+import {message} from 'antd';
 import React from 'react';
-import { addMessageNoticeByBatchUsingPost } from '@/services/henu-backend/messageNoticeController';
-import { PushStatus } from '@/enums/PushStatusEnum';
-import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
+import {addMessageNoticeByBatchUsingPost} from '@/services/henu-backend/messageNoticeController';
+import {PushStatus} from '@/enums/PushStatusEnum';
+import {listRegistrationFormVoByPageUsingPost} from '@/services/henu-backend/registrationFormController';
+import {RegistrationStatus} from '@/enums/RegistrationStatusEnum';
 
 interface CreateProps {
   onCancel: () => void;
@@ -28,7 +29,7 @@ const handleAdd = async (fields: API.MessageNoticeAddRequest) => {
   const hide = message.loading('正在添加');
   try {
     const res = await addMessageNoticeByBatchUsingPost({
-      ...fields,
+      ...fields
     });
     if (res.code === 0 && res.data) {
       message.success('添加成功');
@@ -51,7 +52,7 @@ const handleAdd = async (fields: API.MessageNoticeAddRequest) => {
  * @constructor
  */
 const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
-  const { visible, onSubmit, onCancel } = props;
+  const {visible, onSubmit, onCancel} = props;
   const [form] = ProForm.useForm<API.MessageNoticeAddRequest>();
   return (
     <ModalForm
@@ -60,7 +61,7 @@ const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
       form={form}
       onFinish={async (values: API.MessageNoticeAddRequest) => {
         const success = await handleAdd({
-          ...values,
+          ...values
         });
         if (success) {
           onSubmit?.(values);
@@ -71,13 +72,13 @@ const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
         destroyOnClose: true,
         onCancel: () => {
           onCancel?.();
-        },
+        }
       }}
       submitter={{
         searchConfig: {
           submitText: '创建',
-          resetText: '取消',
-        },
+          resetText: '取消'
+        }
       }}
     >
       <ProFormSelect
@@ -86,12 +87,13 @@ const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
         request={async () => {
           const res = await listRegistrationFormVoByPageUsingPost({
             reviewStatus: PushStatus.SUCCEED,
+            registrationStatus: RegistrationStatus.INTERVIEW,
           });
           if (res.code === 0 && res.data) {
             return (
               res.data.records?.map((registrationForm) => ({
                 label: registrationForm?.userName + ' - ' + registrationForm.jobVO?.jobName,
-                value: registrationForm.id,
+                value: registrationForm.id
               })) ?? []
             );
           } else {
@@ -99,10 +101,10 @@ const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
           }
         }}
         placeholder="请选择消息通知人"
-        style={{ width: '100%' }}
+        style={{width: '100%'}}
       />
-      <ProFormTextArea name={'interviewLocation'} label={'面试地点'} />
-      <ProFormDateTimePicker name={'interviewTime'} label={'面试时间'} />
+      <ProFormTextArea name={'interviewLocation'} label={'面试地点'}/>
+      <ProFormDateTimePicker name={'interviewTime'} label={'面试时间'}/>
     </ModalForm>
   );
 };

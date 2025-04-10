@@ -1731,6 +1731,7 @@ declare namespace API {
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
+    registrationStatus?: number;
     reviewComments?: string;
     reviewStatus?: number;
     reviewTime?: string;
@@ -1759,6 +1760,7 @@ declare namespace API {
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
+    registrationStatus?: number;
     studentAwards?: string;
     studentLeaders?: string[];
     userAvatar?: string;
@@ -1803,6 +1805,7 @@ declare namespace API {
     marryStatus?: number;
     notId?: number;
     pageSize?: number;
+    registrationStatus?: number;
     reviewStatus?: number;
     reviewer?: string;
     schoolTypes?: string[];
@@ -1828,6 +1831,7 @@ declare namespace API {
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
+    registrationStatus?: number;
     studentAwards?: string;
     studentLeaders?: string[];
     userAvatar?: string;
@@ -1857,6 +1861,7 @@ declare namespace API {
     marryStatus?: number;
     partyTime?: string;
     registrationForm?: string;
+    registrationStatus?: number;
     reviewComments?: string;
     reviewStatus?: number;
     reviewTime?: string;
