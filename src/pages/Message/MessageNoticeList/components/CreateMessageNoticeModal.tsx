@@ -85,7 +85,7 @@ const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
         mode={'multiple'}
         request={async () => {
           const res = await listRegistrationFormVoByPageUsingPost({
-            notId: PushStatus.SUCCEED,
+            reviewStatus: PushStatus.SUCCEED,
           });
           if (res.code === 0 && res.data) {
             return (

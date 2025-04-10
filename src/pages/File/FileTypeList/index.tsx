@@ -3,9 +3,11 @@ import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Select, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { FILE_TYPE_EXCEL } from '@/constants';
-import { deleteFileLogUsingPost } from '@/services/henu-backend/fileLogController';
 import { exportFileLogUsingGet } from '@/services/henu-backend/excelController';
-import { listFileTypeByPageUsingPost } from '@/services/henu-backend/fileTypeController';
+import {
+  deleteFileTypeUsingPost,
+  listFileTypeByPageUsingPost,
+} from '@/services/henu-backend/fileTypeController';
 import { CreateFileTypeModal, UpdateFileTypeModal } from '@/pages/File/FileTypeList/components';
 
 /**
@@ -17,7 +19,7 @@ const handleDelete = async (row: API.DeleteRequest) => {
   const hide = message.loading('正在删除');
   if (!row) return true;
   try {
-    const res = await deleteFileLogUsingPost({
+    const res = await deleteFileTypeUsingPost({
       id: row.id,
     });
     if (res.code === 0 && res.data) {
