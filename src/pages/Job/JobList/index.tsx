@@ -90,6 +90,7 @@ const JobList: React.FC = () => {
       title: '截止时间',
       dataIndex: 'deadlineTime',
       valueType: 'dateTime',
+      hideInForm: true,
     },
     {
       title: '创建管理员id',

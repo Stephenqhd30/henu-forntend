@@ -135,7 +135,7 @@ export default [
     ],
   },
   {
-    name: '消息通知管理',
+    name: '通知管理',
     path: 'message',
     access: 'canAdmin',
     icon: 'MessageOutlined',
