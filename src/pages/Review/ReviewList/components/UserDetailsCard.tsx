@@ -1,31 +1,21 @@
 import React from 'react';
-import { Modal, Tag } from 'antd';
+import { Tag } from 'antd';
 import { ProList } from '@ant-design/pro-components';
 
 interface Props {
-  onCancel: () => void;
-  visible: boolean;
   registration: API.RegistrationFormVO;
 }
 
 /**
- * 用户详细信息 Modal 框
+ * 用户详细信息
  * @param props
  * @constructor
  */
 const UserDetailsModal: React.FC<Props> = (props) => {
-  const { onCancel, visible, registration } = props;
+  const { registration } = props;
+
   return (
-    <Modal
-      destroyOnClose
-      title={'用户相关信息'}
-      open={visible}
-      onCancel={() => {
-        onCancel?.();
-      }}
-      width={800}
-      footer={null}
-    >
+    <>
       <ProList
         headerTitle="教育经历"
         dataSource={registration.educationVOList || []}
@@ -86,7 +76,7 @@ const UserDetailsModal: React.FC<Props> = (props) => {
         }}
         locale={{ emptyText: '暂无文件上传信息' }}
       />
-    </Modal>
+    </>
   );
 };
 export default UserDetailsModal;

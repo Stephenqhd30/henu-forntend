@@ -1,19 +1,23 @@
+import type { Key } from 'react';
 import React, { useRef, useState } from 'react';
 import {
   ActionType,
   PageContainer,
+  ProCard,
   ProColumns,
   ProFormSelect,
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, Grid, message, Select, Space, Tag, Typography } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
-import { BatchReviewModal, ReviewModal } from '@/pages/Review/ReviewList/components';
+import {
+  BatchReviewModal,
+  ReviewModal,
+  UserDetailsCard,
+} from '@/pages/Review/ReviewList/components';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
 import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
 import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
-import { JobDetailsModal } from '@/components/ReJob';
-import { UserDetailsModal } from '@/components/ReUser';
 import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 import { listCadreTypeByPageUsingPost } from '@/services/henu-backend/cadreTypeController';
 import { listJobByPageUsingPost } from '@/services/henu-backend/jobController';
@@ -22,7 +26,8 @@ import {
   downloadFileByBatchUsingPost,
   downloadFileUsingPost,
 } from '@/services/henu-backend/fileLogController';
-import { RegistrationStatus, registrationStatusEnum } from '@/enums/RegistrationStatusEnum';
+import { registrationStatusEnum } from '@/enums/RegistrationStatusEnum';
+import {ArrowDownOutlined, CheckOutlined} from '@ant-design/icons';
 
 const { useBreakpoint } = Grid;
 /**
@@ -33,10 +38,6 @@ const RegistrationReview: React.FC = () => {
   const scene = useBreakpoint();
   const isMobile = !scene.md;
   const actionRef = useRef<ActionType>();
-  // 用户详细 Modal 框
-  const [userModal, setUserModal] = useState<boolean>(false);
-  // 岗位信息 Modal
-  const [jobModal, setJobModal] = useState<boolean>(false);
   // 审核信息 Modal 框
   const [reviewModal, setReviewModal] = useState<boolean>(false);
   // 批量审核信息 Modal 框
@@ -47,6 +48,8 @@ const RegistrationReview: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
   // 选中的数据
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  // 可展开
+  const [expandedRowKeys, setExpandedRowKeys] = useState<readonly Key[]>([]);
 
   /**
    * 下载用户上传的文件（ZIP）
@@ -182,6 +185,36 @@ const RegistrationReview: React.FC = () => {
       hideInSearch: true,
     },
     {
+      title: '岗位信息',
+      dataIndex: 'jobId',
+      valueType: 'select',
+      render: (_, record) => <span>{record.jobVO?.jobName}</span>,
+      renderFormItem: (_, { value }, form) => {
+        return (
+          <ProFormSelect
+            mode="single"
+            // @ts-ignore
+            value={value}
+            request={async () => {
+              const res = await listJobByPageUsingPost({});
+              if (res.code === 0 && res.data) {
+                return (
+                  res.data.records?.map((job) => ({
+                    label: job.jobName,
+                    value: job.id,
+                  })) ?? []
+                );
+              } else {
+                return [];
+              }
+            }}
+            onChange={(val) => form.setFieldsValue({ jobId: val })}
+            placeholder="请选择岗位"
+          />
+        );
+      },
+    },
+    {
       title: '工作经历',
       dataIndex: 'workExperience',
       valueType: 'text',
@@ -190,10 +223,6 @@ const RegistrationReview: React.FC = () => {
       title: '主要学生干部经历',
       dataIndex: 'studentLeaders',
       valueType: 'text',
-      search: {
-        // @ts-ignore
-        colSize: 2,
-      },
       render: (_, record) => {
         if (record) {
           return (
@@ -212,8 +241,12 @@ const RegistrationReview: React.FC = () => {
         return (
           <ProFormSelect
             mode="multiple"
-            // @ts-ignore
-            value={value}
+            fieldProps={{
+              value,
+              onChange: (val) => form.setFieldsValue({ studentLeaders: val }),
+              style: { width: '100%' },
+              size: 'middle',
+            }}
             request={async () => {
               const res = await listCadreTypeByPageUsingPost({});
               if (res.code === 0 && res.data) {
@@ -227,7 +260,6 @@ const RegistrationReview: React.FC = () => {
                 return [];
               }
             }}
-            onChange={(val) => form.setFieldsValue({ studentLeaders: val })}
             placeholder="请选择干部类型"
             style={{ width: '100%' }}
           />
@@ -305,40 +337,6 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'registrationForm',
       valueType: 'text',
       hideInSearch: true,
-    },
-    {
-      title: '岗位信息',
-      dataIndex: 'jobId',
-      valueType: 'select',
-      search: {
-        // @ts-ignore
-        colSize: 2,
-      },
-      hideInTable: true,
-      renderFormItem: (_, { value }, form) => {
-        return (
-          <ProFormSelect
-            mode="single"
-            // @ts-ignore
-            value={value}
-            request={async () => {
-              const res = await listJobByPageUsingPost({});
-              if (res.code === 0 && res.data) {
-                return (
-                  res.data.records?.map((job) => ({
-                    label: job.jobName,
-                    value: job.id,
-                  })) ?? []
-                );
-              } else {
-                return [];
-              }
-            }}
-            onChange={(val) => form.setFieldsValue({ jobId: val })}
-            placeholder="请选择岗位"
-          />
-        );
-      },
     },
     {
       title: '审核状态',
@@ -449,50 +447,6 @@ const RegistrationReview: React.FC = () => {
       valueType: 'select',
       valueEnum: registrationStatusEnum,
     },
-    {
-      title: '操作',
-      dataIndex: 'option',
-      valueType: 'option',
-      fixed: isMobile ? undefined : 'right',
-      render: (_, record) => (
-        <Space>
-          <Typography.Link
-            key={'user-details'}
-            onClick={async () => {
-              setUserModal(true);
-              setCurrentRow(record);
-            }}
-          >
-            用户信息
-          </Typography.Link>
-          <Typography.Link
-            key={'job-details'}
-            onClick={async () => {
-              setJobModal(true);
-              setCurrentRow(record);
-            }}
-          >
-            岗位
-          </Typography.Link>
-          <Typography.Link
-            key={'file-details'}
-            type={'secondary'}
-            onClick={() => downloadFile(record)}
-          >
-            附件
-          </Typography.Link>
-          <Typography.Link
-            key={'review'}
-            onClick={async () => {
-              setReviewModal(true);
-              setCurrentRow(record);
-            }}
-          >
-            审核
-          </Typography.Link>
-        </Space>
-      ),
-    },
   ];
   return (
     <PageContainer>
@@ -503,6 +457,42 @@ const RegistrationReview: React.FC = () => {
         actionRef={actionRef}
         search={{
           labelWidth: 120,
+        }}
+        expandable={{
+          expandedRowKeys,
+          onExpandedRowsChange: setExpandedRowKeys,
+          expandedRowRender: (record) => {
+            return (
+              <ProCard
+                title={
+                  <Space>
+                    <Button
+                      key={'review'}
+                      type="primary"
+                      onClick={async () => {
+                        setReviewModal(true);
+                        setCurrentRow(record);
+                      }}
+                      icon={<CheckOutlined />}
+                    >
+                      审核用户信息
+                    </Button>
+                    <Button
+                      key={"file"}
+                      onClick={async () => {
+                        await downloadFile(record);
+                      }}
+                      icon={<ArrowDownOutlined />}
+                    >
+                      下载附件信息
+                    </Button>
+                  </Space>
+                }
+              >
+                <UserDetailsCard registration={record} />
+              </ProCard>
+            );
+          },
         }}
         request={async (params, sort, filter) => {
           const sortField = 'update_time';
@@ -575,22 +565,6 @@ const RegistrationReview: React.FC = () => {
             setSelectedRowKeys([]);
             actionRef.current?.reload();
           }}
-        />
-      )}
-      {/*用户信息*/}
-      {userModal && (
-        <UserDetailsModal
-          visible={userModal}
-          onCancel={() => setUserModal(false)}
-          registration={currentRow}
-        />
-      )}
-      {/*岗位信息*/}
-      {jobModal && (
-        <JobDetailsModal
-          visible={jobModal}
-          onCancel={() => setJobModal(false)}
-          job={currentRow?.jobVO ?? {}}
         />
       )}
     </PageContainer>

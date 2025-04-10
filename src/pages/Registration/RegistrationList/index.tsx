@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import {Button, message, Select, Space, Tag, Typography} from 'antd';
+import { Button, message, Select, Space, Tag } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
 import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
 import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
-import { JobDetailsModal } from '@/components/ReJob';
 import { exportRegistrationFormUsingGet } from '@/services/henu-backend/excelController';
 import { REGISTRATION_EXCEL } from '@/constants';
 import { DownloadOutlined } from '@ant-design/icons';
@@ -16,11 +15,6 @@ import { DownloadOutlined } from '@ant-design/icons';
  */
 const RegistrationList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  // 岗位信息 Modal
-  const [jobModal, setJobModal] = useState<boolean>(false);
-  // 当前行数据
-  const [currentRow, setCurrentRow] = useState<API.RegistrationFormVO>({});
-
   /**
    * 下载报名登记表信息
    */
@@ -224,24 +218,6 @@ const RegistrationList: React.FC = () => {
       valueType: 'text',
       hideInForm: true,
     },
-    {
-      title: '操作',
-      dataIndex: 'option',
-      valueType: 'option',
-      render: (_, record) => (
-        <Space>
-          <Typography.Link
-            key={'job-details'}
-            onClick={async () => {
-              setJobModal(true);
-              setCurrentRow(record);
-            }}
-          >
-            查看岗位信息
-          </Typography.Link>
-        </Space>
-      ),
-    },
   ];
   return (
     <PageContainer>
@@ -284,14 +260,6 @@ const RegistrationList: React.FC = () => {
         }}
         columns={columns}
       />
-      {/*岗位信息*/}
-      {jobModal && (
-        <JobDetailsModal
-          visible={jobModal}
-          onCancel={() => setJobModal(false)}
-          job={currentRow?.jobVO ?? {}}
-        />
-      )}
     </PageContainer>
   );
 };

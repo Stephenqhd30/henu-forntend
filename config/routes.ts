@@ -44,6 +44,7 @@ export default [
     name: '高校信息管理',
     path: 'school',
     icon: 'FundProjectionScreenOutlined',
+    access: 'canAdmin',
     routes: [
       {
         name: '高校信息管理',
@@ -69,6 +70,7 @@ export default [
     name: '招聘信息管理',
     path: 'job',
     icon: 'AppstoreAddOutlined',
+    access: 'canAdmin',
     routes: [
       {
         name: '岗位信息管理',
@@ -94,6 +96,7 @@ export default [
     name: '文件信息管理',
     path: 'file',
     icon: 'FileProtectOutlined',
+    access: 'canAdmin',
     routes: [
       {
         name: '文件上传类型管理',
@@ -113,6 +116,8 @@ export default [
     name: '报名登记信息管理',
     path: 'registration',
     icon: 'PieChartOutlined',
+    access: 'canAdmin',
+    hideInMenu: true,
     routes: [
       {
         name: '报名登记信息管理',

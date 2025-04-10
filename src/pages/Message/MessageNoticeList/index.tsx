@@ -8,7 +8,7 @@ import {
 } from '@/services/henu-backend/messageNoticeController';
 import { exportMessageNoticeUsingGet } from '@/services/henu-backend/excelController';
 import { MESSAGE_NOTICE_EXCEL } from '@/constants';
-import { PushStatus, pushStatusEnum } from '@/enums/PushStatusEnum';
+import { pushStatusEnum } from '@/enums/PushStatusEnum';
 import {
   CreateMessageNoticeModal,
   UpdateMessageNoticeModal,
@@ -320,7 +320,6 @@ const MessageNoticeList: React.FC = () => {
             ...filter,
             sortField,
             sortOrder,
-            notId: PushStatus.SUCCEED,
           } as API.MessageNoticeQueryRequest);
 
           return {
