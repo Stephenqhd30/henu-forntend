@@ -42,6 +42,7 @@ import {
   addMessagePushUsingPost,
 } from '@/services/henu-backend/messagePushController';
 import { PushType } from '@/enums/PushTypeEnum';
+import {politicalStatusEnum} from '@/enums/PoliticalStatusEnum';
 
 /**
  * 发送消息
@@ -182,6 +183,12 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'userIdCard',
       valueType: 'password',
       hideInSearch: true,
+    },
+    {
+      title: '政治面貌',
+      dataIndex: 'politicalStatus',
+      valueType: 'select',
+      valueEnum: politicalStatusEnum,
     },
     {
       title: '性别',

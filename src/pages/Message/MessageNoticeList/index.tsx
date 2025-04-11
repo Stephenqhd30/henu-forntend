@@ -1,38 +1,11 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
+import { Button, message, Space, Tag } from 'antd';
 import React, { useRef } from 'react';
-import {
-  deleteMessageNoticeUsingPost,
-  listMessageNoticeByPageUsingPost,
-} from '@/services/henu-backend/messageNoticeController';
+import { listMessageNoticeByPageUsingPost } from '@/services/henu-backend/messageNoticeController';
 import { exportMessageNoticeUsingGet } from '@/services/henu-backend/excelController';
 import { MESSAGE_NOTICE_EXCEL } from '@/constants';
 import { pushStatusEnum } from '@/enums/PushStatusEnum';
-
-/**
- * 删除节点
- *
- * @param row
- */
-const handleDelete = async (row: API.DeleteRequest) => {
-  const hide = message.loading('正在删除');
-  if (!row) return true;
-  try {
-    const res = await deleteMessageNoticeUsingPost({
-      id: row.id,
-    });
-    if (res.code === 0 && res.data) {
-      message.success('删除成功');
-    } else {
-      message.error(`删除失败${res.message}, 请重试!`);
-    }
-  } catch (error: any) {
-    message.error(`删除失败${error.message}, 请重试!`);
-  } finally {
-    hide();
-  }
-};
 
 /**
  * 面试通知管理列表
@@ -130,35 +103,11 @@ const MessageNoticeList: React.FC = () => {
       hideInSearch: true,
       hideInForm: true,
     },
-    {
-      title: '操作',
-      dataIndex: 'option',
-      valueType: 'option',
-      render: (_, record) => (
-        <Space size={'middle'}>
-          {/*删除表单面试通知的PopConfirm框*/}
-          <Popconfirm
-            title="确定删除？"
-            description="删除后将无法恢复?"
-            okText="确定"
-            cancelText="取消"
-            onConfirm={async () => {
-              await handleDelete(record);
-              actionRef.current?.reload();
-            }}
-          >
-            <Typography.Link key={'delete'} type={'danger'}>
-              删除
-            </Typography.Link>
-          </Popconfirm>
-        </Space>
-      ),
-    },
   ];
   return (
     <PageContainer>
       <ProTable<API.MessageNotice, API.PageParams>
-        headerTitle={'面试通知查询'}
+        headerTitle={'面试通知日志'}
         actionRef={actionRef}
         rowKey={'id'}
         scroll={{ x: 'max-content' }}

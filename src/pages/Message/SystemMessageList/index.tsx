@@ -115,17 +115,7 @@ const SystemMessagesList: React.FC = () => {
     {
       title: '消息内容',
       dataIndex: 'content',
-      valueType: 'text',
-    },
-    {
-      title: '推送时间',
-      dataIndex: 'pushTime',
-      valueType: 'dateTime',
-    },
-    {
-      title: '通知标题',
-      dataIndex: 'title',
-      valueType: 'text',
+      valueType: 'textarea',
     },
     {
       title: '消息类型',

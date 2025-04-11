@@ -1725,6 +1725,7 @@ declare namespace API {
     leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
+    politicalStatus?: string;
     registrationForm?: string;
     registrationStatus?: number;
     reviewComments?: string;
@@ -1754,6 +1755,7 @@ declare namespace API {
     leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
+    politicalStatus?: string;
     registrationForm?: string;
     registrationStatus?: number;
     studentAwards?: string;
@@ -1778,6 +1780,7 @@ declare namespace API {
     leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
+    politicalStatus?: string;
     registrationForm?: string;
     studentAwards?: string;
     studentLeaders?: string[];
@@ -1800,6 +1803,7 @@ declare namespace API {
     marryStatus?: number;
     notId?: number;
     pageSize?: number;
+    politicalStatus?: string;
     registrationStatus?: number;
     reviewStatus?: number;
     reviewer?: string;
@@ -1825,6 +1829,7 @@ declare namespace API {
     leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
+    politicalStatus?: string;
     registrationForm?: string;
     registrationStatus?: number;
     studentAwards?: string;
@@ -1855,6 +1860,7 @@ declare namespace API {
     leaderExperience?: string;
     marryStatus?: number;
     partyTime?: string;
+    politicalStatus?: string;
     registrationForm?: string;
     registrationStatus?: number;
     reviewComments?: string;
@@ -2082,7 +2088,6 @@ declare namespace API {
     id?: number;
     isDelete?: number;
     pushStatus?: number;
-    pushTime?: string;
     title?: string;
     type?: string;
     updateTime?: string;
@@ -2090,7 +2095,6 @@ declare namespace API {
 
   type SystemMessagesAddRequest = {
     content?: string;
-    pushTime?: string;
     title?: string;
     type?: string;
   };
@@ -2102,7 +2106,6 @@ declare namespace API {
     notId?: number;
     pageSize?: number;
     pushStatus?: number;
-    pushTime?: string;
     searchText?: string;
     sortField?: string;
     sortOrder?: string;
@@ -2114,7 +2117,6 @@ declare namespace API {
     content?: string;
     id?: number;
     pushStatus?: number;
-    pushTime?: string;
     title?: string;
   };
 
@@ -2123,7 +2125,6 @@ declare namespace API {
     createTime?: string;
     id?: number;
     pushStatus?: number;
-    pushTime?: string;
     title?: string;
     type?: string;
     updateTime?: string;
