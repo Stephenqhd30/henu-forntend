@@ -28,7 +28,7 @@ const BatchReviewModal: React.FC<ReviewModalProps> = (props) => {
   const [form] = ProForm.useForm();
   return (
     <ModalForm
-      title={'批量审核证书信息'}
+      title={'批量审核信息'}
       open={visible}
       form={form}
       onFinish={async (values: API.ReviewLogAddRequest) => {

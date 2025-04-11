@@ -177,9 +177,10 @@ const MessagePushList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.MessagePush, API.PageParams>
-        headerTitle={'短信推送查询'}
+        headerTitle={'短信推送日志'}
         actionRef={actionRef}
         rowKey={'id'}
+        scroll={{ x: 'max-content' }}
         search={{
           labelWidth: 120,
         }}

@@ -1046,10 +1046,9 @@ declare namespace API {
 
   type MessageNotice = {
     adminId?: number;
+    content?: string;
     createTime?: string;
     id?: number;
-    interviewLocation?: string;
-    interviewTime?: string;
     isDelete?: number;
     pushStatus?: number;
     registrationId?: number;
@@ -1058,18 +1057,16 @@ declare namespace API {
   };
 
   type MessageNoticeAddRequest = {
-    interviewLocation?: string;
-    interviewTime?: string;
+    content?: string;
     registrationId?: number;
     registrationIds?: number[];
   };
 
   type MessageNoticeQueryRequest = {
     adminId?: number;
+    content?: string;
     current?: number;
     id?: number;
-    interviewLocation?: string;
-    interviewTime?: string;
     notId?: number;
     pageSize?: number;
     pushStatus?: number;
@@ -1080,17 +1077,15 @@ declare namespace API {
   };
 
   type MessageNoticeUpdateRequest = {
+    content?: string;
     id?: number;
-    interviewLocation?: string;
-    interviewTime?: string;
   };
 
   type MessageNoticeVO = {
     adminId?: number;
+    content?: string;
     createTime?: string;
     id?: number;
-    interviewLocation?: string;
-    interviewTime?: string;
     registrationFormVO?: RegistrationFormVO;
     registrationId?: number;
     updateTime?: string;

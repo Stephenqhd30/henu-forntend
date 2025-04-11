@@ -8,11 +8,13 @@ import {
   ProFormSelect,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, Grid, message, Select, Space, Tag, Typography } from 'antd';
+import { Button, message, Select, Space, Tag } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import {
   BatchReviewModal,
+  CreateMessageNoticeModal,
   ReviewModal,
+  UploadMessageNoticeModal,
   UserDetailsCard,
 } from '@/pages/Review/ReviewList/components';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
@@ -26,18 +28,56 @@ import {
   downloadFileByBatchUsingPost,
   downloadFileUsingPost,
 } from '@/services/henu-backend/fileLogController';
-import { registrationStatusEnum } from '@/enums/RegistrationStatusEnum';
-import {ArrowDownOutlined, CheckOutlined} from '@ant-design/icons';
+import { RegistrationStatus, registrationStatusEnum } from '@/enums/RegistrationStatusEnum';
+import {
+  ArrowDownOutlined,
+  CheckOutlined,
+  DownloadOutlined,
+  PlusOutlined,
+  SendOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
+import {
+  addMessagePushByIdsUsingPost,
+  addMessagePushUsingPost,
+} from '@/services/henu-backend/messagePushController';
+import { PushType } from '@/enums/PushTypeEnum';
 
-const { useBreakpoint } = Grid;
+/**
+ * 发送消息
+ *
+ * @param row
+ */
+const handlePush = async (row: any) => {
+  const hide = message.loading('正在发送中');
+  if (!row) return true;
+  try {
+    const res = await addMessagePushUsingPost({
+      messageNoticeId: row?.id,
+      pushType: PushType.SMS,
+    });
+    if (res.code === 0 && res.data) {
+      message.success('消息发送成功');
+    } else {
+      message.error(`消息发送失败${res.message}`);
+    }
+  } catch (error: any) {
+    message.error(`消息发送失败${error.message}, 请重试!`);
+  } finally {
+    hide();
+  }
+};
+
 /**
  * 报名登记表信息审核
  * @constructor
  */
 const RegistrationReview: React.FC = () => {
-  const scene = useBreakpoint();
-  const isMobile = !scene.md;
   const actionRef = useRef<ActionType>();
+  // 创建面试通知 Modal 框
+  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+  // 上传面试通知信息窗口 Modal 框
+  const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
   // 审核信息 Modal 框
   const [reviewModal, setReviewModal] = useState<boolean>(false);
   // 批量审核信息 Modal 框
@@ -53,12 +93,12 @@ const RegistrationReview: React.FC = () => {
 
   /**
    * 下载用户上传的文件（ZIP）
-   * @param record
+   * @param userId
    */
-  const downloadFile = async (record: any) => {
+  const downloadFile = async (userId: any) => {
     try {
       const response = await downloadFileUsingPost(
-        { userId: record.userId },
+        { userId: userId },
         {
           responseType: 'blob',
           getResponse: true,
@@ -127,6 +167,7 @@ const RegistrationReview: React.FC = () => {
       message.error('文件下载失败: ' + (error?.message || '未知错误'));
     }
   };
+
   /**
    * 表格列数据
    */
@@ -477,10 +518,38 @@ const RegistrationReview: React.FC = () => {
                     >
                       审核用户信息
                     </Button>
+                    {record.reviewStatus === ReviewStatus.PASS &&
+                      record.registrationStatus === RegistrationStatus.YES && (
+                        <Button
+                          icon={<PlusOutlined />}
+                          key={'export'}
+                          type={'primary'}
+                          onClick={async () => {
+                            setCreateModalVisible(true);
+                            setCurrentRow(record);
+                          }}
+                        >
+                          新建面试通知信息
+                        </Button>
+                      )}
+                    {record.reviewStatus === ReviewStatus.PASS &&
+                      record.registrationStatus === RegistrationStatus.INTERVIEW && (
+                        <Button
+                          icon={<SendOutlined />}
+                          key={'push'}
+                          type={'primary'}
+                          onClick={async () => {
+                            setCreateModalVisible(true);
+                            setCurrentRow(record);
+                          }}
+                        >
+                          发送面试短信
+                        </Button>
+                      )}
                     <Button
-                      key={"file"}
+                      key={'file'}
                       onClick={async () => {
-                        await downloadFile(record);
+                        await downloadFile(record?.userId);
                       }}
                       icon={<ArrowDownOutlined />}
                     >
@@ -494,6 +563,17 @@ const RegistrationReview: React.FC = () => {
             );
           },
         }}
+        toolBarRender={() => [
+          <Button
+            icon={<UploadOutlined />}
+            key={'upload'}
+            onClick={() => {
+              setUploadModalVisible(true);
+            }}
+          >
+            批量上传面试通知信息
+          </Button>,
+        ]}
         request={async (params, sort, filter) => {
           const sortField = 'update_time';
           const sortOrder = sort?.[sortField] ?? 'descend';
@@ -503,7 +583,6 @@ const RegistrationReview: React.FC = () => {
             sortField,
             sortOrder,
           } as API.ReviewLogQueryRequest);
-
           return {
             success: code === 0,
             data: data?.records || [],
@@ -522,6 +601,7 @@ const RegistrationReview: React.FC = () => {
           return (
             <Space>
               <Button
+                icon={<CheckOutlined />}
                 type="primary"
                 onClick={async () => {
                   setBatchReviewModal(true);
@@ -531,6 +611,31 @@ const RegistrationReview: React.FC = () => {
                 批量审核
               </Button>
               <Button
+                type="primary"
+                icon={<SendOutlined />}
+                onClick={async () => {
+                  try {
+                    const res = await addMessagePushByIdsUsingPost({
+                      messageNoticeIds: selectedRowKeys,
+                      pushType: PushType.SMS,
+                    });
+                    if (res.code === 0 && res.data) {
+                      message.success('消息发送成功');
+                    } else {
+                      message.error(`消息发送失败${res.message}`);
+                    }
+                  } catch (error: any) {
+                    message.error(`消息发送失败${error.message}`);
+                  } finally {
+                    actionRef.current?.reload();
+                  }
+                }}
+              >
+                批量发送
+              </Button>
+              <Button
+                key={'download'}
+                icon={<DownloadOutlined />}
                 onClick={async () => {
                   await downloadFileByBatch();
                 }}
@@ -541,6 +646,20 @@ const RegistrationReview: React.FC = () => {
           );
         }}
       />
+      {/*新建面试通知*/}
+      {createModalVisible && (
+        <CreateMessageNoticeModal
+          onCancel={() => {
+            setCreateModalVisible(false);
+          }}
+          onSubmit={async () => {
+            setCreateModalVisible(false);
+            actionRef.current?.reload();
+          }}
+          visible={createModalVisible}
+          registrationForm={currentRow}
+        />
+      )}
       {/*审核*/}
       {reviewModal && (
         <ReviewModal
@@ -563,6 +682,19 @@ const RegistrationReview: React.FC = () => {
           onSubmit={async () => {
             setReviewModal(false);
             setSelectedRowKeys([]);
+            actionRef.current?.reload();
+          }}
+        />
+      )}
+      {/*上传管理员信息*/}
+      {uploadModalVisible && (
+        <UploadMessageNoticeModal
+          onCancel={() => {
+            setUploadModalVisible(false);
+          }}
+          visible={uploadModalVisible}
+          onSubmit={async () => {
+            setUploadModalVisible(false);
             actionRef.current?.reload();
           }}
         />
