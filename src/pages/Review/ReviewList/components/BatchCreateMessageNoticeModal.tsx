@@ -1,14 +1,13 @@
 import { message } from 'antd';
-import { ModalForm, ProColumns, ProForm, ProFormTextArea } from '@ant-design/pro-components';
+import { ModalForm, ProForm, ProFormTextArea } from '@ant-design/pro-components';
 import React from 'react';
 import { addMessageNoticeByBatchUsingPost } from '@/services/henu-backend/messageNoticeController';
 
 interface ReviewModalProps {
   visible: boolean;
   onCancel?: () => void;
-  columns: ProColumns<API.RegistrationFormVO>[];
   selectedRowKeys: any[];
-  onSubmit: (values: API.ReviewLogAddRequest) => Promise<void>;
+  onSubmit: () => Promise<void>;
 }
 
 /**
@@ -38,7 +37,7 @@ const handleAdd = async (fields: API.MessageNoticeAddRequest) => {
 };
 
 /**
- * 批量新建面试通知弹窗
+ * 批量创建面试通知信息弹窗
  * @param props
  * @constructor
  */
@@ -47,7 +46,7 @@ const BatchReviewModal: React.FC<ReviewModalProps> = (props) => {
   const [form] = ProForm.useForm();
   return (
     <ModalForm
-      title={'批量审核证书信息'}
+      title={'批量创建面试通知信息'}
       open={visible}
       form={form}
       onFinish={async (values: API.MessageNoticeAddRequest) => {
@@ -56,7 +55,7 @@ const BatchReviewModal: React.FC<ReviewModalProps> = (props) => {
           registrationIds: selectedRowKeys,
         });
         if (success) {
-          onSubmit?.(values);
+          onSubmit?.();
         }
       }}
       autoFocusFirstInput

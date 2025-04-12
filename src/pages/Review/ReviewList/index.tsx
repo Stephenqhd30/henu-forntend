@@ -11,6 +11,7 @@ import {
 import { Button, message, Select, Space, Tag } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import {
+  BatchCreateMessageNoticeModal,
   BatchReviewModal,
   CreateMessageNoticeModal,
   ReviewModal,
@@ -54,6 +55,8 @@ const RegistrationReview: React.FC = () => {
   const actionRef = useRef<ActionType>();
   // 创建面试通知 Modal 框
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+  // 批量创建面试通知 Modal 框
+  const [batchCreateModalVisible, setbatchCreateModalVisible] = useState<boolean>(false);
   // 上传面试通知信息窗口 Modal 框
   const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
   // 审核信息 Modal 框
@@ -636,12 +639,22 @@ const RegistrationReview: React.FC = () => {
                 批量审核
               </Button>
               <Button
+                icon={<PlusOutlined />}
+                type="primary"
+                onClick={async () => {
+                  setbatchCreateModalVisible(true);
+                  actionRef.current?.reload();
+                }}
+              >
+                批量新建面试通知
+              </Button>
+              <Button
                 type="primary"
                 icon={<SendOutlined />}
                 onClick={async () => {
                   try {
                     const res = await addMessagePushByIdsUsingPost({
-                      messageNoticeIds: selectedRowKeys,
+                      messageNoticeIds: selectedRows.map(row => row.messageNoticeVO?.id),
                       pushType: PushType.SMS,
                     });
                     if (res.code === 0 && res.data) {
@@ -691,7 +704,20 @@ const RegistrationReview: React.FC = () => {
             actionRef.current?.reload();
           }}
           visible={createModalVisible}
-          registrationForm={currentRow?.messageNoticeVO ?? {}}
+          registrationForm={currentRow ?? {}}
+        />
+      )}
+      {/*批量新建面试通知*/}
+      {batchCreateModalVisible && (
+        <BatchCreateMessageNoticeModal
+          visible={batchCreateModalVisible}
+          onCancel={() => setbatchCreateModalVisible(false)}
+          selectedRowKeys={selectedRowKeys ?? []}
+          onSubmit={async () => {
+            setbatchCreateModalVisible(false);
+            setSelectedRowKeys([]);
+            actionRef.current?.reload();
+          }}
         />
       )}
       {/*审核*/}
