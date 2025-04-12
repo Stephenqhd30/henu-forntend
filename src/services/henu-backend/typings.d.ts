@@ -690,6 +690,10 @@ declare namespace API {
     userVO?: UserVO;
   };
 
+  type ExportRegistrationFormRequest = {
+    userIds?: number[];
+  };
+
   type Family = {
     appellation?: string;
     createTime?: string;

@@ -42,7 +42,9 @@ import {
   addMessagePushUsingPost,
 } from '@/services/henu-backend/messagePushController';
 import { PushType } from '@/enums/PushTypeEnum';
-import {politicalStatusEnum} from '@/enums/PoliticalStatusEnum';
+import { politicalStatusEnum } from '@/enums/PoliticalStatusEnum';
+import { REGISTRATION_EXCEL } from '@/constants';
+import {exportRegistrationFormByUserIdUsingPost} from '@/services/henu-backend/excelController';
 
 /**
  * 发送消息
@@ -166,6 +168,36 @@ const RegistrationReview: React.FC = () => {
       message.success('文件下载成功');
     } catch (error: any) {
       message.error('文件下载失败: ' + (error?.message || '未知错误'));
+    }
+  };
+
+  /**
+   * 下载报名登记表信息
+   */
+  const downloadRegistrationFormInfo = async () => {
+    try {
+      const res = await exportRegistrationFormByUserIdUsingPost(
+        {
+          userIds: selectedRows.map((row) => row.userId),
+        },
+        {
+          responseType: 'blob',
+        },
+      );
+      // 创建 Blob 对象
+      // @ts-ignore
+      const url = window.URL.createObjectURL(new Blob([res]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', REGISTRATION_EXCEL);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      // 释放对象 URL
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      message.error('导出失败: ' + error.message);
     }
   };
 
@@ -649,6 +681,15 @@ const RegistrationReview: React.FC = () => {
               >
                 批量下载附件信息
               </Button>
+              <Button
+                key={'download'}
+                icon={<DownloadOutlined />}
+                onClick={async () => {
+                  await downloadRegistrationFormInfo();
+                }}
+              >
+                批量下载报名信息
+              </Button>
             </Space>
           );
         }}
@@ -709,5 +750,4 @@ const RegistrationReview: React.FC = () => {
     </PageContainer>
   );
 };
-
 export default RegistrationReview;

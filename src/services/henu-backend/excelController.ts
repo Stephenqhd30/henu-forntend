@@ -178,6 +178,21 @@ export async function exportUserUsingGet(options?: { [key: string]: any }) {
   });
 }
 
+/** exportRegistrationFormByUserId POST /api/excel/export/user/registration/form */
+export async function exportRegistrationFormByUserIdUsingPost(
+  body: API.ExportRegistrationFormRequest,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/excel/export/user/registration/form', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** importAdminExcel POST /api/excel/import/admin */
 export async function importAdminExcelUsingPost(
   body: {},
