@@ -1090,7 +1090,6 @@ declare namespace API {
     content?: string;
     createTime?: string;
     id?: number;
-    registrationFormVO?: RegistrationFormVO;
     registrationId?: number;
     updateTime?: string;
     userName?: string;
@@ -1863,6 +1862,7 @@ declare namespace API {
     jobVO?: JobVO;
     leaderExperience?: string;
     marryStatus?: number;
+    messageNoticeVO?: MessageNoticeVO;
     partyTime?: string;
     politicalStatus?: string;
     registrationForm?: string;

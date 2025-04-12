@@ -44,32 +44,7 @@ import {
 import { PushType } from '@/enums/PushTypeEnum';
 import { politicalStatusEnum } from '@/enums/PoliticalStatusEnum';
 import { REGISTRATION_EXCEL } from '@/constants';
-import {exportRegistrationFormByUserIdUsingPost} from '@/services/henu-backend/excelController';
-
-/**
- * 发送消息
- *
- * @param row
- */
-const handlePush = async (row: any) => {
-  const hide = message.loading('正在发送中');
-  if (!row) return true;
-  try {
-    const res = await addMessagePushUsingPost({
-      messageNoticeId: row?.id,
-      pushType: PushType.SMS,
-    });
-    if (res.code === 0 && res.data) {
-      message.success('消息发送成功');
-    } else {
-      message.error(`消息发送失败${res.message}`);
-    }
-  } catch (error: any) {
-    message.error(`消息发送失败${error.message}, 请重试!`);
-  } finally {
-    hide();
-  }
-};
+import { exportRegistrationFormByUserIdUsingPost } from '@/services/henu-backend/excelController';
 
 /**
  * 报名登记表信息审核
@@ -578,8 +553,19 @@ const RegistrationReview: React.FC = () => {
                           key={'push'}
                           type={'primary'}
                           onClick={async () => {
-                            setCreateModalVisible(true);
-                            setCurrentRow(record);
+                            try {
+                              const res = await addMessagePushUsingPost({
+                                messageNoticeId: record?.messageNoticeVO?.id,
+                                pushType: PushType.SMS,
+                              });
+                              if (res.code === 0 && res.data) {
+                                message.success('短信发送成功');
+                              } else {
+                                message.error(`短信发送成功${res.message}`);
+                              }
+                            } catch (error: any) {
+                              message.error(`短信发送成功${error.message}`);
+                            }
                           }}
                         >
                           发送面试短信
@@ -705,7 +691,7 @@ const RegistrationReview: React.FC = () => {
             actionRef.current?.reload();
           }}
           visible={createModalVisible}
-          registrationForm={currentRow}
+          registrationForm={currentRow?.messageNoticeVO ?? {}}
         />
       )}
       {/*审核*/}
