@@ -1057,7 +1057,7 @@ declare namespace API {
     pushStatus?: number;
     registrationId?: number;
     updateTime?: string;
-    userName?: string;
+    userId?: number;
   };
 
   type MessageNoticeAddRequest = {
@@ -1077,6 +1077,7 @@ declare namespace API {
     registrationId?: number;
     sortField?: string;
     sortOrder?: string;
+    userId?: number;
     userName?: string;
   };
 
@@ -1090,9 +1091,11 @@ declare namespace API {
     content?: string;
     createTime?: string;
     id?: number;
+    pushStatus?: number;
     registrationId?: number;
     updateTime?: string;
-    userName?: string;
+    userId?: number;
+    userVO?: UserVO;
   };
 
   type MessagePush = {

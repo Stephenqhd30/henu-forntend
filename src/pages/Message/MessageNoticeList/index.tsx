@@ -2,7 +2,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Space, Tag } from 'antd';
 import React, { useRef } from 'react';
-import { listMessageNoticeByPageUsingPost } from '@/services/henu-backend/messageNoticeController';
+import { listMessageNoticeVoByPageUsingPost } from '@/services/henu-backend/messageNoticeController';
 import { exportMessageNoticeUsingGet } from '@/services/henu-backend/excelController';
 import { MESSAGE_NOTICE_EXCEL } from '@/constants';
 import { pushStatusEnum } from '@/enums/PushStatusEnum';
@@ -41,7 +41,7 @@ const MessageNoticeList: React.FC = () => {
   /**
    * 表格列数据
    */
-  const columns: ProColumns<API.MessageNotice>[] = [
+  const columns: ProColumns<API.MessageNoticeVO>[] = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -62,6 +62,8 @@ const MessageNoticeList: React.FC = () => {
       dataIndex: 'userName',
       valueType: 'text',
       hideInForm: true,
+      hideInSearch: true,
+      render: (_, record) => <span>{record?.userVO?.userName}</span>,
     },
     {
       title: '面试内容',
@@ -130,7 +132,7 @@ const MessageNoticeList: React.FC = () => {
         request={async (params, sort, filter) => {
           const sortField = 'create_time';
           const sortOrder = sort?.[sortField] ?? 'descend';
-          const { data, code } = await listMessageNoticeByPageUsingPost({
+          const { data, code } = await listMessageNoticeVoByPageUsingPost({
             ...params,
             ...filter,
             sortField,

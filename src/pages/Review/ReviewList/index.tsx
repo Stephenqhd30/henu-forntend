@@ -184,6 +184,105 @@ const RegistrationReview: React.FC = () => {
    */
   const columns: ProColumns<API.RegistrationFormVO>[] = [
     {
+      title: '教育阶段',
+      dataIndex: 'educationStages',
+      valueType: 'select',
+      hideInForm: true,
+      hideInTable: true,
+      hideInSetting: true,
+      valueEnum: educationStageEnum,
+      renderFormItem: (_, { value }, form) => {
+        return (
+          <Select
+            mode="multiple"
+            value={value}
+            onChange={(val) => form.setFieldsValue({ educationStages: val })}
+            placeholder="请选择教育阶段"
+            allowClear
+          >
+            <Select.Option value={EducationStage.UNDERGRADUATE_COURSE}>
+              {educationStageEnum[EducationStage.UNDERGRADUATE_COURSE].text}
+            </Select.Option>
+            <Select.Option value={EducationStage.POSTGRADUATE}>
+              {educationStageEnum[EducationStage.POSTGRADUATE].text}
+            </Select.Option>
+            <Select.Option value={EducationStage.DOCTOR_DEGREE}>
+              {educationStageEnum[EducationStage.DOCTOR_DEGREE].text}
+            </Select.Option>
+          </Select>
+        );
+      },
+    },
+    {
+      title: '学校类型',
+      dataIndex: 'schoolTypes',
+      hideInForm: true,
+      hideInTable: true,
+      hideInSetting: true,
+      renderFormItem: (_, { value }, form) => {
+        const parsedValue = Array.isArray(value) ? value : [];
+        return (
+          <ProFormSelect
+            mode="multiple"
+            // @ts-ignore
+            value={parsedValue}
+            request={async () => {
+              const res = await listSchoolTypeVoByPageUsingPost({});
+              if (res.code === 0 && res.data) {
+                return (
+                  res.data.records?.map((schoolType) => ({
+                    label: schoolType.typeName,
+                    value: schoolType.typeName,
+                  })) ?? []
+                );
+              } else {
+                return [];
+              }
+            }}
+            onChange={(val) => form.setFieldsValue({ schoolTypes: val })}
+            placeholder="请选择高校类型"
+            style={{ width: '100%' }}
+          />
+        );
+      },
+    },
+    {
+      title: '主要学生干部经历',
+      dataIndex: 'studentLeaders',
+      valueType: 'select',
+      hideInForm: true,
+      hideInTable: true,
+      hideInSetting: true,
+      renderFormItem: (_, { value }, form) => {
+        return (
+          <ProFormSelect
+            mode="multiple"
+            fieldProps={{
+              value,
+              onChange: (val) => form.setFieldsValue({ studentLeaders: val }),
+              style: { width: '100%' },
+              size: 'middle',
+            }}
+            request={async () => {
+              const res = await listCadreTypeByPageUsingPost({});
+              if (res.code === 0 && res.data) {
+                return (
+                  res.data.records?.map((cadreType) => ({
+                    label: cadreType.type,
+                    value: cadreType.type,
+                  })) ?? []
+                );
+              } else {
+                return [];
+              }
+            }}
+            placeholder="请选择干部类型"
+            style={{ width: '100%' }}
+          />
+        );
+      },
+    },
+    {
       title: '用户名',
       dataIndex: 'userName',
       valueType: 'text',
@@ -281,6 +380,7 @@ const RegistrationReview: React.FC = () => {
       title: '主要学生干部经历',
       dataIndex: 'studentLeaders',
       valueType: 'text',
+      hideInSearch: true,
       render: (_, record) => {
         if (record) {
           return (
@@ -435,69 +535,6 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'reviewer',
       valueType: 'text',
       hideInForm: true,
-    },
-    {
-      title: '教育阶段',
-      dataIndex: 'educationStages',
-      valueType: 'select',
-      hideInForm: true,
-      hideInTable: true,
-      hideInSetting: true,
-      valueEnum: educationStageEnum,
-      renderFormItem: (_, { value }, form) => {
-        return (
-          <Select
-            mode="multiple"
-            value={value}
-            onChange={(val) => form.setFieldsValue({ educationStages: val })}
-            placeholder="请选择教育阶段"
-            allowClear
-          >
-            <Select.Option value={EducationStage.UNDERGRADUATE_COURSE}>
-              {educationStageEnum[EducationStage.UNDERGRADUATE_COURSE].text}
-            </Select.Option>
-            <Select.Option value={EducationStage.POSTGRADUATE}>
-              {educationStageEnum[EducationStage.POSTGRADUATE].text}
-            </Select.Option>
-            <Select.Option value={EducationStage.DOCTOR_DEGREE}>
-              {educationStageEnum[EducationStage.DOCTOR_DEGREE].text}
-            </Select.Option>
-          </Select>
-        );
-      },
-    },
-    {
-      title: '学校类型',
-      dataIndex: 'schoolTypes',
-      hideInForm: true,
-      hideInTable: true,
-      hideInSetting: true,
-      renderFormItem: (_, { value }, form) => {
-        const parsedValue = Array.isArray(value) ? value : [];
-        return (
-          <ProFormSelect
-            mode="multiple"
-            // @ts-ignore
-            value={parsedValue}
-            request={async () => {
-              const res = await listSchoolTypeVoByPageUsingPost({});
-              if (res.code === 0 && res.data) {
-                return (
-                  res.data.records?.map((schoolType) => ({
-                    label: schoolType.typeName,
-                    value: schoolType.typeName,
-                  })) ?? []
-                );
-              } else {
-                return [];
-              }
-            }}
-            onChange={(val) => form.setFieldsValue({ schoolTypes: val })}
-            placeholder="请选择高校类型"
-            style={{ width: '100%' }}
-          />
-        );
-      },
     },
     {
       title: '报名状态',
