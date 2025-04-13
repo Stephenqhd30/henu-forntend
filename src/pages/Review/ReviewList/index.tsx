@@ -469,8 +469,7 @@ const RegistrationReview: React.FC = () => {
     {
       title: '出生日期',
       dataIndex: 'birthDate',
-      valueType: 'text',
-      hideInSearch: true,
+      valueType: 'dateYear',
     },
     {
       title: '民族',
