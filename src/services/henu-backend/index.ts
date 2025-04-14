@@ -12,6 +12,7 @@ import * as familyController from './familyController';
 import * as fileLogController from './fileLogController';
 import * as fileTypeController from './fileTypeController';
 import * as jobController from './jobController';
+import * as messageController from './messageController';
 import * as messageNoticeController from './messageNoticeController';
 import * as messagePushController from './messagePushController';
 import * as operationLogController from './operationLogController';
@@ -33,6 +34,7 @@ export default {
   fileLogController,
   fileTypeController,
   jobController,
+  messageController,
   messageNoticeController,
   messagePushController,
   operationLogController,

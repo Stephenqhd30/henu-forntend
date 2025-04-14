@@ -168,6 +168,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseMessageVO_ = {
+    code?: number;
+    data?: MessageVO;
+    message?: string;
+  };
+
   type BaseResponseOperationLogVO_ = {
     code?: number;
     data?: OperationLogVO;
@@ -270,6 +276,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageMessage_ = {
+    code?: number;
+    data?: PageMessage_;
+    message?: string;
+  };
+
   type BaseResponsePageMessageNotice_ = {
     code?: number;
     data?: PageMessageNotice_;
@@ -291,6 +303,12 @@ declare namespace API {
   type BaseResponsePageMessagePushVO_ = {
     code?: number;
     data?: PageMessagePushVO_;
+    message?: string;
+  };
+
+  type BaseResponsePageMessageVO_ = {
+    code?: number;
+    data?: PageMessageVO_;
     message?: string;
   };
 
@@ -927,6 +945,11 @@ declare namespace API {
     id?: number;
   };
 
+  type getMessageVOByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
   type getOperationLogVOByIdUsingGETParams = {
     /** id */
     id?: number;
@@ -1048,6 +1071,21 @@ declare namespace API {
     userPhone?: string;
   };
 
+  type Message = {
+    adminId?: number;
+    content?: string;
+    createTime?: string;
+    id?: number;
+    isDelete?: number;
+    title?: string;
+    updateTime?: string;
+  };
+
+  type MessageAddRequest = {
+    content?: string;
+    title?: string;
+  };
+
   type MessageNotice = {
     adminId?: number;
     content?: string;
@@ -1149,6 +1187,34 @@ declare namespace API {
     userId?: number;
     userName?: string;
     userVO?: UserVO;
+  };
+
+  type MessageQueryRequest = {
+    adminId?: number;
+    content?: string;
+    current?: number;
+    id?: number;
+    notId?: number;
+    pageSize?: number;
+    searchText?: string;
+    sortField?: string;
+    sortOrder?: string;
+    title?: string;
+  };
+
+  type MessageUpdateRequest = {
+    content?: string;
+    id?: number;
+    title?: string;
+  };
+
+  type MessageVO = {
+    adminId?: number;
+    content?: string;
+    createTime?: string;
+    id?: number;
+    title?: string;
+    updateTime?: string;
   };
 
   type OperationLog = {
@@ -1405,6 +1471,19 @@ declare namespace API {
     total?: number;
   };
 
+  type PageMessage_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: Message[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
   type PageMessageNotice_ = {
     countId?: string;
     current?: number;
@@ -1452,6 +1531,19 @@ declare namespace API {
     orders?: OrderItem[];
     pages?: number;
     records?: MessagePushVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageMessageVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: MessageVO[];
     searchCount?: boolean;
     size?: number;
     total?: number;
@@ -1801,6 +1893,7 @@ declare namespace API {
   };
 
   type RegistrationFormQueryRequest = {
+    birthDate?: string;
     current?: number;
     educationStages?: string[];
     id?: number;

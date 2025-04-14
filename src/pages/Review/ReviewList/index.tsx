@@ -45,7 +45,10 @@ import {
 import { PushType } from '@/enums/PushTypeEnum';
 import { politicalStatusEnum } from '@/enums/PoliticalStatusEnum';
 import { REGISTRATION_EXCEL } from '@/constants';
-import { exportRegistrationFormByUserIdUsingPost } from '@/services/henu-backend/excelController';
+import {
+  exportRegistrationFormByUserIdUsingPost,
+  exportRegistrationFormUsingGet,
+} from '@/services/henu-backend/excelController';
 
 /**
  * 报名登记表信息审核
@@ -153,6 +156,32 @@ const RegistrationReview: React.FC = () => {
    * 下载报名登记表信息
    */
   const downloadRegistrationFormInfo = async () => {
+    try {
+      const res = await exportRegistrationFormUsingGet({
+        responseType: 'blob',
+      });
+
+      // 创建 Blob 对象
+      // @ts-ignore
+      const url = window.URL.createObjectURL(new Blob([res]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', REGISTRATION_EXCEL);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      // 释放对象 URL
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
+      message.error('导出失败: ' + error.message);
+    }
+  };
+
+  /**
+   * 批量下载报名登记表信息
+   */
+  const downloadRegistrationFormByBatch = async () => {
     try {
       const res = await exportRegistrationFormByUserIdUsingPost(
         {
@@ -629,6 +658,53 @@ const RegistrationReview: React.FC = () => {
         }}
         toolBarRender={() => [
           <Button
+            icon={<CheckOutlined />}
+            type="primary"
+            key={'batch-review'}
+            onClick={async () => {
+              setBatchReviewModal(true);
+              actionRef.current?.reload();
+            }}
+          >
+            批量审核
+          </Button>,
+          <Button
+            icon={<PlusOutlined />}
+            type="primary"
+            key={'review'}
+            onClick={async () => {
+              setbatchCreateModalVisible(true);
+              actionRef.current?.reload();
+            }}
+          >
+            新建通知
+          </Button>,
+          <Button
+            type="primary"
+            icon={<SendOutlined />}
+            key={'message-push'}
+            onClick={async () => {
+              try {
+                const res = await addMessagePushByIdsUsingPost({
+                  messageNoticeIds: selectedRows.map((row) => row.messageNoticeVO?.id),
+                  pushType: PushType.SMS,
+                });
+                if (res.code === 0 && res.data) {
+                  message.success('消息发送成功');
+                } else {
+                  message.error(`消息发送失败${res.message}`);
+                }
+              } catch (error: any) {
+                message.error(`消息发送失败${error.message}`);
+              } finally {
+                actionRef.current?.reload();
+              }
+            }}
+          >
+            批量发送
+          </Button>,
+          <Button
+            type="primary"
             icon={<UploadOutlined />}
             key={'upload'}
             onClick={() => {
@@ -636,6 +712,33 @@ const RegistrationReview: React.FC = () => {
             }}
           >
             批量上传面试通知信息
+          </Button>,
+          <Button
+            key={'download'}
+            icon={<DownloadOutlined />}
+            onClick={async () => {
+              await downloadFileByBatch();
+            }}
+          >
+            批量下载附件信息
+          </Button>,
+          <Button
+            key={'download'}
+            icon={<DownloadOutlined />}
+            onClick={async () => {
+              await downloadRegistrationFormByBatch();
+            }}
+          >
+            批量下载报名信息
+          </Button>,
+          <Button
+            key={'download'}
+            icon={<DownloadOutlined />}
+            onClick={async () => {
+              await downloadRegistrationFormInfo();
+            }}
+          >
+            下载报名信息
           </Button>,
         ]}
         request={async (params, sort, filter) => {
@@ -660,73 +763,6 @@ const RegistrationReview: React.FC = () => {
             setSelectedRowKeys(keys);
             setSelectedRows(rows);
           },
-        }}
-        tableAlertOptionRender={() => {
-          return (
-            <Space>
-              <Button
-                icon={<CheckOutlined />}
-                type="primary"
-                onClick={async () => {
-                  setBatchReviewModal(true);
-                  actionRef.current?.reload();
-                }}
-              >
-                批量审核
-              </Button>
-              <Button
-                icon={<PlusOutlined />}
-                type="primary"
-                onClick={async () => {
-                  setbatchCreateModalVisible(true);
-                  actionRef.current?.reload();
-                }}
-              >
-                批量新建面试通知
-              </Button>
-              <Button
-                type="primary"
-                icon={<SendOutlined />}
-                onClick={async () => {
-                  try {
-                    const res = await addMessagePushByIdsUsingPost({
-                      messageNoticeIds: selectedRows.map(row => row.messageNoticeVO?.id),
-                      pushType: PushType.SMS,
-                    });
-                    if (res.code === 0 && res.data) {
-                      message.success('消息发送成功');
-                    } else {
-                      message.error(`消息发送失败${res.message}`);
-                    }
-                  } catch (error: any) {
-                    message.error(`消息发送失败${error.message}`);
-                  } finally {
-                    actionRef.current?.reload();
-                  }
-                }}
-              >
-                批量发送
-              </Button>
-              <Button
-                key={'download'}
-                icon={<DownloadOutlined />}
-                onClick={async () => {
-                  await downloadFileByBatch();
-                }}
-              >
-                批量下载附件信息
-              </Button>
-              <Button
-                key={'download'}
-                icon={<DownloadOutlined />}
-                onClick={async () => {
-                  await downloadRegistrationFormInfo();
-                }}
-              >
-                批量下载报名信息
-              </Button>
-            </Space>
-          );
         }}
       />
       {/*新建面试通知*/}

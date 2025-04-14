@@ -1,9 +1,9 @@
 import { message } from 'antd';
-import { ModalForm, ProForm, ProFormTextArea } from '@ant-design/pro-components';
+import { ModalForm, ProForm, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import React from 'react';
-import { addMessageNoticeByBatchUsingPost } from '@/services/henu-backend/messageNoticeController';
+import { addMessageUsingPost } from '@/services/henu-backend/messageController';
 
-interface ReviewModalProps {
+interface MessageModalProps {
   visible: boolean;
   onCancel?: () => void;
   selectedRowKeys: any[];
@@ -18,7 +18,7 @@ interface ReviewModalProps {
 const handleAdd = async (fields: API.MessageNoticeAddRequest) => {
   const hide = message.loading('正在添加');
   try {
-    const res = await addMessageNoticeByBatchUsingPost({
+    const res = await addMessageUsingPost({
       ...fields,
     });
     if (res.code === 0 && res.data) {
@@ -37,22 +37,21 @@ const handleAdd = async (fields: API.MessageNoticeAddRequest) => {
 };
 
 /**
- * 批量创建面试通知信息弹窗
+ * 批量创建通知信息弹窗
  * @param props
  * @constructor
  */
-const BatchReviewModal: React.FC<ReviewModalProps> = (props) => {
-  const { visible, onCancel, selectedRowKeys, onSubmit } = props;
+const BatchCreateMessageModal: React.FC<MessageModalProps> = (props) => {
+  const { visible, onCancel, onSubmit } = props;
   const [form] = ProForm.useForm();
   return (
     <ModalForm
       title={'批量创建面试通知信息'}
       open={visible}
       form={form}
-      onFinish={async (values: API.MessageNoticeAddRequest) => {
+      onFinish={async (values: API.MessageAddRequest) => {
         const success = await handleAdd({
           ...values,
-          registrationIds: selectedRowKeys,
         });
         if (success) {
           onSubmit?.();
@@ -72,9 +71,22 @@ const BatchReviewModal: React.FC<ReviewModalProps> = (props) => {
         },
       }}
     >
-      <ProFormTextArea name={'content'} label={'面试内容'} />
+      <ProFormText
+        fieldProps={{
+          required: true,
+        }}
+        name={'title'}
+        label={'通知主题'}
+      />
+      <ProFormTextArea
+        fieldProps={{
+          required: true,
+        }}
+        name={'content'}
+        label={'通知内容'}
+      />
     </ModalForm>
   );
 };
 
-export default BatchReviewModal;
+export default BatchCreateMessageModal;

@@ -146,6 +146,12 @@ export default [
     icon: 'MessageOutlined',
     routes: [
       {
+        name: '消息通知管理',
+        path: '/message',
+        icon: 'BarsOutlined',
+        component: './Message/MessageList',
+      },
+      {
         name: '面试通知管理',
         path: '/message/notice',
         icon: 'NotificationOutlined',
