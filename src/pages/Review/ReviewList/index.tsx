@@ -252,6 +252,9 @@ const RegistrationReview: React.FC = () => {
         return (
           <ProFormSelect
             mode="multiple"
+            fieldProps={{
+              style: { width: '100%', minWidth: 240 },
+            }}
             // @ts-ignore
             value={parsedValue}
             request={async () => {
@@ -269,7 +272,6 @@ const RegistrationReview: React.FC = () => {
             }}
             onChange={(val) => form.setFieldsValue({ schoolTypes: val })}
             placeholder="请选择高校类型"
-            style={{ width: '100%' }}
           />
         );
       },
@@ -286,11 +288,10 @@ const RegistrationReview: React.FC = () => {
           <ProFormSelect
             mode="multiple"
             fieldProps={{
-              value,
-              onChange: (val) => form.setFieldsValue({ studentLeaders: val }),
-              style: { width: '100%' },
-              size: 'middle',
+              style: { width: '100%', minWidth: 240 },
             }}
+            initialValue={value}
+            onChange={(val) => form.setFieldsValue({ studentLeaders: val })}
             request={async () => {
               const res = await listCadreTypeByPageUsingPost({});
               if (res.code === 0 && res.data) {
@@ -305,7 +306,6 @@ const RegistrationReview: React.FC = () => {
               }
             }}
             placeholder="请选择干部类型"
-            style={{ width: '100%' }}
           />
         );
       },
@@ -378,8 +378,11 @@ const RegistrationReview: React.FC = () => {
         return (
           <ProFormSelect
             mode="single"
-            // @ts-ignore
-            value={value}
+            fieldProps={{
+              style: { width: '100%', minWidth: 240 },
+            }}
+            initialValue={value}
+            onChange={(val) => form.setFieldsValue({ jobId: val })}
             request={async () => {
               const res = await listJobByPageUsingPost({});
               if (res.code === 0 && res.data) {
@@ -393,7 +396,6 @@ const RegistrationReview: React.FC = () => {
                 return [];
               }
             }}
-            onChange={(val) => form.setFieldsValue({ jobId: val })}
             placeholder="请选择岗位"
           />
         );
@@ -428,11 +430,10 @@ const RegistrationReview: React.FC = () => {
           <ProFormSelect
             mode="multiple"
             fieldProps={{
-              value,
-              onChange: (val) => form.setFieldsValue({ studentLeaders: val }),
-              style: { width: '100%' },
-              size: 'middle',
+              style: { width: '100%', minWidth: 240 },
             }}
+            initialValue={value}
+            onChange={(val) => form.setFieldsValue({ studentLeaders: val })}
             request={async () => {
               const res = await listCadreTypeByPageUsingPost({});
               if (res.code === 0 && res.data) {
@@ -447,7 +448,6 @@ const RegistrationReview: React.FC = () => {
               }
             }}
             placeholder="请选择干部类型"
-            style={{ width: '100%' }}
           />
         );
       },
