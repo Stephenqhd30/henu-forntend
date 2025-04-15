@@ -1958,7 +1958,6 @@ declare namespace API {
     jobVO?: JobVO;
     leaderExperience?: string;
     marryStatus?: number;
-    messageNoticeVO?: MessageNoticeVO;
     partyTime?: string;
     politicalStatus?: string;
     registrationForm?: string;
@@ -2037,7 +2036,6 @@ declare namespace API {
   type ReviewLogVO = {
     createTime?: string;
     id?: number;
-    registrationFormVO?: RegistrationFormVO;
     registrationId?: number;
     reviewComments?: string;
     reviewStatus?: number;

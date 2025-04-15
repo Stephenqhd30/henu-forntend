@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Select } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
@@ -6,7 +6,6 @@ import { exportReviewLogUsingGet } from '@/services/henu-backend/excelController
 import { REVIEW_LOG_EXCEL } from '@/constants';
 import { DownloadOutlined } from '@ant-design/icons';
 import { listReviewLogVoByPageUsingPost } from '@/services/henu-backend/reviewLogController';
-import { RegistrationDetailsModal } from '@/components/ReRegistration';
 
 /**
  * 审核信息列表
@@ -14,10 +13,6 @@ import { RegistrationDetailsModal } from '@/components/ReRegistration';
  */
 const ReviewLogList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  // 当前行数据
-  const [currentRow] = useState<API.ReviewLogVO>({});
-  // 报名登记Modal框
-  const [registrationModal, setRegistrationModal] = useState<boolean>(false);
   /**
    * 下载审核日志信息
    */
@@ -51,6 +46,12 @@ const ReviewLogList: React.FC = () => {
     {
       title: 'id',
       dataIndex: 'id',
+      valueType: 'text',
+      hideInForm: true,
+    },
+    {
+      title: '报名登记表id',
+      dataIndex: 'registrationId',
       valueType: 'text',
       hideInForm: true,
     },
@@ -112,7 +113,7 @@ const ReviewLogList: React.FC = () => {
       <ProTable<API.ReviewLog, API.PageParams>
         headerTitle={'审核日志'}
         rowKey={'id'}
-        scroll={{ x: 'max-content', y: 400 }}
+        scroll={{ x: 'max-content' }}
         actionRef={actionRef}
         search={{
           labelWidth: 120,
@@ -136,7 +137,6 @@ const ReviewLogList: React.FC = () => {
             ...filter,
             sortField,
             sortOrder,
-            notId: ReviewStatus.PASS,
           } as API.ReviewLogQueryRequest);
 
           return {
@@ -147,14 +147,6 @@ const ReviewLogList: React.FC = () => {
         }}
         columns={columns}
       />
-      {/*报名登记包信息*/}
-      {registrationModal && (
-        <RegistrationDetailsModal
-          visible={registrationModal}
-          onCancel={() => setRegistrationModal(false)}
-          registration={currentRow?.registrationFormVO ?? {}}
-        />
-      )}
     </PageContainer>
   );
 };

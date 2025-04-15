@@ -711,7 +711,8 @@ const RegistrationReview: React.FC = () => {
             ...filter,
             sortField,
             sortOrder,
-          } as API.ReviewLogQueryRequest);
+            notId: RegistrationStatus.NO,
+          } as API.RegistrationFormQueryRequest);
           return {
             success: code === 0,
             data: data?.records || [],
