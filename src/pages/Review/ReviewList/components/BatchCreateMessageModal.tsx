@@ -46,7 +46,7 @@ const BatchCreateMessageModal: React.FC<MessageModalProps> = (props) => {
   const [form] = ProForm.useForm();
   return (
     <ModalForm
-      title={'批量创建面试通知信息'}
+      title={'批量创建通知信息'}
       open={visible}
       form={form}
       onFinish={async (values: API.MessageAddRequest) => {

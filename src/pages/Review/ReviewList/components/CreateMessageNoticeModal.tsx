@@ -1,7 +1,8 @@
-import { ModalForm, ProForm, ProFormTextArea } from '@ant-design/pro-components';
+import { ModalForm, ProForm, ProFormSelect } from '@ant-design/pro-components';
 import { message } from 'antd';
 import React from 'react';
 import { addMessageNoticeUsingPost } from '@/services/henu-backend/messageNoticeController';
+import { listMessageVoByPageUsingPost } from '@/services/henu-backend/messageController';
 
 interface CreateProps {
   onCancel: () => void;
@@ -72,7 +73,31 @@ const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
         },
       }}
     >
-      <ProFormTextArea name={'content'} label={'面试内容'} />
+      <ProFormSelect
+        fieldProps={{
+          style: { width: '100%' },
+          size: 'middle',
+        }}
+        request={async () => {
+          const res = await listMessageVoByPageUsingPost({
+            sortField: 'update_time',
+            sortOrder: 'descend',
+          });
+          if (res.code === 0 && res.data) {
+            return (
+              res.data.records?.map((message) => ({
+                label: message.title,
+                value: message.content,
+              })) ?? []
+            );
+          } else {
+            return [];
+          }
+        }}
+        name={"content"}
+        placeholder="请选择通知内容"
+        style={{ width: '100%' }}
+      />
     </ModalForm>
   );
 };

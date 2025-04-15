@@ -611,7 +611,7 @@ const RegistrationReview: React.FC = () => {
                             setCurrentRow(record);
                           }}
                         >
-                          新建面试通知信息
+                          新建并发送通知信息
                         </Button>
                       )}
                     {record.reviewStatus === ReviewStatus.PASS &&
@@ -818,7 +818,6 @@ const RegistrationReview: React.FC = () => {
           }}
         />
       )}
-      {/*上传管理员信息*/}
       {uploadModalVisible && (
         <UploadMessageNoticeModal
           onCancel={() => {
