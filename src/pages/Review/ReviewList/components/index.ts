@@ -3,7 +3,8 @@ import BatchReviewModal from '@/pages/Review/ReviewList/components/BatchReviewMo
 import UserDetailsCard from '@/pages/Review/ReviewList/components/UserDetailsCard';
 import CreateMessageNoticeModal from '@/pages/Review/ReviewList/components/CreateMessageNoticeModal';
 import UploadMessageNoticeModal from '@/pages/Review/ReviewList/components/UploadMessageNoticeModal';
-import BatchCreateMessageNoticeModal from '@/pages/Review/ReviewList/components/BatchCreateMessageModal';
+import BatchCreateMessageModal from '@/pages/Review/ReviewList/components/BatchCreateMessageModal';
+import BatchCreateMessageNoticeModal from '@/pages/Review/ReviewList/components/BatchCreateMessageNoticeModal';
 
 export {
   ReviewModal,
@@ -11,5 +12,6 @@ export {
   UserDetailsCard,
   CreateMessageNoticeModal,
   UploadMessageNoticeModal,
+  BatchCreateMessageModal,
   BatchCreateMessageNoticeModal,
 };

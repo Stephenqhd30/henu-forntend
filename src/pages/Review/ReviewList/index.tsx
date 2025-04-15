@@ -11,6 +11,7 @@ import {
 import { Button, message, Select, Space, Tag } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import {
+  BatchCreateMessageModal,
   BatchCreateMessageNoticeModal,
   BatchReviewModal,
   CreateMessageNoticeModal,
@@ -38,11 +39,6 @@ import {
   SendOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
-import {
-  addMessagePushByIdsUsingPost,
-  addMessagePushUsingPost,
-} from '@/services/henu-backend/messagePushController';
-import { PushType } from '@/enums/PushTypeEnum';
 import { politicalStatusEnum } from '@/enums/PoliticalStatusEnum';
 import { REGISTRATION_EXCEL } from '@/constants';
 import {
@@ -59,7 +55,10 @@ const RegistrationReview: React.FC = () => {
   // 创建面试通知 Modal 框
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   // 批量创建面试通知 Modal 框
-  const [batchCreateModalVisible, setbatchCreateModalVisible] = useState<boolean>(false);
+  const [batchCreateModalVisible, setBatchCreateModalVisible] = useState<boolean>(false);
+  // 批量创建短信通知 Modal 框
+  const [batchCreateMessageNoticeModalVisible, setBatchCreateMessageNoticeModalVisible] =
+    useState<boolean>(false);
   // 上传面试通知信息窗口 Modal 框
   const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
   // 审核信息 Modal 框
@@ -588,7 +587,7 @@ const RegistrationReview: React.FC = () => {
             return (
               <ProCard
                 title={
-                  <Space>
+                  <Space wrap={true}>
                     <Button
                       key={'review'}
                       type="primary"
@@ -614,31 +613,6 @@ const RegistrationReview: React.FC = () => {
                           新建并发送通知信息
                         </Button>
                       )}
-                    {record.reviewStatus === ReviewStatus.PASS &&
-                      record.registrationStatus === RegistrationStatus.INTERVIEW && (
-                        <Button
-                          icon={<SendOutlined />}
-                          key={'push'}
-                          type={'primary'}
-                          onClick={async () => {
-                            try {
-                              const res = await addMessagePushUsingPost({
-                                messageNoticeId: record?.messageNoticeVO?.id,
-                                pushType: PushType.SMS,
-                              });
-                              if (res.code === 0 && res.data) {
-                                message.success('短信发送成功');
-                              } else {
-                                message.error(`短信发送成功${res.message}`);
-                              }
-                            } catch (error: any) {
-                              message.error(`短信发送成功${error.message}`);
-                            }
-                          }}
-                        >
-                          发送面试短信
-                        </Button>
-                      )}
                     <Button
                       key={'file'}
                       onClick={async () => {
@@ -657,89 +631,77 @@ const RegistrationReview: React.FC = () => {
           },
         }}
         toolBarRender={() => [
-          <Button
-            icon={<CheckOutlined />}
-            type="primary"
-            key={'batch-review'}
-            onClick={async () => {
-              setBatchReviewModal(true);
-              actionRef.current?.reload();
-            }}
-          >
-            批量审核
-          </Button>,
-          <Button
-            icon={<PlusOutlined />}
-            type="primary"
-            key={'review'}
-            onClick={async () => {
-              setbatchCreateModalVisible(true);
-              actionRef.current?.reload();
-            }}
-          >
-            新建通知
-          </Button>,
-          <Button
-            type="primary"
-            icon={<SendOutlined />}
-            key={'message-push'}
-            onClick={async () => {
-              try {
-                const res = await addMessagePushByIdsUsingPost({
-                  messageNoticeIds: selectedRows.map((row) => row.messageNoticeVO?.id),
-                  pushType: PushType.SMS,
-                });
-                if (res.code === 0 && res.data) {
-                  message.success('消息发送成功');
-                } else {
-                  message.error(`消息发送失败${res.message}`);
-                }
-              } catch (error: any) {
-                message.error(`消息发送失败${error.message}`);
-              } finally {
+          <Space key={'tool'} wrap={true}>
+            <Button
+              icon={<CheckOutlined />}
+              type="primary"
+              key={'batch-review'}
+              onClick={async () => {
+                setBatchReviewModal(true);
                 actionRef.current?.reload();
-              }
-            }}
-          >
-            批量发送
-          </Button>,
-          <Button
-            type="primary"
-            icon={<UploadOutlined />}
-            key={'upload'}
-            onClick={() => {
-              setUploadModalVisible(true);
-            }}
-          >
-            批量上传面试通知信息
-          </Button>,
-          <Button
-            key={'download'}
-            icon={<DownloadOutlined />}
-            onClick={async () => {
-              await downloadFileByBatch();
-            }}
-          >
-            批量下载附件信息
-          </Button>,
-          <Button
-            key={'download'}
-            icon={<DownloadOutlined />}
-            onClick={async () => {
-              await downloadRegistrationFormByBatch();
-            }}
-          >
-            批量下载报名信息
-          </Button>,
-          <Button
-            key={'download'}
-            icon={<DownloadOutlined />}
-            onClick={async () => {
-              await downloadRegistrationFormInfo();
-            }}
-          >
-            下载报名信息
-          </Button>,
+              }}
+            >
+              批量审核
+            </Button>
+            <Button
+              icon={<PlusOutlined />}
+              type="primary"
+              key={'review'}
+              onClick={async () => {
+                setBatchCreateModalVisible(true);
+                actionRef.current?.reload();
+              }}
+            >
+              新建通知
+            </Button>
+            <Button
+              type="primary"
+              icon={<SendOutlined />}
+              key={'message-push'}
+              onClick={async () => {
+                setBatchCreateMessageNoticeModalVisible(true);
+              }}
+            >
+              批量发送
+            </Button>
+            <Button
+              type="primary"
+              icon={<UploadOutlined />}
+              key={'upload'}
+              onClick={() => {
+                setUploadModalVisible(true);
+              }}
+            >
+              批量上传面试通知信息
+            </Button>
+            <Button
+              key={'download'}
+              icon={<DownloadOutlined />}
+              onClick={async () => {
+                await downloadFileByBatch();
+              }}
+            >
+              批量下载附件信息
+            </Button>
+            <Button
+              key={'download'}
+              icon={<DownloadOutlined />}
+              onClick={async () => {
+                await downloadRegistrationFormByBatch();
+              }}
+            >
+              批量下载报名信息
+            </Button>
+            <Button
+              key={'download'}
+              icon={<DownloadOutlined />}
+              onClick={async () => {
+                await downloadRegistrationFormInfo();
+              }}
+            >
+              下载报名信息
+            </Button>
+          </Space>,
         ]}
         request={async (params, sort, filter) => {
           const sortField = 'update_time';
@@ -779,14 +741,14 @@ const RegistrationReview: React.FC = () => {
           registrationForm={currentRow ?? {}}
         />
       )}
-      {/*批量新建面试通知*/}
+      {/*批量新建通知*/}
       {batchCreateModalVisible && (
-        <BatchCreateMessageNoticeModal
+        <BatchCreateMessageModal
           visible={batchCreateModalVisible}
-          onCancel={() => setbatchCreateModalVisible(false)}
+          onCancel={() => setBatchCreateModalVisible(false)}
           selectedRowKeys={selectedRowKeys ?? []}
           onSubmit={async () => {
-            setbatchCreateModalVisible(false);
+            setBatchCreateModalVisible(false);
             setSelectedRowKeys([]);
             actionRef.current?.reload();
           }}
@@ -816,6 +778,20 @@ const RegistrationReview: React.FC = () => {
             setSelectedRowKeys([]);
             actionRef.current?.reload();
           }}
+        />
+      )}
+      {/*批量发送通知*/}
+      {batchCreateMessageNoticeModalVisible && (
+        <BatchCreateMessageNoticeModal
+          onCancel={() => {
+            setBatchCreateMessageNoticeModalVisible(false);
+          }}
+          visible={batchCreateMessageNoticeModalVisible}
+          onSubmit={async () => {
+            setBatchCreateMessageNoticeModalVisible(false);
+            actionRef.current?.reload();
+          }}
+          selectedRowKeys={selectedRowKeys}
         />
       )}
       {uploadModalVisible && (
