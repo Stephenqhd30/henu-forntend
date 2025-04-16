@@ -518,12 +518,6 @@ const RegistrationReview: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: '报名登记表文件',
-      dataIndex: 'registrationForm',
-      valueType: 'text',
-      hideInSearch: true,
-    },
-    {
       title: '审核状态',
       dataIndex: 'reviewStatus',
       valueType: 'select',
@@ -665,23 +659,13 @@ const RegistrationReview: React.FC = () => {
               批量发送
             </Button>
             <Button
-              type="primary"
-              icon={<UploadOutlined />}
-              key={'upload'}
-              onClick={() => {
-                setUploadModalVisible(true);
-              }}
-            >
-              批量上传面试通知信息
-            </Button>
-            <Button
               key={'download'}
               icon={<DownloadOutlined />}
               onClick={async () => {
                 await downloadFileByBatch();
               }}
             >
-              批量下载附件信息
+              下载选中行附件
             </Button>
             <Button
               key={'download'}
@@ -690,7 +674,7 @@ const RegistrationReview: React.FC = () => {
                 await downloadRegistrationFormByBatch();
               }}
             >
-              批量下载报名信息
+              下载选中行报名信息
             </Button>
             <Button
               key={'download'}
@@ -699,7 +683,7 @@ const RegistrationReview: React.FC = () => {
                 await downloadRegistrationFormInfo();
               }}
             >
-              下载报名信息
+              下载所有报名信息
             </Button>
           </Space>,
         ]}

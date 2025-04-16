@@ -1,14 +1,11 @@
-import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Select, Space, Tag, Typography } from 'antd';
-import React, { useRef, useState } from 'react';
-import { FILE_TYPE_EXCEL } from '@/constants';
-import { exportFileLogUsingGet } from '@/services/henu-backend/excelController';
-import {
-  deleteFileTypeUsingPost,
-  listFileTypeByPageUsingPost,
-} from '@/services/henu-backend/fileTypeController';
-import { CreateFileTypeModal, UpdateFileTypeModal } from '@/pages/File/FileTypeList/components';
+import {DownloadOutlined, PlusOutlined} from '@ant-design/icons';
+import {ActionType, ProColumns, ProTable} from '@ant-design/pro-components';
+import {Button, message, Popconfirm, Select, Space, Tag, Typography} from 'antd';
+import React, {useRef, useState} from 'react';
+import {FILE_TYPE_EXCEL} from '@/constants';
+import {exportFileTypeUsingGet} from '@/services/henu-backend/excelController';
+import {deleteFileTypeUsingPost, listFileTypeByPageUsingPost} from '@/services/henu-backend/fileTypeController';
+import {CreateFileTypeModal, UpdateFileTypeModal} from '@/pages/File/FileTypeList/components';
 
 /**
  * 删除节点
@@ -51,7 +48,7 @@ const FileTypeList: React.FC = () => {
    */
   const downloadFileTypeInfo = async () => {
     try {
-      const res = await exportFileLogUsingGet({
+      const res = await exportFileTypeUsingGet({
         responseType: 'blob',
       });
 
