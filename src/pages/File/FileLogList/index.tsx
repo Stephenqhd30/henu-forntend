@@ -2,7 +2,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import {FILE_LOG_EXCEL, OPERATION_LOG_EXCEL} from '@/constants';
+import { FILE_LOG_EXCEL } from '@/constants';
 import {
   deleteFileLogUsingPost,
   listFileLogVoByPageUsingPost,
@@ -168,8 +168,8 @@ const FileLogVOList: React.FC = () => {
           </Space>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = "create_time";
-          const sortOrder = sort?.[sortField] ?? "descend";
+          const sortField = 'create_time';
+          const sortOrder = sort?.[sortField] ?? 'descend';
           const { data, code } = await listFileLogVoByPageUsingPost({
             ...params,
             ...filter,

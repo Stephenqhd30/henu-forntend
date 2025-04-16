@@ -1,7 +1,7 @@
 import { ProColumns, ProTable } from '@ant-design/pro-components';
 import { message, Modal } from 'antd';
 import React from 'react';
-import {updateSchoolTypeUsingPost} from '@/services/henu-backend/schoolTypeController';
+import { updateSchoolTypeUsingPost } from '@/services/henu-backend/schoolTypeController';
 
 interface UpdateProps {
   oldData?: API.SchoolTypeVO;

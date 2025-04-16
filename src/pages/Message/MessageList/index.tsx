@@ -6,8 +6,6 @@ import {
   listMessageByPageUsingPost,
 } from '@/services/henu-backend/messageController';
 import { message, Popconfirm, Space, Typography } from 'antd';
-import CreateCadreTypeModal from '../../Job/CadreTypeList/components/CreateCadreTypeModal';
-import UpdateCadreTypeModal from '../../Job/CadreTypeList/components/UpdateCadreTypeModal';
 import { CreateMessageModal, UpdateMessageModal } from '@/pages/Message/MessageList/components';
 
 /**

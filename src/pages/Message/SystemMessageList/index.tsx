@@ -7,7 +7,8 @@ import { SYSTEM_MESSAGE_EXCEL } from '@/constants';
 import { PushStatus, pushStatusEnum } from '@/enums/PushStatusEnum';
 import {
   deleteSystemMessagesUsingPost,
-  listSystemMessagesByPageUsingPost, updateSystemMessagesUsingPost
+  listSystemMessagesByPageUsingPost,
+  updateSystemMessagesUsingPost,
 } from '@/services/henu-backend/systemMessagesController';
 import CreateSystemMessagesModal from '@/pages/Message/SystemMessageList/components/CreateSystemMessagesModal';
 import UpdateSystemMessagesModal from '@/pages/Message/SystemMessageList/components/UpdateSystemMessagesModal';
@@ -32,8 +33,6 @@ const handleDelete = async (row: API.DeleteRequest) => {
     message.error(`删除失败${error.message}, 请重试!`);
   }
 };
-
-
 
 /**
  * 系统消息管理列表

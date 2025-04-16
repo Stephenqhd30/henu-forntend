@@ -1,7 +1,7 @@
 import { ProColumns, ProTable } from '@ant-design/pro-components';
 import { message, Modal } from 'antd';
 import React from 'react';
-import {updateSystemMessagesUsingPost} from '@/services/henu-backend/systemMessagesController';
+import { updateSystemMessagesUsingPost } from '@/services/henu-backend/systemMessagesController';
 
 interface UpdateProps {
   oldData?: API.MessagePush;

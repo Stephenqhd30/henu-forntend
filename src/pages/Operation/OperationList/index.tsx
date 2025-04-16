@@ -115,8 +115,8 @@ const OperationLogList: React.FC = () => {
           </Space>,
         ]}
         request={async (params, sort, filter) => {
-          const sortField = "create_time";
-          const sortOrder = "descend";
+          const sortField = 'create_time';
+          const sortOrder = 'descend';
           const { data, code } = await listOperationLogByPageUsingPost({
             ...params,
             ...filter,

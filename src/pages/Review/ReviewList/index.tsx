@@ -37,7 +37,6 @@ import {
   DownloadOutlined,
   PlusOutlined,
   SendOutlined,
-  UploadOutlined,
 } from '@ant-design/icons';
 import { politicalStatusEnum } from '@/enums/PoliticalStatusEnum';
 import { REGISTRATION_EXCEL } from '@/constants';

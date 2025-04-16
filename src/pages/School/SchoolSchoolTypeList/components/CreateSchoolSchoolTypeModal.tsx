@@ -1,15 +1,7 @@
-import {
-  ModalForm,
-  ProColumns,
-  ProForm,
-  ProFormSelect,
-  ProFormText,
-  ProTable,
-} from '@ant-design/pro-components';
-import { message, Modal, Select } from 'antd';
+import { ModalForm, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
+import { message } from 'antd';
 import React from 'react';
 import { addSchoolSchoolTypeUsingPost } from '@/services/henu-backend/schoolSchoolTypeController';
-import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
 import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 
 interface CreateProps {

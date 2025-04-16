@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import React from 'react';
 import { ModalForm, ProForm, ProFormUploadDragger } from '@ant-design/pro-components';
-import {importSchoolSchoolTypeExcelUsingPost} from '@/services/henu-backend/excelController';
+import { importSchoolSchoolTypeExcelUsingPost } from '@/services/henu-backend/excelController';
 
 interface Props {
   onCancel: () => void;

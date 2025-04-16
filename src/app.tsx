@@ -1,10 +1,10 @@
-import {AvatarDropdown, Footer} from '@/components';
-import {history, Link, RunTimeLayoutConfig} from '@umijs/max';
+import { AvatarDropdown, Footer } from '@/components';
+import { history, Link, RunTimeLayoutConfig } from '@umijs/max';
 import React from 'react';
 import Settings from '../config/defaultSettings';
 import UnAccessiblePage from '@/pages/Exception/403';
-import {requestConfig} from '@/requestConfig';
-import {getLoginAdminUsingGet} from '@/services/henu-backend/adminController';
+import { requestConfig } from '@/requestConfig';
+import { getLoginAdminUsingGet } from '@/services/henu-backend/adminController';
 
 const loginPath = '/user/login';
 
@@ -13,10 +13,10 @@ const loginPath = '/user/login';
  * */
 export async function getInitialState(): Promise<InitialState> {
   const initialState = {
-    currentAdmin: undefined
+    currentAdmin: undefined,
   };
   // 如果不是登录页面，执行
-  const {location} = history;
+  const { location } = history;
   try {
     if (location.pathname !== loginPath) {
       const res = await getLoginAdminUsingGet();
@@ -25,22 +25,21 @@ export async function getInitialState(): Promise<InitialState> {
         localStorage.setItem('henu-token', res?.data?.token || '');
       }
     }
-  } catch (error: any) {
-  }
+  } catch (error: any) {}
   // 返回一个 Promise<InitialState> 类型的值
   return initialState;
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 // @ts-ignore
-export const layout: RunTimeLayoutConfig = ({initialState}) => {
+export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
     avatarProps: {
       src: undefined,
       title: initialState?.currentAdmin?.adminName,
       render: () => {
-        return <AvatarDropdown/>;
-      }
+        return <AvatarDropdown />;
+      },
     },
     menuItemRender: (menuItemProps, defaultDom) => {
       if (menuItemProps.isUrl || !menuItemProps.path) {
@@ -52,7 +51,7 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
           <div
             style={{
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             {menuItemProps.pro_layout_parentKeys &&
@@ -63,9 +62,9 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
         </Link>
       );
     },
-    footerRender: () => <Footer/>,
+    footerRender: () => <Footer />,
     onPageChange: () => {
-      const {location} = history;
+      const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentAdmin && location.pathname !== loginPath) {
         history.replace(loginPath);
@@ -73,8 +72,8 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
     },
     menuHeaderRender: undefined,
     // 自定义 403 页面
-    unAccessible: <UnAccessiblePage/>,
-    ...Settings
+    unAccessible: <UnAccessiblePage />,
+    ...Settings,
   };
 };
 

@@ -9,7 +9,7 @@ import {
   listDeadlineByPageUsingPost,
 } from '@/services/henu-backend/deadlineController';
 import { CreateDeadlineModal, UpdateDeadlineModal } from '@/pages/Job/DeadlineList/components';
-import {listJobByPageUsingPost, listJobVoByPageUsingPost} from '@/services/henu-backend/jobController';
+import { listJobByPageUsingPost } from '@/services/henu-backend/jobController';
 
 /**
  * 删除节点

@@ -6,7 +6,7 @@ import {
   exportSchoolTypeTemplateUsingGet,
   exportSchoolTypeUsingGet,
 } from '@/services/henu-backend/excelController';
-import { EXPORT_SCHOOL_TYPE_EXCEL, SCHOOL_TYPE_EXCEL} from '@/constants';
+import { EXPORT_SCHOOL_TYPE_EXCEL, SCHOOL_TYPE_EXCEL } from '@/constants';
 import {
   deleteSchoolTypeUsingPost,
   listSchoolTypeByPageUsingPost,

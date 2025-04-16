@@ -1,9 +1,8 @@
-import {ModalForm, ProColumns, ProForm, ProFormSelect, ProFormText, ProTable} from '@ant-design/pro-components';
-import {message, Modal, Select} from 'antd';
+import { ModalForm, ProForm, ProFormSelect } from '@ant-design/pro-components';
+import { message } from 'antd';
 import React from 'react';
 import { updateSchoolSchoolTypeUsingPost } from '@/services/henu-backend/schoolSchoolTypeController';
-import {UserGender, userGenderEnum} from '@/enums/UserGenderEnum';
-import {listSchoolTypeVoByPageUsingPost} from '@/services/henu-backend/schoolTypeController';
+import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 
 interface UpdateProps {
   oldData?: API.SchoolSchoolTypeVO;

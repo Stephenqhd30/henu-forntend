@@ -1,7 +1,7 @@
 import { ProColumns, ProTable } from '@ant-design/pro-components';
 import { message, Modal } from 'antd';
 import React from 'react';
-import {addSchoolUsingPost} from '@/services/henu-backend/schoolController';
+import { addSchoolUsingPost } from '@/services/henu-backend/schoolController';
 
 interface CreateProps {
   onCancel: () => void;
@@ -44,7 +44,13 @@ const handleAdd = async (fields: API.SchoolAddRequest) => {
 const CreateSchoolModal: React.FC<CreateProps> = (props) => {
   const { visible, onSubmit, onCancel, columns } = props;
   return (
-    <Modal destroyOnClose title={'创建高校信息'} onCancel={() => onCancel?.()} open={visible} footer>
+    <Modal
+      destroyOnClose
+      title={'创建高校信息'}
+      onCancel={() => onCancel?.()}
+      open={visible}
+      footer
+    >
       <ProTable
         columns={columns}
         onSubmit={async (values: API.SchoolAddRequest) => {

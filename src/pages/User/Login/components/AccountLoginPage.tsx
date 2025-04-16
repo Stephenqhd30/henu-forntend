@@ -1,6 +1,6 @@
-import {LockOutlined, UserOutlined} from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React from 'react';
-import {ProFormText} from '@ant-design/pro-components';
+import { ProFormText } from '@ant-design/pro-components';
 
 /**
  * 登录页面
@@ -13,28 +13,28 @@ const AccountLoginPage: React.FC = () => (
       name="adminNumber"
       fieldProps={{
         size: 'large',
-        prefix: <UserOutlined/>
+        prefix: <UserOutlined />,
       }}
       placeholder={'请输入账号'}
       rules={[
         {
           required: true,
-          message: '请输入合法账号！'
-        }
+          message: '请输入合法账号！',
+        },
       ]}
     />
     <ProFormText.Password
       name="adminPassword"
       fieldProps={{
         size: 'large',
-        prefix: <LockOutlined/>
+        prefix: <LockOutlined />,
       }}
       placeholder={'请输入密码'}
       rules={[
         {
           required: true,
-          message: '请输入合法身份密码！'
-        }
+          message: '请输入合法身份密码！',
+        },
       ]}
     />
   </>

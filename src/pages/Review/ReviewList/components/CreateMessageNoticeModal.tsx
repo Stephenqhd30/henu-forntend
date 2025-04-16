@@ -94,7 +94,7 @@ const CreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
             return [];
           }
         }}
-        name={"content"}
+        name={'content'}
         placeholder="请选择通知内容"
         style={{ width: '100%' }}
       />

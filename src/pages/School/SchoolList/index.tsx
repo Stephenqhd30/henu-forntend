@@ -1,11 +1,5 @@
 import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import {
-  ActionType,
-  PageContainer,
-  ProColumns,
-  ProFormSelect,
-  ProTable,
-} from '@ant-design/pro-components';
+import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import {
@@ -20,7 +14,6 @@ import {
   exportSchoolUsingGet,
 } from '@/services/henu-backend/excelController';
 import { EXPORT_SCHOOL_EXCEL, SCHOOL_EXCEL } from '@/constants';
-import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 
 /**
  * 删除节点

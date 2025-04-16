@@ -1,7 +1,6 @@
 ﻿import type { RequestOptions } from '@@/plugin-request/request';
 import type { RequestConfig } from '@umijs/max';
-import {BASE_URL, PRODUCTION_URL} from '@/constants';
-
+import { BASE_URL, PRODUCTION_URL } from '@/constants';
 
 // 与后端约定的响应数据格式
 interface ResponseStructure {
@@ -28,7 +27,7 @@ export const requestConfig: RequestConfig = {
         config.headers = {
           ...config.headers,
           Authorization: `Bearer ${token}`,
-        }
+        };
       }
       return config;
     },
