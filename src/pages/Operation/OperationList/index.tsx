@@ -16,11 +16,11 @@ const OperationLogList: React.FC = () => {
    * 下载操作日志信息信息
    */
   const downloadOperationLogInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportOperationLogUsingGet({
         responseType: 'blob',
       });
-
       // 创建 Blob 对象
       // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
@@ -35,6 +35,8 @@ const OperationLogList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
 

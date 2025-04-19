@@ -29,7 +29,6 @@ import { EducationStage, educationStageEnum } from '@/enums/EducationalStageEnum
 import {
   downloadFileByBatchUsingPost,
   downloadFileByUserIdUsingPost,
-  downloadFileUsingGet,
 } from '@/services/henu-backend/fileLogController';
 import { RegistrationStatus, registrationStatusEnum } from '@/enums/RegistrationStatusEnum';
 import {

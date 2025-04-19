@@ -19,11 +19,11 @@ const RegistrationList: React.FC = () => {
    * 下载报名登记表信息
    */
   const downloadRegistrationFormInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportRegistrationFormUsingGet({
         responseType: 'blob',
       });
-
       // 创建 Blob 对象
       // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
@@ -38,6 +38,8 @@ const RegistrationList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
   /**

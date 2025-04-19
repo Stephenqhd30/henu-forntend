@@ -16,6 +16,7 @@ const FamilyList: React.FC = () => {
    * 下载家庭关系信息
    */
   const downloadFamilyInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportFamilyUsingGet({
         responseType: 'blob',
@@ -34,6 +35,8 @@ const FamilyList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
 

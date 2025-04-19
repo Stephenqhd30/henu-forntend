@@ -1,6 +1,6 @@
 import { DefaultFooter } from '@ant-design/pro-components';
 import React from 'react';
-import { HEUN_DEFAULT_MESSAGE, HENU_IPC, HENU_URL } from '@/constants';
+import { HENU_IPC, HENU_URL, HEUN_DEFAULT_MESSAGE } from '@/constants';
 
 const Footer: React.FC = () => {
   const defaultMessage = HEUN_DEFAULT_MESSAGE;

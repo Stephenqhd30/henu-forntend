@@ -46,6 +46,7 @@ const UserList: React.FC = () => {
    * 下载用户信息
    */
   const downloadUserInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportUserUsingGet({
         responseType: 'blob',
@@ -65,6 +66,8 @@ const UserList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
   /**

@@ -50,11 +50,11 @@ const FileTypeList: React.FC = () => {
    * 下载文件上传日志信息
    */
   const downloadFileTypeInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportFileTypeUsingGet({
         responseType: 'blob',
       });
-
       // 创建 Blob 对象
       // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
@@ -69,6 +69,8 @@ const FileTypeList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
 

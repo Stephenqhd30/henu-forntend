@@ -17,11 +17,11 @@ const ReviewLogList: React.FC = () => {
    * 下载审核日志信息
    */
   const downloadReviewLogInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportReviewLogUsingGet({
         responseType: 'blob',
       });
-
       // 创建 Blob 对象
       // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
@@ -36,6 +36,8 @@ const ReviewLogList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
 

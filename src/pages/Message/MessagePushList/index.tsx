@@ -44,11 +44,11 @@ const MessagePushList: React.FC = () => {
    * 下载短信推送信息
    */
   const downloadMessagePushInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportMessagePushUsingGet({
         responseType: 'blob',
       });
-
       // 创建 Blob 对象
       // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
@@ -63,6 +63,8 @@ const MessagePushList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
   /**

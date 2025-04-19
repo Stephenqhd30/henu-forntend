@@ -47,11 +47,11 @@ const FileLogVOList: React.FC = () => {
    * 下载文件上传日志信息
    */
   const downloadFileLogVOInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportFileLogUsingGet({
         responseType: 'blob',
       });
-
       // 创建 Blob 对象
       // @ts-ignore
       const url = window.URL.createObjectURL(new Blob([res]));
@@ -66,6 +66,8 @@ const FileLogVOList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
 
@@ -73,6 +75,7 @@ const FileLogVOList: React.FC = () => {
    * 下载的文件（ZIP）
    */
   const downloadFile = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const response = await downloadFileUsingGet({
         responseType: 'blob',
@@ -101,6 +104,8 @@ const FileLogVOList: React.FC = () => {
       message.success('文件下载成功');
     } catch (error: any) {
       message.error('文件下载失败: ' + (error?.message || '未知错误'));
+    } finally {
+      hide();
     }
   };
 

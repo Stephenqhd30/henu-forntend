@@ -60,6 +60,7 @@ const SchoolTypeList: React.FC = () => {
    * 下载高校类型信息
    */
   const downloadSchoolTypeInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportSchoolTypeUsingGet({
         responseType: 'blob',
@@ -78,6 +79,8 @@ const SchoolTypeList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
 
