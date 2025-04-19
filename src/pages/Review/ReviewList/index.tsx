@@ -246,14 +246,12 @@ const RegistrationReview: React.FC = () => {
       hideInForm: true,
       hideInTable: true,
       hideInSetting: true,
+      colSize: 2,
       renderFormItem: (_, { value }, form) => {
         const parsedValue = Array.isArray(value) ? value : [];
         return (
           <ProFormSelect
             mode="multiple"
-            fieldProps={{
-              style: { width: '100%', minWidth: 240 },
-            }}
             // @ts-ignore
             value={parsedValue}
             request={async () => {
@@ -276,9 +274,43 @@ const RegistrationReview: React.FC = () => {
       },
     },
     {
+      title: '岗位信息',
+      dataIndex: 'jobId',
+      valueType: 'select',
+      colSize: 2,
+      render: (_, record) => <span>{record.jobVO?.jobName}</span>,
+      renderFormItem: (_, { value }, form) => {
+        return (
+          <ProFormSelect
+            mode="single"
+            fieldProps={{
+              style: { width: '100%', minWidth: 240 },
+            }}
+            initialValue={value}
+            onChange={(val) => form.setFieldsValue({ jobId: val })}
+            request={async () => {
+              const res = await listJobByPageUsingPost({});
+              if (res.code === 0 && res.data) {
+                return (
+                  res.data.records?.map((job) => ({
+                    label: job.jobName,
+                    value: job.id,
+                  })) ?? []
+                );
+              } else {
+                return [];
+              }
+            }}
+            placeholder="请选择岗位"
+          />
+        );
+      },
+    },
+    {
       title: '主要学生干部经历',
       dataIndex: 'studentLeaders',
       valueType: 'select',
+      colSize: 2,
       hideInForm: true,
       hideInTable: true,
       hideInSetting: true,
@@ -367,38 +399,6 @@ const RegistrationReview: React.FC = () => {
         width: 64,
       },
       hideInSearch: true,
-    },
-    {
-      title: '岗位信息',
-      dataIndex: 'jobId',
-      valueType: 'select',
-      render: (_, record) => <span>{record.jobVO?.jobName}</span>,
-      renderFormItem: (_, { value }, form) => {
-        return (
-          <ProFormSelect
-            mode="single"
-            fieldProps={{
-              style: { width: '100%', minWidth: 240 },
-            }}
-            initialValue={value}
-            onChange={(val) => form.setFieldsValue({ jobId: val })}
-            request={async () => {
-              const res = await listJobByPageUsingPost({});
-              if (res.code === 0 && res.data) {
-                return (
-                  res.data.records?.map((job) => ({
-                    label: job.jobName,
-                    value: job.id,
-                  })) ?? []
-                );
-              } else {
-                return [];
-              }
-            }}
-            placeholder="请选择岗位"
-          />
-        );
-      },
     },
     {
       title: '工作经历',
