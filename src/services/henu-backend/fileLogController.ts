@@ -17,17 +17,10 @@ export async function deleteFileLogUsingPost(
   });
 }
 
-/** downloadFile POST /api/file/download */
-export async function downloadFileUsingPost(
-  body: API.DownloadFileRequest,
-  options?: { [key: string]: any },
-) {
+/** downloadFile GET /api/file/download */
+export async function downloadFileUsingGet(options?: { [key: string]: any }) {
   return request<any>('/api/file/download', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
+    method: 'GET',
     ...(options || {}),
   });
 }
@@ -38,6 +31,21 @@ export async function downloadFileByBatchUsingPost(
   options?: { [key: string]: any },
 ) {
   return request<any>('/api/file/download/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** downloadFileByUserId POST /api/file/download/user */
+export async function downloadFileByUserIdUsingPost(
+  body: API.DownloadFileRequest,
+  options?: { [key: string]: any },
+) {
+  return request<any>('/api/file/download/user', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

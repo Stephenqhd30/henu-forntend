@@ -28,7 +28,8 @@ import { listJobByPageUsingPost } from '@/services/henu-backend/jobController';
 import { EducationStage, educationStageEnum } from '@/enums/EducationalStageEnum';
 import {
   downloadFileByBatchUsingPost,
-  downloadFileUsingPost,
+  downloadFileByUserIdUsingPost,
+  downloadFileUsingGet,
 } from '@/services/henu-backend/fileLogController';
 import { RegistrationStatus, registrationStatusEnum } from '@/enums/RegistrationStatusEnum';
 import {
@@ -77,9 +78,10 @@ const RegistrationReview: React.FC = () => {
    * 下载用户上传的文件（ZIP）
    * @param userId
    */
-  const downloadFile = async (userId: any) => {
+  const downloadFileByUserId = async (userId: any) => {
+    const hide = message.loading('文件下载中....');
     try {
-      const response = await downloadFileUsingPost(
+      const response = await downloadFileByUserIdUsingPost(
         { userId: userId },
         {
           responseType: 'blob',
@@ -109,6 +111,8 @@ const RegistrationReview: React.FC = () => {
       message.success('文件下载成功');
     } catch (error: any) {
       message.error('文件下载失败: ' + (error?.message || '未知错误'));
+    } finally {
+      hide();
     }
   };
 
@@ -116,6 +120,7 @@ const RegistrationReview: React.FC = () => {
    * 批量下载用户上传的文件（ZIP）
    */
   const downloadFileByBatch = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const response = await downloadFileByBatchUsingPost(
         { userIds: selectedRows.map((row) => row.userId) },
@@ -147,6 +152,8 @@ const RegistrationReview: React.FC = () => {
       message.success('文件下载成功');
     } catch (error: any) {
       message.error('文件下载失败: ' + (error?.message || '未知错误'));
+    } finally {
+      hide();
     }
   };
 
@@ -154,6 +161,7 @@ const RegistrationReview: React.FC = () => {
    * 下载报名登记表信息
    */
   const downloadRegistrationFormInfo = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportRegistrationFormUsingGet({
         responseType: 'blob',
@@ -173,6 +181,8 @@ const RegistrationReview: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
 
@@ -180,6 +190,7 @@ const RegistrationReview: React.FC = () => {
    * 批量下载报名登记表信息
    */
   const downloadRegistrationFormByBatch = async () => {
+    const hide = message.loading('文件下载中....');
     try {
       const res = await exportRegistrationFormByUserIdUsingPost(
         {
@@ -203,6 +214,8 @@ const RegistrationReview: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    } finally {
+      hide();
     }
   };
 
@@ -609,7 +622,7 @@ const RegistrationReview: React.FC = () => {
                     <Button
                       key={'file'}
                       onClick={async () => {
-                        await downloadFile(record?.userId);
+                        await downloadFileByUserId(record?.userId);
                       }}
                       icon={<ArrowDownOutlined />}
                     >

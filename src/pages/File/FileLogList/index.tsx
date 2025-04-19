@@ -1,10 +1,11 @@
-import { DownloadOutlined } from '@ant-design/icons';
+import { ArrowDownOutlined, DownloadOutlined } from '@ant-design/icons';
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { FILE_LOG_EXCEL } from '@/constants';
 import {
   deleteFileLogUsingPost,
+  downloadFileUsingGet,
   listFileLogVoByPageUsingPost,
 } from '@/services/henu-backend/fileLogController';
 import { exportFileLogUsingGet } from '@/services/henu-backend/excelController';
@@ -65,6 +66,41 @@ const FileLogVOList: React.FC = () => {
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
       message.error('导出失败: ' + error.message);
+    }
+  };
+
+  /**
+   * 下载的文件（ZIP）
+   */
+  const downloadFile = async () => {
+    try {
+      const response = await downloadFileUsingGet({
+        responseType: 'blob',
+        getResponse: true,
+      });
+      const blob = new Blob([response.data], { type: 'application/zip' });
+      // 从响应头中获取文件名
+      const disposition = response.headers['content-disposition'];
+      let fileName = '附件信息.zip';
+      if (disposition) {
+        const match = disposition.match(/filename="?([^"]+)"?/);
+        if (match && match[1]) {
+          fileName = decodeURIComponent(match[1]);
+        }
+      }
+      // 创建并点击下载链接
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      // 释放 URL 对象
+      window.URL.revokeObjectURL(url);
+      message.success('文件下载成功');
+    } catch (error: any) {
+      message.error('文件下载失败: ' + (error?.message || '未知错误'));
     }
   };
 
@@ -164,6 +200,15 @@ const FileLogVOList: React.FC = () => {
               }}
             >
               导出文件上传日志
+            </Button>
+            <Button
+              key={'file'}
+              onClick={async () => {
+                await downloadFile();
+              }}
+              icon={<ArrowDownOutlined />}
+            >
+              下载附件信息
             </Button>
           </Space>,
         ]}

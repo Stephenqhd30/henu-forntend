@@ -23,7 +23,6 @@ import * as schoolSchoolTypeController from './schoolSchoolTypeController';
 import * as schoolTypeController from './schoolTypeController';
 import * as systemMessagesController from './systemMessagesController';
 import * as userController from './userController';
-
 export default {
   adminController,
   cadreTypeController,
