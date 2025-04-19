@@ -88,7 +88,7 @@ const FileLogVOList: React.FC = () => {
     // 模拟进度增长
     const interval = setInterval(() => {
       if (percent < 95) {
-        percent += Math.floor(Math.random() * 10) + 5;
+        percent += Math.floor(Math.random() * 5) + 5;
         if (percent > 95) percent = 95;
         notification.open({
           key,
