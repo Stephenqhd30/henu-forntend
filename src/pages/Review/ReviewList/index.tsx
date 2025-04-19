@@ -8,7 +8,7 @@ import {
   ProFormSelect,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Select, Space, Tag } from 'antd';
+import { Button, message, notification, Progress, Select, Space, Tag } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import {
   BatchCreateMessageModal,
@@ -78,7 +78,38 @@ const RegistrationReview: React.FC = () => {
    * @param userId
    */
   const downloadFileByUserId = async (userId: any) => {
-    const hide = message.loading('文件下载中....');
+    const key = 'downloadFileByUserId';
+    let percent = 0;
+    let downloadCompleted = false;
+    // 显示初始通知
+    notification.open({
+      key,
+      message: '文件下载中...',
+      description: <Progress percent={percent} status="active" />,
+      duration: 0,
+    });
+    // 模拟进度增长
+    const interval = setInterval(() => {
+      if (percent < 95) {
+        percent += Math.floor(Math.random() * 10) + 5;
+        if (percent > 95) percent = 95;
+        notification.open({
+          key,
+          message: '文件下载中...',
+          description: <Progress percent={percent} status="active" />,
+          duration: 0,
+        });
+      } else if (downloadCompleted) {
+        percent = 100;
+        clearInterval(interval);
+        notification.open({
+          key,
+          message: '文件下载完成',
+          description: <Progress percent={percent} status="success" />,
+          duration: 2,
+        });
+      }
+    }, 50);
     try {
       const response = await downloadFileByUserIdUsingPost(
         { userId: userId },
@@ -107,11 +138,15 @@ const RegistrationReview: React.FC = () => {
       link.remove();
       // 释放 URL 对象
       window.URL.revokeObjectURL(url);
-      message.success('文件下载成功');
+      downloadCompleted = true;
     } catch (error: any) {
-      message.error('文件下载失败: ' + (error?.message || '未知错误'));
-    } finally {
-      hide();
+      clearInterval(interval);
+      notification.open({
+        key,
+        message: '文件下载失败: ' + (error?.message || '未知错误'),
+        description: <Progress percent={100} status="exception" />,
+        duration: 2,
+      });
     }
   };
 
@@ -119,7 +154,38 @@ const RegistrationReview: React.FC = () => {
    * 批量下载用户上传的文件（ZIP）
    */
   const downloadFileByBatch = async () => {
-    const hide = message.loading('文件下载中....');
+    const key = 'downloadFileByBatch';
+    let percent = 0;
+    let downloadCompleted = false;
+    // 显示初始通知
+    notification.open({
+      key,
+      message: '文件下载中...',
+      description: <Progress percent={percent} status="active" />,
+      duration: 0,
+    });
+    // 模拟进度增长
+    const interval = setInterval(() => {
+      if (percent < 95) {
+        percent += Math.floor(Math.random() * 10) + 5;
+        if (percent > 95) percent = 95;
+        notification.open({
+          key,
+          message: '文件下载中...',
+          description: <Progress percent={percent} status="active" />,
+          duration: 0,
+        });
+      } else if (downloadCompleted) {
+        percent = 100;
+        clearInterval(interval);
+        notification.open({
+          key,
+          message: '文件下载完成',
+          description: <Progress percent={percent} status="success" />,
+          duration: 2,
+        });
+      }
+    }, 100);
     try {
       const response = await downloadFileByBatchUsingPost(
         { userIds: selectedRows.map((row) => row.userId) },
@@ -129,7 +195,6 @@ const RegistrationReview: React.FC = () => {
         },
       );
       const blob = new Blob([response.data], { type: 'application/zip' });
-      // 从响应头中获取文件名
       const disposition = response.headers['content-disposition'];
       let fileName = '附件信息.zip';
       if (disposition) {
@@ -138,7 +203,6 @@ const RegistrationReview: React.FC = () => {
           fileName = decodeURIComponent(match[1]);
         }
       }
-      // 创建并点击下载链接
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -146,13 +210,16 @@ const RegistrationReview: React.FC = () => {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      // 释放 URL 对象
       window.URL.revokeObjectURL(url);
-      message.success('文件下载成功');
+      downloadCompleted = true;
     } catch (error: any) {
-      message.error('文件下载失败: ' + (error?.message || '未知错误'));
-    } finally {
-      hide();
+      clearInterval(interval);
+      notification.open({
+        key,
+        message: '文件下载失败: ' + (error?.message || '未知错误'),
+        description: <Progress percent={100} status="exception" />,
+        duration: 2,
+      });
     }
   };
 
@@ -674,6 +741,7 @@ const RegistrationReview: React.FC = () => {
               icon={<DownloadOutlined />}
               onClick={async () => {
                 await downloadFileByBatch();
+                setSelectedRowKeys([]);
               }}
             >
               下载选中行附件
@@ -683,6 +751,7 @@ const RegistrationReview: React.FC = () => {
               icon={<DownloadOutlined />}
               onClick={async () => {
                 await downloadRegistrationFormByBatch();
+                setSelectedRowKeys([]);
               }}
             >
               下载选中行报名信息
@@ -745,7 +814,6 @@ const RegistrationReview: React.FC = () => {
           selectedRowKeys={selectedRowKeys ?? []}
           onSubmit={async () => {
             setBatchCreateModalVisible(false);
-            setSelectedRowKeys([]);
             actionRef.current?.reload();
           }}
         />
@@ -785,6 +853,7 @@ const RegistrationReview: React.FC = () => {
           visible={batchCreateMessageNoticeModalVisible}
           onSubmit={async () => {
             setBatchCreateMessageNoticeModalVisible(false);
+            setSelectedRowKeys([]);
             actionRef.current?.reload();
           }}
           selectedRowKeys={selectedRowKeys}

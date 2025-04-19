@@ -1,6 +1,6 @@
 import { ArrowDownOutlined, DownloadOutlined } from '@ant-design/icons';
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Space, Typography } from 'antd';
+import { Button, message, notification, Popconfirm, Progress, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { FILE_LOG_EXCEL } from '@/constants';
 import {
@@ -75,7 +75,38 @@ const FileLogVOList: React.FC = () => {
    * 下载的文件（ZIP）
    */
   const downloadFile = async () => {
-    const hide = message.loading('文件下载中....');
+    const key = 'downloadFile';
+    let percent = 0;
+    let downloadCompleted = false;
+    // 显示初始通知
+    notification.open({
+      key,
+      message: '文件下载中...',
+      description: <Progress percent={percent} status="active" />,
+      duration: 0,
+    });
+    // 模拟进度增长
+    const interval = setInterval(() => {
+      if (percent < 95) {
+        percent += Math.floor(Math.random() * 10) + 5;
+        if (percent > 95) percent = 95;
+        notification.open({
+          key,
+          message: '文件下载中...',
+          description: <Progress percent={percent} status="active" />,
+          duration: 0,
+        });
+      } else if (downloadCompleted) {
+        percent = 100;
+        clearInterval(interval);
+        notification.open({
+          key,
+          message: '文件下载完成',
+          description: <Progress percent={percent} status="success" />,
+          duration: 2,
+        });
+      }
+    }, 200);
     try {
       const response = await downloadFileUsingGet({
         responseType: 'blob',
@@ -101,11 +132,15 @@ const FileLogVOList: React.FC = () => {
       link.remove();
       // 释放 URL 对象
       window.URL.revokeObjectURL(url);
-      message.success('文件下载成功');
+      downloadCompleted = true;
     } catch (error: any) {
-      message.error('文件下载失败: ' + (error?.message || '未知错误'));
-    } finally {
-      hide();
+      clearInterval(interval);
+      notification.open({
+        key,
+        message: '文件下载失败: ' + (error?.message || '未知错误'),
+        description: <Progress percent={100} status="exception" />,
+        duration: 2,
+      });
     }
   };
 
