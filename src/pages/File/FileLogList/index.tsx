@@ -106,7 +106,7 @@ const FileLogVOList: React.FC = () => {
           duration: 2,
         });
       }
-    }, 200);
+    }, 2000);
     try {
       const response = await downloadFileUsingGet({
         responseType: 'blob',

@@ -185,7 +185,7 @@ const RegistrationReview: React.FC = () => {
           duration: 2,
         });
       }
-    }, 100);
+    }, 500);
     try {
       const response = await downloadFileByBatchUsingPost(
         { userIds: selectedRows.map((row) => row.userId) },
