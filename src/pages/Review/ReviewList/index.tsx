@@ -87,6 +87,7 @@ const RegistrationReview: React.FC = () => {
       message: '文件下载中...',
       description: <Progress percent={percent} status="active" />,
       duration: 0,
+      placement: "top",
     });
     // 模拟进度增长
     const interval = setInterval(() => {
@@ -98,6 +99,7 @@ const RegistrationReview: React.FC = () => {
           message: '文件下载中...',
           description: <Progress percent={percent} status="active" />,
           duration: 0,
+          placement: "top",
         });
       } else if (downloadCompleted) {
         percent = 100;
@@ -107,6 +109,7 @@ const RegistrationReview: React.FC = () => {
           message: '文件下载完成',
           description: <Progress percent={percent} status="success" />,
           duration: 2,
+          placement: "top",
         });
       }
     }, 50);
@@ -146,6 +149,7 @@ const RegistrationReview: React.FC = () => {
         message: '文件下载失败: ' + (error?.message || '未知错误'),
         description: <Progress percent={100} status="exception" />,
         duration: 2,
+        placement: "top",
       });
     }
   };
@@ -163,6 +167,7 @@ const RegistrationReview: React.FC = () => {
       message: '文件下载中...',
       description: <Progress percent={percent} status="active" />,
       duration: 0,
+      placement: "top",
     });
     // 模拟进度增长
     const interval = setInterval(() => {
@@ -174,6 +179,7 @@ const RegistrationReview: React.FC = () => {
           message: '文件下载中...',
           description: <Progress percent={percent} status="active" />,
           duration: 0,
+          placement: "top",
         });
       } else if (downloadCompleted) {
         percent = 100;
@@ -183,6 +189,7 @@ const RegistrationReview: React.FC = () => {
           message: '文件下载完成',
           description: <Progress percent={percent} status="success" />,
           duration: 2,
+          placement: "top",
         });
       }
     }, 500);
@@ -219,6 +226,7 @@ const RegistrationReview: React.FC = () => {
         message: '文件下载失败: ' + (error?.message || '未知错误'),
         description: <Progress percent={100} status="exception" />,
         duration: 2,
+        placement: "top",
       });
     }
   };
