@@ -23,8 +23,8 @@ import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/r
 import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
 import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
 import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
-import { listCadreTypeByPageUsingPost } from '@/services/henu-backend/cadreTypeController';
-import { listJobByPageUsingPost } from '@/services/henu-backend/jobController';
+import { listCadreTypeVoByPageUsingPost } from '@/services/henu-backend/cadreTypeController';
+import { listJobVoByPageUsingPost } from '@/services/henu-backend/jobController';
 import { EducationStage, educationStageEnum } from '@/enums/EducationalStageEnum';
 import {
   downloadFileByBatchUsingPost,
@@ -87,7 +87,7 @@ const RegistrationReview: React.FC = () => {
       message: '文件下载中...',
       description: <Progress percent={percent} status="active" />,
       duration: 0,
-      placement: "top",
+      placement: 'top',
     });
     // 模拟进度增长
     const interval = setInterval(() => {
@@ -99,7 +99,7 @@ const RegistrationReview: React.FC = () => {
           message: '文件下载中...',
           description: <Progress percent={percent} status="active" />,
           duration: 0,
-          placement: "top",
+          placement: 'top',
         });
       } else if (downloadCompleted) {
         percent = 100;
@@ -109,7 +109,7 @@ const RegistrationReview: React.FC = () => {
           message: '文件下载完成',
           description: <Progress percent={percent} status="success" />,
           duration: 2,
-          placement: "top",
+          placement: 'top',
         });
       }
     }, 50);
@@ -149,7 +149,7 @@ const RegistrationReview: React.FC = () => {
         message: '文件下载失败: ' + (error?.message || '未知错误'),
         description: <Progress percent={100} status="exception" />,
         duration: 2,
-        placement: "top",
+        placement: 'top',
       });
     }
   };
@@ -167,7 +167,7 @@ const RegistrationReview: React.FC = () => {
       message: '文件下载中...',
       description: <Progress percent={percent} status="active" />,
       duration: 0,
-      placement: "top",
+      placement: 'top',
     });
     // 模拟进度增长
     const interval = setInterval(() => {
@@ -179,7 +179,7 @@ const RegistrationReview: React.FC = () => {
           message: '文件下载中...',
           description: <Progress percent={percent} status="active" />,
           duration: 0,
-          placement: "top",
+          placement: 'top',
         });
       } else if (downloadCompleted) {
         percent = 100;
@@ -189,7 +189,7 @@ const RegistrationReview: React.FC = () => {
           message: '文件下载完成',
           description: <Progress percent={percent} status="success" />,
           duration: 2,
-          placement: "top",
+          placement: 'top',
         });
       }
     }, 500);
@@ -226,7 +226,7 @@ const RegistrationReview: React.FC = () => {
         message: '文件下载失败: ' + (error?.message || '未知错误'),
         description: <Progress percent={100} status="exception" />,
         duration: 2,
-        placement: "top",
+        placement: 'top',
       });
     }
   };
@@ -376,7 +376,7 @@ const RegistrationReview: React.FC = () => {
             initialValue={value}
             onChange={(val) => form.setFieldsValue({ jobId: val })}
             request={async () => {
-              const res = await listJobByPageUsingPost({});
+              const res = await listJobVoByPageUsingPost({});
               if (res.code === 0 && res.data) {
                 return (
                   res.data.records?.map((job) => ({
@@ -411,7 +411,7 @@ const RegistrationReview: React.FC = () => {
             initialValue={value}
             onChange={(val) => form.setFieldsValue({ studentLeaders: val })}
             request={async () => {
-              const res = await listCadreTypeByPageUsingPost({});
+              const res = await listCadreTypeVoByPageUsingPost({});
               if (res.code === 0 && res.data) {
                 return (
                   res.data.records?.map((cadreType) => ({
@@ -444,6 +444,7 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'politicalStatus',
       valueType: 'select',
       valueEnum: politicalStatusEnum,
+      hideInSearch: true,
     },
     {
       title: '性别',
@@ -521,7 +522,7 @@ const RegistrationReview: React.FC = () => {
             initialValue={value}
             onChange={(val) => form.setFieldsValue({ studentLeaders: val })}
             request={async () => {
-              const res = await listCadreTypeByPageUsingPost({});
+              const res = await listCadreTypeVoByPageUsingPost({});
               if (res.code === 0 && res.data) {
                 return (
                   res.data.records?.map((cadreType) => ({
