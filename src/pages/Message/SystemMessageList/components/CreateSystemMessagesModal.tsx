@@ -1,13 +1,13 @@
 import { ProColumns, ProTable } from '@ant-design/pro-components';
 import { message, Modal } from 'antd';
 import React from 'react';
-import { addMessagePushUsingPost } from '@/services/henu-backend/messagePushController';
+import { addSystemMessagesUsingPost } from '@/services/henu-backend/systemMessagesController';
 
 interface CreateProps {
   onCancel: () => void;
-  onSubmit: (values: API.MessagePushAddRequest) => Promise<void>;
+  onSubmit: (values: API.SystemMessagesAddRequest) => Promise<void>;
   visible: boolean;
-  columns: ProColumns<API.MessagePush>[];
+  columns: ProColumns<API.SystemMessages>[];
 }
 
 /**
@@ -15,10 +15,10 @@ interface CreateProps {
  *
  * @param fields
  */
-const handleAdd = async (fields: API.MessagePushAddRequest) => {
+const handleAdd = async (fields: API.SystemMessagesAddRequest) => {
   const hide = message.loading('正在添加');
   try {
-    const res = await addMessagePushUsingPost({
+    const res = await addSystemMessagesUsingPost({
       ...fields,
     });
     if (res.code === 0 && res.data) {
@@ -53,7 +53,7 @@ const CreateSystemMessagesModal: React.FC<CreateProps> = (props) => {
     >
       <ProTable
         columns={columns}
-        onSubmit={async (values: API.MessagePushAddRequest) => {
+        onSubmit={async (values: API.SystemMessagesAddRequest) => {
           const success = await handleAdd(values);
           if (success) {
             onSubmit?.(values);
