@@ -636,6 +636,7 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'reviewComments',
       valueType: 'textarea',
       hideInSearch: true,
+      width: 600,
     },
     {
       title: '审核时间',
