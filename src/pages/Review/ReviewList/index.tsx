@@ -432,6 +432,7 @@ const RegistrationReview: React.FC = () => {
       title: '用户名',
       dataIndex: 'userName',
       valueType: 'text',
+      width: 120,
     },
     {
       title: '身份证号',
@@ -492,12 +493,14 @@ const RegistrationReview: React.FC = () => {
       title: '工作经历',
       dataIndex: 'workExperience',
       valueType: 'text',
+      width: 600,
     },
     {
       title: '主要学生干部经历',
       dataIndex: 'studentLeaders',
       valueType: 'text',
       hideInSearch: true,
+      width: 600,
       render: (_, record) => {
         if (record) {
           return (
@@ -544,12 +547,14 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'leaderExperience',
       valueType: 'text',
       hideInSearch: true,
+      width: 600,
     },
     {
       title: '主要获奖情况',
       dataIndex: 'studentAwards',
       valueType: 'text',
       hideInSearch: true,
+      width: 600,
     },
     {
       title: '邮箱',
@@ -580,11 +585,12 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'address',
       valueType: 'text',
       hideInSearch: true,
+      width: 600,
     },
     {
       title: '出生日期',
       dataIndex: 'birthDate',
-      valueType: 'dateYear',
+      valueType: 'date',
     },
     {
       title: '民族',
@@ -595,7 +601,7 @@ const RegistrationReview: React.FC = () => {
     {
       title: '入党时间',
       dataIndex: 'partyTime',
-      valueType: 'dateTime',
+      valueType: 'date',
       hideInSearch: true,
     },
     {
