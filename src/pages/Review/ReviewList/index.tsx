@@ -432,7 +432,8 @@ const RegistrationReview: React.FC = () => {
       title: '用户名',
       dataIndex: 'userName',
       valueType: 'text',
-      width: 120,
+      ellipsis: true,
+      tooltip: '标题过长会自动收缩',
     },
     {
       title: '身份证号',

@@ -4,7 +4,7 @@ export enum PoliticalStatus {
 
 export const politicalStatusEnum = {
   [PoliticalStatus.COMMUNIST_PARTY_MEMBER]: {
-    text: '党员(预备党员)',
+    text: '中共党员(预备党员)',
     value: PoliticalStatus.COMMUNIST_PARTY_MEMBER,
   },
 };
