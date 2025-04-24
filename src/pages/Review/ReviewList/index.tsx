@@ -370,9 +370,6 @@ const RegistrationReview: React.FC = () => {
         return (
           <ProFormSelect
             mode="single"
-            fieldProps={{
-              style: { width: '100%', minWidth: 240 },
-            }}
             initialValue={value}
             onChange={(val) => form.setFieldsValue({ jobId: val })}
             request={async () => {
@@ -405,9 +402,6 @@ const RegistrationReview: React.FC = () => {
         return (
           <ProFormSelect
             mode="multiple"
-            fieldProps={{
-              style: { width: '100%', minWidth: 240 },
-            }}
             initialValue={value}
             onChange={(val) => form.setFieldsValue({ studentLeaders: val })}
             request={async () => {
@@ -432,8 +426,7 @@ const RegistrationReview: React.FC = () => {
       title: '用户名',
       dataIndex: 'userName',
       valueType: 'text',
-      ellipsis: true,
-      tooltip: '标题过长会自动收缩',
+      width: 120
     },
     {
       title: '身份证号',
@@ -799,6 +792,11 @@ const RegistrationReview: React.FC = () => {
             data: data?.records || [],
             total: data?.total || 0,
           };
+        }}
+        pagination={{
+          defaultPageSize: 20,
+          pageSizeOptions: ['20', '50', '100'],
+          showSizeChanger: true,
         }}
         columns={columns}
         rowSelection={{
