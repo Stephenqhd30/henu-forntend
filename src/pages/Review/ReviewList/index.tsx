@@ -5,10 +5,9 @@ import {
   PageContainer,
   ProCard,
   ProColumns,
-  ProFormSelect,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, notification, Progress, Select, Space, Tag } from 'antd';
+import { Button, message, notification, Progress, Space, Tag } from 'antd';
 import { ReviewStatus, reviewStatusEnum } from '@/enums/ReviewStatusEnum';
 import {
   BatchCreateMessageModal,
@@ -20,12 +19,12 @@ import {
   UserDetailsCard,
 } from '@/pages/Review/ReviewList/components';
 import { listRegistrationFormVoByPageUsingPost } from '@/services/henu-backend/registrationFormController';
-import { UserGender, userGenderEnum } from '@/enums/UserGenderEnum';
-import { MarryStatus, marryStatusEnum } from '@/enums/MarryStatusEnum';
+import { userGenderEnum } from '@/enums/UserGenderEnum';
+import { marryStatusEnum } from '@/enums/MarryStatusEnum';
 import { listSchoolTypeVoByPageUsingPost } from '@/services/henu-backend/schoolTypeController';
 import { listCadreTypeVoByPageUsingPost } from '@/services/henu-backend/cadreTypeController';
 import { listJobVoByPageUsingPost } from '@/services/henu-backend/jobController';
-import { EducationStage, educationStageEnum } from '@/enums/EducationalStageEnum';
+import { educationStageEnum } from '@/enums/EducationalStageEnum';
 import {
   downloadFileByBatchUsingPost,
   downloadFileByUserIdUsingPost,
@@ -305,27 +304,6 @@ const RegistrationReview: React.FC = () => {
       hideInTable: true,
       hideInSetting: true,
       valueEnum: educationStageEnum,
-      renderFormItem: (_, { value }, form) => {
-        return (
-          <Select
-            mode="multiple"
-            value={value}
-            onChange={(val) => form.setFieldsValue({ educationStages: val })}
-            placeholder="请选择教育阶段"
-            allowClear
-          >
-            <Select.Option value={EducationStage.UNDERGRADUATE_COURSE}>
-              {educationStageEnum[EducationStage.UNDERGRADUATE_COURSE].text}
-            </Select.Option>
-            <Select.Option value={EducationStage.POSTGRADUATE}>
-              {educationStageEnum[EducationStage.POSTGRADUATE].text}
-            </Select.Option>
-            <Select.Option value={EducationStage.DOCTOR_DEGREE}>
-              {educationStageEnum[EducationStage.DOCTOR_DEGREE].text}
-            </Select.Option>
-          </Select>
-        );
-      },
     },
     {
       title: '学校类型',
@@ -333,30 +311,18 @@ const RegistrationReview: React.FC = () => {
       hideInForm: true,
       hideInTable: true,
       hideInSetting: true,
-      colSize: 2,
-      renderFormItem: (_, { value }, form) => {
-        const parsedValue = Array.isArray(value) ? value : [];
+      fieldProps: {
+        mode: 'multiple',
+        allowClear: true,
+        placeholder: '请选择高校类型',
+      },
+      request: async () => {
+        const res = await listSchoolTypeVoByPageUsingPost({});
         return (
-          <ProFormSelect
-            mode="multiple"
-            // @ts-ignore
-            value={parsedValue}
-            request={async () => {
-              const res = await listSchoolTypeVoByPageUsingPost({});
-              if (res.code === 0 && res.data) {
-                return (
-                  res.data.records?.map((schoolType) => ({
-                    label: schoolType.typeName,
-                    value: schoolType.typeName,
-                  })) ?? []
-                );
-              } else {
-                return [];
-              }
-            }}
-            onChange={(val) => form.setFieldsValue({ schoolTypes: val })}
-            placeholder="请选择高校类型"
-          />
+          res?.data?.records?.map((schoolType) => ({
+            label: schoolType.typeName,
+            value: schoolType.typeName,
+          })) ?? []
         );
       },
     },
@@ -365,30 +331,21 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'jobId',
       valueType: 'select',
       colSize: 2,
-      render: (_, record) => <span>{record.jobVO?.jobName}</span>,
-      renderFormItem: (_, { value }, form) => {
+      fieldProps: {
+        mode: 'single',
+        allowClear: true,
+        placeholder: '请选择岗位',
+      },
+      request: async () => {
+        const res = await listJobVoByPageUsingPost({});
         return (
-          <ProFormSelect
-            mode="single"
-            initialValue={value}
-            onChange={(val) => form.setFieldsValue({ jobId: val })}
-            request={async () => {
-              const res = await listJobVoByPageUsingPost({});
-              if (res.code === 0 && res.data) {
-                return (
-                  res.data.records?.map((job) => ({
-                    label: job.jobName,
-                    value: job.id,
-                  })) ?? []
-                );
-              } else {
-                return [];
-              }
-            }}
-            placeholder="请选择岗位"
-          />
+          res?.data?.records?.map((job) => ({
+            label: job.jobName,
+            value: job.id,
+          })) ?? []
         );
       },
+      render: (_, record) => <span>{record.jobVO?.jobName}</span>,
     },
     {
       title: '主要学生干部经历',
@@ -398,27 +355,18 @@ const RegistrationReview: React.FC = () => {
       hideInForm: true,
       hideInTable: true,
       hideInSetting: true,
-      renderFormItem: (_, { value }, form) => {
+      fieldProps: {
+        mode: 'multiple',
+        allowClear: true,
+        placeholder: '请选择干部类型',
+      },
+      request: async () => {
+        const res = await listCadreTypeVoByPageUsingPost({ pageSize: 100 });
         return (
-          <ProFormSelect
-            mode="multiple"
-            initialValue={value}
-            onChange={(val) => form.setFieldsValue({ studentLeaders: val })}
-            request={async () => {
-              const res = await listCadreTypeVoByPageUsingPost({});
-              if (res.code === 0 && res.data) {
-                return (
-                  res.data.records?.map((cadreType) => ({
-                    label: cadreType.type,
-                    value: cadreType.type,
-                  })) ?? []
-                );
-              } else {
-                return [];
-              }
-            }}
-            placeholder="请选择干部类型"
-          />
+          res.data?.records?.map((cadreType) => ({
+            value: cadreType.type,
+            label: cadreType.type,
+          })) ?? []
         );
       },
     },
@@ -426,12 +374,12 @@ const RegistrationReview: React.FC = () => {
       title: '用户名',
       dataIndex: 'userName',
       valueType: 'text',
-      width: 120
+      width: 120,
     },
     {
       title: '身份证号',
       dataIndex: 'userIdCard',
-      valueType: 'password',
+      valueType: 'text',
       hideInSearch: true,
     },
     {
@@ -446,18 +394,6 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'userGender',
       valueType: 'text',
       valueEnum: userGenderEnum,
-      renderFormItem: () => {
-        return (
-          <Select>
-            <Select.Option value={UserGender.MALE}>
-              {userGenderEnum[UserGender.MALE].text}
-            </Select.Option>
-            <Select.Option value={UserGender.FEMALE}>
-              {userGenderEnum[UserGender.FEMALE].text}
-            </Select.Option>
-          </Select>
-        );
-      },
     },
     {
       title: '联系电话',
@@ -495,6 +431,20 @@ const RegistrationReview: React.FC = () => {
       valueType: 'text',
       hideInSearch: true,
       width: 600,
+      fieldProps: {
+        mode: 'multiple',
+        allowClear: true,
+        placeholder: '请选择干部类型',
+      },
+      request: async () => {
+        const res = await listCadreTypeVoByPageUsingPost({ pageSize: 100 });
+        return (
+          res.data?.records?.map((cadreType) => ({
+            label: cadreType.type,
+            value: cadreType.type,
+          })) ?? []
+        );
+      },
       render: (_, record) => {
         if (record) {
           return (
@@ -508,32 +458,6 @@ const RegistrationReview: React.FC = () => {
           );
         }
         return <Tag>{'无'}</Tag>;
-      },
-      renderFormItem: (_, { value }, form) => {
-        return (
-          <ProFormSelect
-            mode="multiple"
-            fieldProps={{
-              style: { width: '100%', minWidth: 240 },
-            }}
-            initialValue={value}
-            onChange={(val) => form.setFieldsValue({ studentLeaders: val })}
-            request={async () => {
-              const res = await listCadreTypeVoByPageUsingPost({});
-              if (res.code === 0 && res.data) {
-                return (
-                  res.data.records?.map((cadreType) => ({
-                    label: cadreType.type,
-                    value: cadreType.type,
-                  })) ?? []
-                );
-              } else {
-                return [];
-              }
-            }}
-            placeholder="请选择干部类型"
-          />
-        );
       },
     },
     {
@@ -561,18 +485,6 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'marryStatus',
       valueType: 'select',
       valueEnum: marryStatusEnum,
-      renderFormItem: () => {
-        return (
-          <Select>
-            <Select.Option value={MarryStatus.YES}>
-              {marryStatusEnum[MarryStatus.YES].text}
-            </Select.Option>
-            <Select.Option value={MarryStatus.NO}>
-              {marryStatusEnum[MarryStatus.NO].text}
-            </Select.Option>
-          </Select>
-        );
-      },
     },
     {
       title: '家庭住址',
@@ -609,21 +521,6 @@ const RegistrationReview: React.FC = () => {
       dataIndex: 'reviewStatus',
       valueType: 'select',
       valueEnum: reviewStatusEnum,
-      renderFormItem: () => {
-        return (
-          <Select>
-            <Select.Option value={ReviewStatus.REVIEWING}>
-              {reviewStatusEnum[ReviewStatus.REVIEWING].text}
-            </Select.Option>
-            <Select.Option value={ReviewStatus.PASS}>
-              {reviewStatusEnum[ReviewStatus.PASS].text}
-            </Select.Option>
-            <Select.Option value={ReviewStatus.REJECT}>
-              {reviewStatusEnum[ReviewStatus.REJECT].text}
-            </Select.Option>
-          </Select>
-        );
-      },
     },
     {
       title: '审核意见',
