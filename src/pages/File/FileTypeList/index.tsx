@@ -1,4 +1,4 @@
-import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
+import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Select, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
@@ -8,7 +8,11 @@ import {
   deleteFileTypeUsingPost,
   listFileTypeByPageUsingPost,
 } from '@/services/henu-backend/fileTypeController';
-import { CreateFileTypeModal, UpdateFileTypeModal } from '@/pages/File/FileTypeList/components';
+import {
+  CreateFileTypeModal,
+  UpdateFileTypeModal,
+  UploadFileTypeModal,
+} from '@/pages/File/FileTypeList/components';
 
 /**
  * 删除节点
@@ -46,6 +50,8 @@ const FileTypeList: React.FC = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   // 更新文件上传类型 Modal 框
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+  // 上传窗口 Modal 框
+  const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
   /**
    * 下载文件上传日志信息
    */
@@ -136,12 +142,11 @@ const FileTypeList: React.FC = () => {
         return '未设置';
       },
       renderFormItem: (_, { value }, form) => {
-        const sizeOptions = [1, 2, 5, 10]; // 默认选项：1MB、2MB、5MB、10MB
+        const sizeOptions = [1, 2, 5, 10];
         return (
           <Select
             value={value}
             onChange={(val) => {
-              // 将 MB 转换为字节（B）
               // eslint-disable-next-line eqeqeq
               const sizeInBytes = val != null ? val * 1024 * 1024 : null;
               form.setFieldsValue({ maxFileSize: sizeInBytes });
@@ -242,6 +247,15 @@ const FileTypeList: React.FC = () => {
               新建文件上传类型
             </Button>
             <Button
+              icon={<UploadOutlined />}
+              key={'upload'}
+              onClick={() => {
+                setUploadModalVisible(true);
+              }}
+            >
+              批量导入文件上传类型
+            </Button>
+            <Button
               icon={<DownloadOutlined />}
               key={'export'}
               onClick={async () => {
@@ -295,6 +309,18 @@ const FileTypeList: React.FC = () => {
           }}
           visible={updateModalVisible}
           columns={columns}
+        />
+      )}
+      {uploadModalVisible && (
+        <UploadFileTypeModal
+          onCancel={() => {
+            setUploadModalVisible(false);
+          }}
+          visible={uploadModalVisible}
+          onSubmit={async () => {
+            setUploadModalVisible(false);
+            actionRef.current?.reload();
+          }}
         />
       )}
     </>
