@@ -8,15 +8,12 @@ import {
 } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import {
-  exportSchoolSchoolTypeTemplateUsingGet,
-  exportSchoolSchoolTypeUsingGet,
-} from '@/services/henu-backend/excelController';
+import { exportSchoolSchoolTypeUsingGet } from '@/services/henu-backend/excelController';
 import {
   deleteSchoolSchoolTypeUsingPost,
   listSchoolSchoolTypeVoByPageUsingPost,
 } from '@/services/henu-backend/schoolSchoolTypeController';
-import { EXPORT_SCHOOL_SCHOOL_TYPE_EXCEL, SCHOOL_SCHOOL_TYPE_EXCEL } from '@/constants';
+import { SCHOOL_SCHOOL_TYPE_EXCEL } from '@/constants';
 import CreateSchoolSchoolTypeModal from '@/pages/School/SchoolSchoolTypeList/components/CreateSchoolSchoolTypeModal';
 import UpdateSchoolSchoolTypeModal from '@/pages/School/SchoolSchoolTypeList/components/UpdateSchoolSchoolTypeModal';
 import UploadSchoolSchoolTypeModal from '@/pages/School/SchoolSchoolTypeList/components/UploadSchoolSchoolTypeModal';
@@ -86,31 +83,6 @@ const SchoolSchoolSchoolTypeList: React.FC = () => {
       message.error('导出失败: ' + error.message);
     } finally {
       hide();
-    }
-  };
-
-  /**
-   * 下载导入息高校信示例数据
-   */
-  const downloadSchoolSchoolTypeExample = async () => {
-    try {
-      const res = await exportSchoolSchoolTypeTemplateUsingGet({
-        responseType: 'blob',
-      });
-      // 创建 Blob 对象
-      // @ts-ignore
-      const url = window.URL.createObjectURL(new Blob([res]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', EXPORT_SCHOOL_SCHOOL_TYPE_EXCEL);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      // 释放对象 URL
-      window.URL.revokeObjectURL(url);
-    } catch (error: any) {
-      message.error('导出失败: ' + error.message);
     }
   };
 
@@ -253,15 +225,6 @@ const SchoolSchoolSchoolTypeList: React.FC = () => {
               onClick={() => setCreateModalVisible(true)}
             >
               新建类型关联信息
-            </Button>
-            <Button
-              icon={<DownloadOutlined />}
-              key={'export-example'}
-              onClick={async () => {
-                await downloadSchoolSchoolTypeExample();
-              }}
-            >
-              下载导入示例数据
             </Button>
             <Button
               icon={<UploadOutlined />}

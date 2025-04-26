@@ -2,11 +2,8 @@ import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icon
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import {
-  exportAdminTemplateUsingGet,
-  exportAdminUsingGet,
-} from '@/services/henu-backend/excelController';
-import { ADMIN_EXCEL, EXPORT_ADMIN_EXCEL } from '@/constants';
+import { exportAdminUsingGet } from '@/services/henu-backend/excelController';
+import { ADMIN_EXCEL } from '@/constants';
 import {
   deleteAdminUsingPost,
   listAdminByPageUsingPost,
@@ -76,32 +73,6 @@ const AdminList: React.FC = () => {
       message.error('导出失败: ' + error.message);
     } finally {
       hide();
-    }
-  };
-
-  /**
-   * 下载导入管理员示例数据
-   */
-  const downloadAdminExample = async () => {
-    try {
-      const res = await exportAdminTemplateUsingGet({
-        responseType: 'blob',
-      });
-
-      // 创建 Blob 对象
-      // @ts-ignore
-      const url = window.URL.createObjectURL(new Blob([res]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', EXPORT_ADMIN_EXCEL);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      // 释放对象 URL
-      window.URL.revokeObjectURL(url);
-    } catch (error: any) {
-      message.error('导出失败: ' + error.message);
     }
   };
 
@@ -216,15 +187,6 @@ const AdminList: React.FC = () => {
               onClick={() => setCreateModalVisible(true)}
             >
               新建管理员
-            </Button>
-            <Button
-              icon={<DownloadOutlined />}
-              key={'export-example'}
-              onClick={async () => {
-                await downloadAdminExample();
-              }}
-            >
-              下载导入管理员示例数据
             </Button>
             <Button
               icon={<UploadOutlined />}

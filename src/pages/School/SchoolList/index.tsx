@@ -9,11 +9,8 @@ import {
 import CreateSchoolModal from '@/pages/School/SchoolList/components/CreateSchoolModal';
 import UpdateSchoolModal from '@/pages/School/SchoolList/components/UpdateSchoolModal';
 import { UploadSchoolModal } from '@/pages/School/SchoolList/components';
-import {
-  exportSchoolTemplateUsingGet,
-  exportSchoolUsingGet,
-} from '@/services/henu-backend/excelController';
-import { EXPORT_SCHOOL_EXCEL, SCHOOL_EXCEL } from '@/constants';
+import { exportSchoolUsingGet } from '@/services/henu-backend/excelController';
+import { SCHOOL_EXCEL } from '@/constants';
 
 /**
  * 删除节点
@@ -79,32 +76,6 @@ const SchoolList: React.FC = () => {
       message.error('导出失败: ' + error.message);
     } finally {
       hide();
-    }
-  };
-
-  /**
-   * 下载导入高校信息示例数据
-   */
-  const downloadSchoolExample = async () => {
-    try {
-      const res = await exportSchoolTemplateUsingGet({
-        responseType: 'blob',
-      });
-
-      // 创建 Blob 对象
-      // @ts-ignore
-      const url = window.URL.createObjectURL(new Blob([res]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', EXPORT_SCHOOL_EXCEL);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      // 释放对象 URL
-      window.URL.revokeObjectURL(url);
-    } catch (error: any) {
-      message.error('导出失败: ' + error.message);
     }
   };
 
@@ -222,15 +193,6 @@ const SchoolList: React.FC = () => {
               onClick={() => setCreateModalVisible(true)}
             >
               新建高校信息
-            </Button>
-            <Button
-              icon={<DownloadOutlined />}
-              key={'export-example'}
-              onClick={async () => {
-                await downloadSchoolExample();
-              }}
-            >
-              下载导入高校信息示例数据
             </Button>
             <Button
               icon={<UploadOutlined />}

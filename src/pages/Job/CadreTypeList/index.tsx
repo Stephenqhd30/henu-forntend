@@ -1,15 +1,13 @@
-import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
-import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Space, Typography } from 'antd';
-import React, { useRef, useState } from 'react';
-import {
-  deleteCadreTypeUsingPost,
-  listCadreTypeByPageUsingPost,
-} from '@/services/henu-backend/cadreTypeController';
-import { exportCadreTypeUsingGet } from '@/services/henu-backend/excelController';
-import { CADRE_TYPE_EXCEL } from '@/constants';
+import {DownloadOutlined, PlusOutlined, UploadOutlined} from '@ant-design/icons';
+import {ActionType, PageContainer, ProColumns, ProTable} from '@ant-design/pro-components';
+import {Button, message, Popconfirm, Space, Typography} from 'antd';
+import React, {useRef, useState} from 'react';
+import {deleteCadreTypeUsingPost, listCadreTypeByPageUsingPost} from '@/services/henu-backend/cadreTypeController';
+import {exportCadreTypeUsingGet} from '@/services/henu-backend/excelController';
+import {CADRE_TYPE_EXCEL} from '@/constants';
 import CreateCadreTypeModal from '@/pages/Job/CadreTypeList/components/CreateCadreTypeModal';
 import UpdateCadreTypeModal from '@/pages/Job/CadreTypeList/components/UpdateCadreTypeModal';
+import {UploadCadreTypeModal} from '@/pages/Job/CadreTypeList/components';
 
 /**
  * 删除节点
@@ -40,6 +38,8 @@ const CadreTypeList: React.FC = () => {
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   // 更新干部类型 Modal 框
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+  // 上传窗口 Modal 框
+  const [uploadModalVisible, setUploadModalVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   // 当前干部类型的所点击的数据
   const [currentRow, setCurrentRow] = useState<API.CadreType>();
@@ -169,6 +169,15 @@ const CadreTypeList: React.FC = () => {
               新建干部类型信息
             </Button>
             <Button
+              icon={<UploadOutlined />}
+              key={'upload'}
+              onClick={() => {
+                setUploadModalVisible(true);
+              }}
+            >
+              批量导入干部类型信息
+            </Button>
+            <Button
               key={'export'}
               onClick={async () => {
                 await downloadCadreTypeInfo();
@@ -222,6 +231,18 @@ const CadreTypeList: React.FC = () => {
           }}
           visible={updateModalVisible}
           columns={columns}
+        />
+      )}
+      {uploadModalVisible && (
+        <UploadCadreTypeModal
+          onCancel={() => {
+            setUploadModalVisible(false);
+          }}
+          visible={uploadModalVisible}
+          onSubmit={async () => {
+            setUploadModalVisible(false);
+            actionRef.current?.reload();
+          }}
         />
       )}
     </PageContainer>

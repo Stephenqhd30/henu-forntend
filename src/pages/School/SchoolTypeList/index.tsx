@@ -2,11 +2,8 @@ import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icon
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-import {
-  exportSchoolTypeTemplateUsingGet,
-  exportSchoolTypeUsingGet,
-} from '@/services/henu-backend/excelController';
-import { EXPORT_SCHOOL_TYPE_EXCEL, SCHOOL_TYPE_EXCEL } from '@/constants';
+import { exportSchoolTypeUsingGet } from '@/services/henu-backend/excelController';
+import { SCHOOL_TYPE_EXCEL } from '@/constants';
 import {
   deleteSchoolTypeUsingPost,
   listSchoolTypeByPageUsingPost,
@@ -81,31 +78,6 @@ const SchoolTypeList: React.FC = () => {
       message.error('导出失败: ' + error.message);
     } finally {
       hide();
-    }
-  };
-
-  /**
-   * 下载导入息高校信示例数据
-   */
-  const downloadSchoolTypeExample = async () => {
-    try {
-      const res = await exportSchoolTypeTemplateUsingGet({
-        responseType: 'blob',
-      });
-      // 创建 Blob 对象
-      // @ts-ignore
-      const url = window.URL.createObjectURL(new Blob([res]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', EXPORT_SCHOOL_TYPE_EXCEL);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      // 释放对象 URL
-      window.URL.revokeObjectURL(url);
-    } catch (error: any) {
-      message.error('导出失败: ' + error.message);
     }
   };
 
@@ -205,15 +177,6 @@ const SchoolTypeList: React.FC = () => {
               onClick={() => setCreateModalVisible(true)}
             >
               新建高校类型信息
-            </Button>
-            <Button
-              icon={<DownloadOutlined />}
-              key={'export-example'}
-              onClick={async () => {
-                await downloadSchoolTypeExample();
-              }}
-            >
-              下载导入高校类型信息示例数据
             </Button>
             <Button
               icon={<UploadOutlined />}
