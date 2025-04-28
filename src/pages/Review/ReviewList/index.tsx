@@ -303,6 +303,11 @@ const RegistrationReview: React.FC = () => {
       hideInForm: true,
       hideInTable: true,
       hideInSetting: true,
+      fieldProps: {
+        mode: 'multiple',
+        allowClear: true,
+        placeholder: '请选择教育阶段',
+      },
       valueEnum: educationStageEnum,
     },
     {
