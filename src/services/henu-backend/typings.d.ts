@@ -1895,7 +1895,7 @@ declare namespace API {
   type RegistrationFormQueryRequest = {
     birthDate?: string;
     current?: number;
-    educationStages?: string[];
+    educationStages?: string;
     id?: number;
     jobId?: number;
     leaderExperience?: string;

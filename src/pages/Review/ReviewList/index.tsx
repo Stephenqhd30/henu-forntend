@@ -304,7 +304,7 @@ const RegistrationReview: React.FC = () => {
       hideInTable: true,
       hideInSetting: true,
       fieldProps: {
-        mode: 'multiple',
+        mode: 'single',
         allowClear: true,
         placeholder: '请选择教育阶段',
       },
