@@ -1,5 +1,5 @@
 import { DownloadOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import {ActionType, PageContainer, ProColumns, ProTable} from '@ant-design/pro-components';
 import { Button, message, Popconfirm, Select, Space, Tag, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { FILE_TYPE_EXCEL } from '@/constants';
@@ -120,7 +120,6 @@ const FileTypeList: React.FC = () => {
             style={{ width: '100%' }}
             tokenSeparators={[',']}
           >
-            {/* 默认选项 */}
             <Select.Option value="jpg">JPG</Select.Option>
             <Select.Option value="png">PNG</Select.Option>
             <Select.Option value="webp">WEBP</Select.Option>
@@ -228,7 +227,7 @@ const FileTypeList: React.FC = () => {
     },
   ];
   return (
-    <>
+    <PageContainer>
       <ProTable<API.FileType, API.PageParams>
         headerTitle={'文件上传类型'}
         actionRef={actionRef}
@@ -323,7 +322,7 @@ const FileTypeList: React.FC = () => {
           }}
         />
       )}
-    </>
+    </PageContainer>
   );
 };
 export default FileTypeList;

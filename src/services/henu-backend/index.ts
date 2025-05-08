@@ -5,6 +5,7 @@
 import * as adminController from './adminController';
 import * as cadreTypeController from './cadreTypeController';
 import * as captchaController from './captchaController';
+import * as clearController from './clearController';
 import * as deadlineController from './deadlineController';
 import * as educationController from './educationController';
 import * as excelController from './excelController';
@@ -27,6 +28,7 @@ export default {
   adminController,
   cadreTypeController,
   captchaController,
+  clearController,
   deadlineController,
   educationController,
   excelController,

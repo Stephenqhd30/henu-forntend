@@ -1,5 +1,5 @@
 import { ArrowDownOutlined, DownloadOutlined } from '@ant-design/icons';
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import {ActionType, PageContainer, ProColumns, ProTable} from '@ant-design/pro-components';
 import { Button, message, notification, Popconfirm, Progress, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { FILE_LOG_EXCEL } from '@/constants';
@@ -225,7 +225,7 @@ const FileLogVOList: React.FC = () => {
     },
   ];
   return (
-    <>
+    <PageContainer>
       <ProTable<API.FileLogVO, API.PageParams>
         headerTitle={'文件上传日志'}
         actionRef={actionRef}
@@ -274,7 +274,7 @@ const FileLogVOList: React.FC = () => {
         }}
         columns={columns}
       />
-    </>
+    </PageContainer>
   );
 };
 export default FileLogVOList;

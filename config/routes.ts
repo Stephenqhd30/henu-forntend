@@ -179,6 +179,13 @@ export default [
     component: './Operation/OperationList',
   },
   {
+    name: '清除系统数据',
+    path: 'clear',
+    access: 'canAdmin',
+    icon: 'ClearOutlined',
+    component: './Clear',
+  },
+  {
     name: 'exception',
     icon: 'warning',
     path: '/exception',
