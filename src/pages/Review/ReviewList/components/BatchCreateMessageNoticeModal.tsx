@@ -47,7 +47,7 @@ const BatchCreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
   const [form] = ProForm.useForm<API.MessageNoticeAddRequest>();
   return (
     <ModalForm
-      title={'批量添加短信推送信息'}
+      title={'批量发送短信通知'}
       open={visible}
       form={form}
       onFinish={async (values: API.MessageNoticeAddRequest) => {
@@ -68,7 +68,7 @@ const BatchCreateMessageNoticeModal: React.FC<CreateProps> = (props) => {
       }}
       submitter={{
         searchConfig: {
-          submitText: '创建',
+          submitText: '发送',
           resetText: '取消',
         },
       }}
