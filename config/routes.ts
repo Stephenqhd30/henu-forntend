@@ -179,7 +179,7 @@ export default [
     component: './Operation/OperationList',
   },
   {
-    name: '清除系统数据',
+    name: '清除历史报名数据',
     path: 'clear',
     access: 'canAdmin',
     icon: 'ClearOutlined',
